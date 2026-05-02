@@ -168,6 +168,13 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\MatchingContext\SharedKernel\Infrastructure\SharedKernelServiceProvider::class,
+        App\MatchingContext\Business\Infrastructure\BusinessServiceProvider::class,
+        App\MatchingContext\Taxonomy\Infrastructure\TaxonomyServiceProvider::class,
+        App\MatchingContext\Rfs\Infrastructure\RfsServiceProvider::class,
+        App\MatchingContext\Matching\Infrastructure\MatchingServiceProvider::class,
+        App\MatchingContext\Engagement\Infrastructure\EngagementServiceProvider::class,
+        App\MatchingContext\Signal\Infrastructure\SignalServiceProvider::class,
     ])->toArray(),
 
     /*

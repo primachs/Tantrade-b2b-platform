@@ -29,7 +29,14 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "tests/",
+            "App\\MatchingContext\\SharedKernel\\Tests\\": "app/MatchingContext/SharedKernel/Tests/",
+            "App\\MatchingContext\\Business\\Tests\\": "app/MatchingContext/Business/Tests/",
+            "App\\MatchingContext\\Taxonomy\\Tests\\": "app/MatchingContext/Taxonomy/Tests/",
+            "App\\MatchingContext\\Rfs\\Tests\\": "app/MatchingContext/Rfs/Tests/",
+            "App\\MatchingContext\\Matching\\Tests\\": "app/MatchingContext/Matching/Tests/",
+            "App\\MatchingContext\\Engagement\\Tests\\": "app/MatchingContext/Engagement/Tests/",
+            "App\\MatchingContext\\Signal\\Tests\\": "app/MatchingContext/Signal/Tests/"
         }
     },
     "scripts": {
