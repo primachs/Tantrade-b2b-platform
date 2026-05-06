@@ -32,16 +32,19 @@ if ($project && isset($project['line-rate'])) {
             if (isset($attrs['statements']) && isset($attrs['coveredstatements'])) {
                 $totalStatements += (float) $attrs['statements'];
                 $totalCovered += (float) $attrs['coveredstatements'];
+
                 continue;
             }
             if (isset($attrs['lines']) && isset($attrs['coveredlines'])) {
                 $totalStatements += (float) $attrs['lines'];
                 $totalCovered += (float) $attrs['coveredlines'];
+
                 continue;
             }
             if (isset($attrs['elements']) && isset($attrs['coveredelements'])) {
                 $totalStatements += (float) $attrs['elements'];
                 $totalCovered += (float) $attrs['coveredelements'];
+
                 continue;
             }
         }
