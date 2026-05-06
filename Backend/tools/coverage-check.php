@@ -23,37 +23,31 @@ if ($project && isset($project['line-rate'])) {
     // Fallback: try to compute line rate from metrics elements
     $lineRate = null;
 
-    $metricsNodes = $xml->xpath('//metrics');
-    if ($metricsNodes !== false) {
+    $metricsNodes = $xml->xpath('//file/metrics');
+    if ($metricsNodes !== false && count($metricsNodes) > 0) {
+        $totalStatements = 0.0;
+        $totalCovered = 0.0;
         foreach ($metricsNodes as $metrics) {
             $attrs = $metrics->attributes();
-            // Clover may use 'statements' and 'coveredstatements'
             if (isset($attrs['statements']) && isset($attrs['coveredstatements'])) {
-                $total = (float) $attrs['statements'];
-                $covered = (float) $attrs['coveredstatements'];
-                if ($total > 0) {
-                    $lineRate = $covered / $total;
-                    break;
-                }
+                $totalStatements += (float) $attrs['statements'];
+                $totalCovered += (float) $attrs['coveredstatements'];
+                continue;
             }
-            // Or use 'lines' and 'coveredlines'
             if (isset($attrs['lines']) && isset($attrs['coveredlines'])) {
-                $total = (float) $attrs['lines'];
-                $covered = (float) $attrs['coveredlines'];
-                if ($total > 0) {
-                    $lineRate = $covered / $total;
-                    break;
-                }
+                $totalStatements += (float) $attrs['lines'];
+                $totalCovered += (float) $attrs['coveredlines'];
+                continue;
             }
-            // Or use 'elements' and 'coveredelements'
             if (isset($attrs['elements']) && isset($attrs['coveredelements'])) {
-                $total = (float) $attrs['elements'];
-                $covered = (float) $attrs['coveredelements'];
-                if ($total > 0) {
-                    $lineRate = $covered / $total;
-                    break;
-                }
+                $totalStatements += (float) $attrs['elements'];
+                $totalCovered += (float) $attrs['coveredelements'];
+                continue;
             }
+        }
+
+        if ($totalStatements > 0) {
+            $lineRate = $totalCovered / $totalStatements;
         }
     }
 
