@@ -14,11 +14,11 @@
             <exclude>app/MatchingContext/*/Tests/Unit</exclude>
         </testsuite>
     </testsuites>
-    <coverage>
-        <include>
+    <filter>
+        <whitelist>
             <directory>app/MatchingContext</directory>
-        </include>
-    </coverage>
+        </whitelist>
+    </filter>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="APP_KEY" value="base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="/>
