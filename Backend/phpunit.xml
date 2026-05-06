@@ -6,7 +6,6 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory>tests/Unit</directory>
             <directory>app/MatchingContext/SharedKernel/Tests/Unit</directory>
             <directory>app/MatchingContext/Business/Tests/Unit</directory>
             <directory>app/MatchingContext/Taxonomy/Tests/Unit</directory>
@@ -16,7 +15,6 @@
             <directory>app/MatchingContext/Signal/Tests/Unit</directory>
         </testsuite>
         <testsuite name="Feature">
-            <directory>tests/Feature</directory>
             <directory>app/MatchingContext/Business/Tests/Feature</directory>
             <directory>app/MatchingContext/Taxonomy/Tests/Feature</directory>
             <directory>app/MatchingContext/Rfs/Tests/Feature</directory>
