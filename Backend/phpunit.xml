@@ -6,21 +6,12 @@
 >
     <testsuites>
         <testsuite name="Unit">
-            <directory>app/MatchingContext/SharedKernel/Tests/Unit</directory>
-            <directory>app/MatchingContext/Business/Tests/Unit</directory>
-            <directory>app/MatchingContext/Taxonomy/Tests/Unit</directory>
-            <directory>app/MatchingContext/Rfs/Tests/Unit</directory>
-            <directory>app/MatchingContext/Matching/Tests/Unit</directory>
-            <directory>app/MatchingContext/Engagement/Tests/Unit</directory>
-            <directory>app/MatchingContext/Signal/Tests/Unit</directory>
+            <directory suffix="Test.php">app/MatchingContext</directory>
+            <exclude>app/MatchingContext/*/Tests/Feature</exclude>
         </testsuite>
         <testsuite name="Feature">
-            <directory>app/MatchingContext/Business/Tests/Feature</directory>
-            <directory>app/MatchingContext/Taxonomy/Tests/Feature</directory>
-            <directory>app/MatchingContext/Rfs/Tests/Feature</directory>
-            <directory>app/MatchingContext/Matching/Tests/Feature</directory>
-            <directory>app/MatchingContext/Engagement/Tests/Feature</directory>
-            <directory>app/MatchingContext/Signal/Tests/Feature</directory>
+            <directory suffix="Test.php">app/MatchingContext</directory>
+            <exclude>app/MatchingContext/*/Tests/Unit</exclude>
         </testsuite>
     </testsuites>
     <source>
