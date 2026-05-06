@@ -7,8 +7,8 @@ use App\MatchingContext\Matching\Domain\Repositories\MatchingRepository;
 use App\MatchingContext\Matching\Domain\Services\MatchingEngine;
 use App\MatchingContext\Rfs\Domain\Entities\Rfs;
 use App\MatchingContext\Rfs\Domain\Repositories\RfsRepository;
-use App\MatchingContext\SharedKernel\Infrastructure\DomainEvents\DomainEventRecorder;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
+use App\MatchingContext\SharedKernel\Infrastructure\DomainEvents\DomainEventRecorder;
 use App\MatchingContext\Taxonomy\Domain\Repositories\TaxonomyRepository;
 
 class MatchingService
@@ -20,8 +20,7 @@ class MatchingService
         private readonly RfsRepository $rfsRepository,
         private readonly TaxonomyRepository $taxonomyRepository,
         private readonly DomainEventRecorder $events
-    ) {
-    }
+    ) {}
 
     public function generateShortlist(string $rfsId): array
     {
@@ -31,12 +30,12 @@ class MatchingService
         }
 
         $serviceType = $this->taxonomyRepository->findServiceTypeById($rfs->serviceTypeId());
-        if (!$serviceType) {
+        if (! $serviceType) {
             throw new \RuntimeException('Service type not found for RFS.');
         }
 
         $category = $this->taxonomyRepository->findCategoryById($serviceType->categoryId());
-        if (!$category) {
+        if (! $category) {
             throw new \RuntimeException('Service category not found for RFS.');
         }
 
@@ -70,7 +69,7 @@ class MatchingService
 
             $sellerId = $candidate->sellerId()->value();
             $existing = $scored[$sellerId] ?? null;
-            if (!$existing || $result['score'] > $existing['score']) {
+            if (! $existing || $result['score'] > $existing['score']) {
                 $scored[$sellerId] = $result + ['seller_id' => $sellerId];
             }
         }
@@ -101,7 +100,7 @@ class MatchingService
     private function getRfs(string $rfsId): Rfs
     {
         $rfs = $this->rfsRepository->findById(Uuid::fromString($rfsId));
-        if (!$rfs) {
+        if (! $rfs) {
             throw new \RuntimeException('RFS not found.');
         }
 

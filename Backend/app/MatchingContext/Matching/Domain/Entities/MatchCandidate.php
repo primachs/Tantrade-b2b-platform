@@ -11,8 +11,7 @@ final class MatchCandidate
         private readonly Uuid $sellerId,
         private readonly float $score,
         private readonly int $rank
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

@@ -10,8 +10,7 @@ final class AttributeValue
         private readonly Uuid $id,
         private readonly Uuid $attributeId,
         private readonly string $value
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

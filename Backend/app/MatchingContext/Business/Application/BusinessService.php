@@ -11,8 +11,7 @@ class BusinessService
     public function __construct(
         private readonly BusinessRepository $repository,
         private readonly BusinessFactory $factory
-    ) {
-    }
+    ) {}
 
     public function create(array $payload): array
     {
@@ -54,7 +53,7 @@ class BusinessService
     public function trustMetrics(string $businessId): array
     {
         $metrics = $this->repository->getTrustMetrics(Uuid::fromString($businessId));
-        if (!$metrics) {
+        if (! $metrics) {
             return [];
         }
 
@@ -93,7 +92,7 @@ class BusinessService
     private function requireBusiness(string $businessId)
     {
         $business = $this->repository->findById(Uuid::fromString($businessId));
-        if (!$business) {
+        if (! $business) {
             throw new \RuntimeException('Business not found.');
         }
 

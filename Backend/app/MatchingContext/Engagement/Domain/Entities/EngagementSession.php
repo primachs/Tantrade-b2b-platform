@@ -31,7 +31,7 @@ final class EngagementSession
 
     public function createdAt(): \DateTimeImmutable
     {
-        return $this->createdAt ?? new \DateTimeImmutable();
+        return $this->createdAt ?? new \DateTimeImmutable;
     }
 
     public function status(): string

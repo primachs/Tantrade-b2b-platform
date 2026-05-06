@@ -10,8 +10,7 @@ class TaxonomyService
     public function __construct(
         private readonly TaxonomyRepository $repository,
         private readonly TaxonomyFactory $factory
-    ) {
-    }
+    ) {}
 
     public function createCategory(array $payload): array
     {

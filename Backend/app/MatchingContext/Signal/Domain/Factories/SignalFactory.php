@@ -2,8 +2,8 @@
 
 namespace App\MatchingContext\Signal\Domain\Factories;
 
-use App\MatchingContext\Signal\Domain\Entities\OutcomeSignal;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
+use App\MatchingContext\Signal\Domain\Entities\OutcomeSignal;
 
 class SignalFactory
 {
@@ -15,7 +15,7 @@ class SignalFactory
             Uuid::fromString($sellerId),
             $outcome,
             $confidence,
-            new \DateTimeImmutable()
+            new \DateTimeImmutable
         );
     }
 }

@@ -27,7 +27,7 @@ class RfsFactory
             $payload['project_size'],
             $payload['expertise_level'],
             'DRAFT',
-            new \DateTimeImmutable(),
+            new \DateTimeImmutable,
             $this->constraintFromPayload($rfsId, $payload['constraints'] ?? []),
             $this->preferenceFromPayload($rfsId, $payload['preferences'] ?? []),
             $this->attributesFromPayload($rfsId, $payload['attributes'] ?? [])

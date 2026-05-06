@@ -14,8 +14,7 @@ final class BusinessTrustMetrics
         private readonly float $disputeRate,
         private readonly ?float $avgResponseTime,
         private readonly ?float $sessionCompletionRate
-    ) {
-    }
+    ) {}
 
     public function businessId(): Uuid
     {

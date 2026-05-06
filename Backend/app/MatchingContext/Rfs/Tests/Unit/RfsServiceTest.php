@@ -2,12 +2,12 @@
 
 namespace App\MatchingContext\Rfs\Tests\Unit;
 
+use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Rfs\Application\RfsService;
 use App\MatchingContext\Rfs\Infrastructure\Models\Rfs;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsConstraint;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
-use App\MatchingContext\Business\Infrastructure\Models\Business;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;

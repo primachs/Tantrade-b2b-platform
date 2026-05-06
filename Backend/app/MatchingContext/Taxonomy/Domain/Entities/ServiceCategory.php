@@ -12,8 +12,7 @@ final class ServiceCategory
         private readonly ?Uuid $parentId,
         private readonly int $level,
         private readonly bool $isActive
-    ) {
-    }
+    ) {}
 
     public function id(): Uuid
     {

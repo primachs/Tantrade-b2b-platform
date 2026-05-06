@@ -6,11 +6,11 @@ use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessVerification;
 use App\MatchingContext\Engagement\Infrastructure\Models\EngagementSession;
 use App\MatchingContext\Engagement\Infrastructure\Models\SessionReport;
+use App\MatchingContext\Rfs\Infrastructure\Models\Rfs;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
 use App\MatchingContext\Signal\Domain\Services\ReliabilityCalculator;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
-use App\MatchingContext\Rfs\Infrastructure\Models\Rfs;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
@@ -157,13 +157,13 @@ class ReliabilityCalculatorTest extends TestCase
             'name' => $name,
             'contact_person' => 'Owner',
             'phone' => '+255700000000',
-            'email' => strtolower(str_replace(' ', '.', $name)) . '@example.com',
+            'email' => strtolower(str_replace(' ', '.', $name)).'@example.com',
         ]);
 
         BusinessVerification::create([
             'business_id' => $business->id,
-            'tin_number' => 'TIN-' . $business->id,
-            'brela_number' => 'BRELA-' . $business->id,
+            'tin_number' => 'TIN-'.$business->id,
+            'brela_number' => 'BRELA-'.$business->id,
             'business_size' => 'SMALL',
             'is_owner' => true,
             'owner_gender' => 'OTHER',
@@ -178,4 +178,3 @@ class ReliabilityCalculatorTest extends TestCase
         return $business;
     }
 }
-

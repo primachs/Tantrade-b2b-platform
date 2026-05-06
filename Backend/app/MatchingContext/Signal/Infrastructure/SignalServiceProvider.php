@@ -15,6 +15,6 @@ class SignalServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->loadMigrationsFrom(__DIR__ . '/Persistence/Migrations');
+        $this->loadMigrationsFrom(__DIR__.'/Persistence/Migrations');
     }
 }

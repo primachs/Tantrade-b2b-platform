@@ -11,8 +11,7 @@ final class ServiceType
         private readonly string $name,
         private readonly Uuid $categoryId,
         private readonly bool $isActive
-    ) {
-    }
+    ) {}
 
     public function id(): Uuid
     {

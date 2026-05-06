@@ -10,8 +10,7 @@ final class PreferenceWeights
         private readonly float $speed,
         private readonly float $experience,
         private readonly float $location
-    ) {
-    }
+    ) {}
 
     public static function fromArray(array $weights): self
     {

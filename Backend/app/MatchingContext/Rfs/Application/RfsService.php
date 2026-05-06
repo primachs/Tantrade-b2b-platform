@@ -4,8 +4,8 @@ namespace App\MatchingContext\Rfs\Application;
 
 use App\MatchingContext\Rfs\Domain\Factories\RfsFactory;
 use App\MatchingContext\Rfs\Domain\Repositories\RfsRepository;
-use App\MatchingContext\SharedKernel\Infrastructure\DomainEvents\DomainEventRecorder;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
+use App\MatchingContext\SharedKernel\Infrastructure\DomainEvents\DomainEventRecorder;
 
 class RfsService
 {
@@ -13,8 +13,7 @@ class RfsService
         private readonly RfsRepository $repository,
         private readonly RfsFactory $factory,
         private readonly DomainEventRecorder $events
-    ) {
-    }
+    ) {}
 
     public function create(array $payload): array
     {
@@ -74,7 +73,7 @@ class RfsService
         }
 
         $constraint = $rfs->constraint();
-        if (!$constraint) {
+        if (! $constraint) {
             throw new \RuntimeException('RFS must include at least one constraint.');
         }
 
@@ -88,7 +87,7 @@ class RfsService
             || $location->region() !== null
             || $location->district() !== null;
 
-        if (!$hasConstraint) {
+        if (! $hasConstraint) {
             throw new \RuntimeException('RFS must include at least one constraint.');
         }
 
@@ -104,7 +103,7 @@ class RfsService
     private function requireRfs(string $rfsId)
     {
         $rfs = $this->repository->findById(Uuid::fromString($rfsId));
-        if (!$rfs) {
+        if (! $rfs) {
             throw new \RuntimeException('RFS not found.');
         }
 

@@ -11,8 +11,7 @@ final class RfsAttribute
         private readonly Uuid $rfsId,
         private readonly Uuid $attributeId,
         private readonly string $value
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

@@ -10,8 +10,7 @@ final class ServiceAttribute
         private readonly Uuid $id,
         private readonly Uuid $serviceTypeId,
         private readonly string $name
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

@@ -20,8 +20,7 @@ final class BusinessVerification
         private readonly string $district,
         private readonly string $address,
         private readonly string $verificationStatus
-    ) {
-    }
+    ) {}
 
     public function businessId(): Uuid
     {

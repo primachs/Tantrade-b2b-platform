@@ -17,8 +17,7 @@ class EngagementService
         private readonly OutcomeResolver $resolver,
         private readonly SignalService $signals,
         private readonly DomainEventRecorder $events
-    ) {
-    }
+    ) {}
 
     public function createSession(array $payload): array
     {
@@ -54,7 +53,7 @@ class EngagementService
     public function activate(string $sessionId): array
     {
         $session = $this->requireSession($sessionId);
-        if (!in_array($session->status(), ['ACCEPTED', 'STALLED'], true)) {
+        if (! in_array($session->status(), ['ACCEPTED', 'STALLED'], true)) {
             throw new \RuntimeException('Only ACCEPTED or STALLED sessions can be activated.');
         }
 
@@ -100,7 +99,7 @@ class EngagementService
         $buyerReport = $this->repository->findReport(Uuid::fromString($sessionId), 'BUYER');
         $sellerReport = $this->repository->findReport(Uuid::fromString($sessionId), 'SELLER');
 
-        if (!$buyerReport && !$sellerReport) {
+        if (! $buyerReport && ! $sellerReport) {
             throw new \RuntimeException('At least one outcome report is required before closing.');
         }
 
@@ -116,7 +115,7 @@ class EngagementService
             ];
         }
 
-        $closed = $session->close($resolution['outcome'], (float) $resolution['confidence'], new \DateTimeImmutable());
+        $closed = $session->close($resolution['outcome'], (float) $resolution['confidence'], new \DateTimeImmutable);
         $this->repository->update($closed);
 
         $this->signals->recordSignal(
@@ -137,7 +136,7 @@ class EngagementService
     private function requireSession(string $sessionId)
     {
         $session = $this->repository->findById(Uuid::fromString($sessionId));
-        if (!$session) {
+        if (! $session) {
             throw new \RuntimeException('Engagement session not found.');
         }
 

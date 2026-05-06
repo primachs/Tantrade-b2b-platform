@@ -9,8 +9,7 @@ final class CandidateAttribute
     public function __construct(
         private readonly Uuid $attributeId,
         private readonly string $value
-    ) {
-    }
+    ) {}
 
     public function attributeId(): Uuid
     {

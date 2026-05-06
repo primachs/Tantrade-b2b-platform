@@ -15,8 +15,7 @@ final class RfsConstraint
         private readonly MoneyRange $budget,
         private readonly DateRange $timeline,
         private readonly Location $location
-    ) {
-    }
+    ) {}
 
     public function budget(): MoneyRange
     {

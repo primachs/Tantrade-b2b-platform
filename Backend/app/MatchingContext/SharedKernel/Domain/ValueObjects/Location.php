@@ -7,8 +7,7 @@ final class Location
     public function __construct(
         private readonly ?string $region,
         private readonly ?string $district
-    ) {
-    }
+    ) {}
 
     public static function fromNullable(?string $region, ?string $district): self
     {

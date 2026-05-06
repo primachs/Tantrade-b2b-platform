@@ -8,18 +8,18 @@ class OutcomeResolver
 {
     public function resolve(?string $buyerOutcome, ?string $sellerOutcome): array
     {
-        if (!$buyerOutcome && !$sellerOutcome) {
+        if (! $buyerOutcome && ! $sellerOutcome) {
             throw new \InvalidArgumentException('At least one outcome report is required.');
         }
 
-        if ($buyerOutcome && !$sellerOutcome) {
+        if ($buyerOutcome && ! $sellerOutcome) {
             return [
                 'outcome' => $buyerOutcome,
                 'confidence' => 0.6,
             ];
         }
 
-        if ($sellerOutcome && !$buyerOutcome) {
+        if ($sellerOutcome && ! $buyerOutcome) {
             return [
                 'outcome' => $sellerOutcome,
                 'confidence' => 0.6,

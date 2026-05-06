@@ -13,9 +13,7 @@ use Illuminate\Support\Carbon;
 
 class EloquentEngagementRepository implements EngagementRepository
 {
-    public function __construct(private readonly EngagementFactory $factory)
-    {
-    }
+    public function __construct(private readonly EngagementFactory $factory) {}
 
     public function create(EngagementSession $session): EngagementSession
     {
@@ -50,7 +48,7 @@ class EloquentEngagementRepository implements EngagementRepository
     public function findById(Uuid $sessionId): ?EngagementSession
     {
         $model = EngagementSessionModel::with('reports')->find($sessionId->value());
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 
@@ -85,7 +83,7 @@ class EloquentEngagementRepository implements EngagementRepository
             ->where('reported_by', $reportedBy)
             ->first();
 
-        if (!$report) {
+        if (! $report) {
             return null;
         }
 

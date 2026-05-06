@@ -25,6 +25,6 @@ class MatchingFactory
             $rank++;
         }
 
-        return new MatchShortlist($shortlistId, $rfsId, new \DateTimeImmutable(), $candidateEntities);
+        return new MatchShortlist($shortlistId, $rfsId, new \DateTimeImmutable, $candidateEntities);
     }
 }

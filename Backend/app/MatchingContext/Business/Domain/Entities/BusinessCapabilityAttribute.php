@@ -11,8 +11,7 @@ final class BusinessCapabilityAttribute
         private readonly Uuid $capabilityId,
         private readonly Uuid $attributeId,
         private readonly string $value
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

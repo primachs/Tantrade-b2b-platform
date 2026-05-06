@@ -8,11 +8,11 @@ use App\MatchingContext\Matching\Domain\Services\MatchingEngine;
 use App\MatchingContext\Rfs\Domain\Entities\Rfs;
 use App\MatchingContext\Rfs\Domain\Entities\RfsConstraint;
 use App\MatchingContext\Rfs\Domain\Entities\RfsPreference;
-use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
-use App\MatchingContext\SharedKernel\Domain\ValueObjects\PreferenceWeights;
-use App\MatchingContext\SharedKernel\Domain\ValueObjects\MoneyRange;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\DateRange;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Location;
+use App\MatchingContext\SharedKernel\Domain\ValueObjects\MoneyRange;
+use App\MatchingContext\SharedKernel\Domain\ValueObjects\PreferenceWeights;
+use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
 use PHPUnit\Framework\TestCase;
 
 class MatchingEngineTest extends TestCase
@@ -51,7 +51,7 @@ class MatchingEngineTest extends TestCase
             'SMALL',
             'BASIC',
             'OPEN',
-            new \DateTimeImmutable(),
+            new \DateTimeImmutable,
             $constraint,
             $preference,
             []
@@ -76,7 +76,7 @@ class MatchingEngineTest extends TestCase
             []
         );
 
-        $engine = new MatchingEngine();
+        $engine = new MatchingEngine;
         $result = $engine->scoreCandidate($rfs, $candidate, [
             'taxonomy_score' => 2.0,
             'attribute_match_ratio' => 1.0,
@@ -114,7 +114,7 @@ class MatchingEngineTest extends TestCase
             'SMALL',
             'BASIC',
             'OPEN',
-            new \DateTimeImmutable(),
+            new \DateTimeImmutable,
             null,
             $preference,
             []
@@ -139,7 +139,7 @@ class MatchingEngineTest extends TestCase
             []
         );
 
-        $engine = new MatchingEngine();
+        $engine = new MatchingEngine;
         $result = $engine->scoreCandidate($rfs, $candidate, [
             'taxonomy_score' => 0.7,
             'attribute_match_ratio' => 0.0,

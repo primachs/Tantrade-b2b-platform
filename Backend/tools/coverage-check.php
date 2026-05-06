@@ -1,9 +1,9 @@
 <?php
 
-$coverageFile = $argv[1] ?? __DIR__ . '/../coverage.xml';
+$coverageFile = $argv[1] ?? __DIR__.'/../coverage.xml';
 $minimum = isset($argv[2]) ? (float) $argv[2] : 100.0;
 
-if (!file_exists($coverageFile)) {
+if (! file_exists($coverageFile)) {
     fwrite(STDERR, "Coverage file not found: {$coverageFile}\n");
     exit(1);
 }
@@ -15,7 +15,7 @@ if ($xml === false) {
 }
 
 $project = $xml->project;
-if (!$project || !isset($project['line-rate'])) {
+if (! $project || ! isset($project['line-rate'])) {
     fwrite(STDERR, "Coverage file does not contain project line-rate.\n");
     exit(1);
 }

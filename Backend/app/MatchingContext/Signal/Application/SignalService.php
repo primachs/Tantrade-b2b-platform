@@ -15,8 +15,7 @@ class SignalService
         private readonly SignalFactory $factory,
         private readonly ReliabilityCalculator $calculator,
         private readonly BusinessRepository $businessRepository
-    ) {
-    }
+    ) {}
 
     public function recordSignal(string $sessionId, string $sellerId, string $outcome, float $confidence): array
     {

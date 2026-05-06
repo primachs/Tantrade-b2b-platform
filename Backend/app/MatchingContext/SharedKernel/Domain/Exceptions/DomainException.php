@@ -2,6 +2,4 @@
 
 namespace App\MatchingContext\SharedKernel\Domain\Exceptions;
 
-class DomainException extends \RuntimeException
-{
-}
+class DomainException extends \RuntimeException {}

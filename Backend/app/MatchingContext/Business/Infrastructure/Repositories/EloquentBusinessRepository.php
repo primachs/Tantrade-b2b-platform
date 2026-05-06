@@ -19,9 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 class EloquentBusinessRepository implements BusinessRepository
 {
-    public function __construct(private readonly BusinessFactory $factory)
-    {
-    }
+    public function __construct(private readonly BusinessFactory $factory) {}
 
     public function create(Business $business): Business
     {
@@ -44,7 +42,7 @@ class EloquentBusinessRepository implements BusinessRepository
                 BusinessTrustMetricsModel::create($data['trust_metrics']);
             }
 
-            if (!empty($data['capabilities'])) {
+            if (! empty($data['capabilities'])) {
                 $capabilities = array_map(function (array $capability) {
                     return $this->factory->capabilityFromState($capability);
                 }, $data['capabilities']);
@@ -77,7 +75,7 @@ class EloquentBusinessRepository implements BusinessRepository
         $model = BusinessModel::with(['verification', 'capabilities.capabilityAttributes', 'trustMetrics'])
             ->find($businessId->value());
 
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 
@@ -108,7 +106,7 @@ class EloquentBusinessRepository implements BusinessRepository
         BusinessCapabilityModel::where('business_id', $businessId->value())->delete();
 
         foreach ($capabilities as $capability) {
-            if (!$capability instanceof BusinessCapability) {
+            if (! $capability instanceof BusinessCapability) {
                 continue;
             }
 
@@ -140,7 +138,7 @@ class EloquentBusinessRepository implements BusinessRepository
     public function getTrustMetrics(Uuid $businessId): ?BusinessTrustMetrics
     {
         $metrics = BusinessTrustMetricsModel::where('business_id', $businessId->value())->first();
-        if (!$metrics) {
+        if (! $metrics) {
             return null;
         }
 

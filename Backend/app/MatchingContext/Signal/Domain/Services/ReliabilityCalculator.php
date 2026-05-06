@@ -8,9 +8,7 @@ use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
 
 class ReliabilityCalculator
 {
-    public function __construct(private readonly EngagementRepository $engagementRepository)
-    {
-    }
+    public function __construct(private readonly EngagementRepository $engagementRepository) {}
 
     public function recalculateForSeller(Uuid $sellerId): BusinessTrustMetrics
     {
@@ -56,7 +54,7 @@ class ReliabilityCalculator
         $durations = [];
         foreach ($sessions as $session) {
             $firstResponse = $this->engagementRepository->findReport($session->id(), 'SELLER');
-            if (!$firstResponse) {
+            if (! $firstResponse) {
                 continue;
             }
 

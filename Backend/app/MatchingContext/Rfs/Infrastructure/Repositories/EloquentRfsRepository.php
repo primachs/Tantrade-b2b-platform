@@ -18,9 +18,7 @@ use Illuminate\Support\Facades\DB;
 
 class EloquentRfsRepository implements RfsRepository
 {
-    public function __construct(private readonly RfsFactory $factory)
-    {
-    }
+    public function __construct(private readonly RfsFactory $factory) {}
 
     public function create(Rfs $rfs): Rfs
     {
@@ -47,7 +45,7 @@ class EloquentRfsRepository implements RfsRepository
                 $this->upsertPreference($this->factory->preferenceFromState($data['preference']));
             }
 
-            if (!empty($data['attributes'])) {
+            if (! empty($data['attributes'])) {
                 $this->replaceAttributes(Uuid::fromString($data['id']), $this->factory->attributesFromState($data['attributes']));
             }
 
@@ -74,7 +72,7 @@ class EloquentRfsRepository implements RfsRepository
     public function findById(Uuid $rfsId): ?Rfs
     {
         $model = RfsModel::with(['constraints', 'preferences', 'rfsAttributes'])->find($rfsId->value());
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 
@@ -118,7 +116,7 @@ class EloquentRfsRepository implements RfsRepository
         RfsAttributeModel::where('rfs_id', $rfsId->value())->delete();
 
         foreach ($attributes as $attribute) {
-            if (!$attribute instanceof RfsAttribute) {
+            if (! $attribute instanceof RfsAttribute) {
                 continue;
             }
 

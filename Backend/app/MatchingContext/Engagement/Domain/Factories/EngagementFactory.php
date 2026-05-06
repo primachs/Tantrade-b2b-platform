@@ -18,7 +18,7 @@ class EngagementFactory
             'INITIATED',
             null,
             null,
-            new \DateTimeImmutable(),
+            new \DateTimeImmutable,
             null,
             []
         );
@@ -52,7 +52,7 @@ class EngagementFactory
             $sessionId,
             $payload['reported_by'],
             $payload['outcome'],
-            new \DateTimeImmutable()
+            new \DateTimeImmutable
         );
     }
 

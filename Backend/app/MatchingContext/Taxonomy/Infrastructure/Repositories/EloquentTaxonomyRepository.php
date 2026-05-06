@@ -16,9 +16,7 @@ use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType as ServiceTyp
 
 class EloquentTaxonomyRepository implements TaxonomyRepository
 {
-    public function __construct(private readonly TaxonomyFactory $factory)
-    {
-    }
+    public function __construct(private readonly TaxonomyFactory $factory) {}
 
     public function createCategory(ServiceCategory $category): ServiceCategory
     {
@@ -90,7 +88,7 @@ class EloquentTaxonomyRepository implements TaxonomyRepository
     public function findCategoryById(Uuid $id): ?ServiceCategory
     {
         $model = ServiceCategoryModel::find($id->value());
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 
@@ -100,7 +98,7 @@ class EloquentTaxonomyRepository implements TaxonomyRepository
     public function findServiceTypeById(Uuid $id): ?ServiceType
     {
         $model = ServiceTypeModel::find($id->value());
-        if (!$model) {
+        if (! $model) {
             return null;
         }
 

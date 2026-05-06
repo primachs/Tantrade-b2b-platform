@@ -193,13 +193,13 @@ class RfsMatchingApiTest extends TestCase
             'name' => $name,
             'contact_person' => 'Owner',
             'phone' => '+255700000000',
-            'email' => strtolower(str_replace(' ', '.', $name)) . '@example.com',
+            'email' => strtolower(str_replace(' ', '.', $name)).'@example.com',
         ]);
 
         BusinessVerification::create([
             'business_id' => $business->id,
-            'tin_number' => 'TIN-' . $business->id,
-            'brela_number' => 'BRELA-' . $business->id,
+            'tin_number' => 'TIN-'.$business->id,
+            'brela_number' => 'BRELA-'.$business->id,
             'business_size' => 'SMALL',
             'is_owner' => true,
             'owner_gender' => 'OTHER',

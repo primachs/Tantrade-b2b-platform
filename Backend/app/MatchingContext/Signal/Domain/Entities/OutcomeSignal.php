@@ -13,8 +13,7 @@ final class OutcomeSignal
         private readonly string $outcome,
         private readonly float $confidenceScore,
         private readonly \DateTimeImmutable $createdAt
-    ) {
-    }
+    ) {}
 
     public function toArray(): array
     {

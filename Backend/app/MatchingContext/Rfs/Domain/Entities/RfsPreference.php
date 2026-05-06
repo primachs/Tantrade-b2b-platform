@@ -10,8 +10,7 @@ final class RfsPreference
     public function __construct(
         private readonly Uuid $rfsId,
         private readonly PreferenceWeights $weights
-    ) {
-    }
+    ) {}
 
     public function weights(): PreferenceWeights
     {

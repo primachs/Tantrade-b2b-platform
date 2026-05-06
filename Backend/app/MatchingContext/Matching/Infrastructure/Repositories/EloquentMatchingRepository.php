@@ -3,6 +3,7 @@
 namespace App\MatchingContext\Matching\Infrastructure\Repositories;
 
 use App\MatchingContext\Business\Domain\Factories\BusinessFactory;
+use App\MatchingContext\Business\Infrastructure\Models\BusinessCapability as BusinessCapabilityModel;
 use App\MatchingContext\Matching\Domain\Entities\CandidateAttribute;
 use App\MatchingContext\Matching\Domain\Entities\CandidateProfile;
 use App\MatchingContext\Matching\Domain\Entities\MatchCandidate;
@@ -10,16 +11,13 @@ use App\MatchingContext\Matching\Domain\Entities\MatchShortlist;
 use App\MatchingContext\Matching\Domain\Repositories\MatchingRepository;
 use App\MatchingContext\Matching\Infrastructure\Models\MatchCandidate as MatchCandidateModel;
 use App\MatchingContext\Matching\Infrastructure\Models\MatchShortlist as MatchShortlistModel;
-use App\MatchingContext\Business\Infrastructure\Models\BusinessCapability as BusinessCapabilityModel;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Location;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
 use Illuminate\Support\Facades\DB;
 
 class EloquentMatchingRepository implements MatchingRepository
 {
-    public function __construct(private readonly BusinessFactory $businessFactory)
-    {
-    }
+    public function __construct(private readonly BusinessFactory $businessFactory) {}
 
     public function findCandidatesByServiceTypes(array $serviceTypeIds): array
     {
@@ -92,7 +90,7 @@ class EloquentMatchingRepository implements MatchingRepository
             ->latest('created_at')
             ->first();
 
-        if (!$shortlist) {
+        if (! $shortlist) {
             return null;
         }
 

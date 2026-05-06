@@ -12,8 +12,7 @@ final class SessionReport
         private readonly string $reportedBy,
         private readonly string $outcome,
         private readonly \DateTimeImmutable $createdAt
-    ) {
-    }
+    ) {}
 
     public function reportedBy(): string
     {
