@@ -14,7 +14,7 @@ class MarketRepositoryTest extends TestCase
     public function test_market_repository_crud(): void
     {
         $repository = app(MarketRepository::class);
-        $factory = new MarketFactory();
+        $factory = new MarketFactory;
 
         $market = $factory->create([
             'market_name' => 'Kariakoo',

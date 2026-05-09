@@ -2,11 +2,11 @@
 
 namespace App\MatchingContext\SharedKernel\Tests\Unit;
 
+use App\MatchingContext\SharedKernel\Domain\Exceptions\DomainException;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\DateRange;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\EmailAddress;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\MoneyRange;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
-use App\MatchingContext\SharedKernel\Domain\Exceptions\DomainException;
 use PHPUnit\Framework\TestCase;
 
 class ValueObjectCoverageTest extends TestCase

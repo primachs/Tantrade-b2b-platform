@@ -14,7 +14,7 @@ class EngagementSessionModelTest extends TestCase
 
     public function test_engagement_session_relationships(): void
     {
-        $model = new EngagementSession();
+        $model = new EngagementSession;
 
         $this->assertInstanceOf(BelongsTo::class, $model->rfs());
         $this->assertInstanceOf(BelongsTo::class, $model->buyer());

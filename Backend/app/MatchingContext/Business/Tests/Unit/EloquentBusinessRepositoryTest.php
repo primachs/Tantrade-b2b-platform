@@ -24,7 +24,7 @@ class EloquentBusinessRepositoryTest extends TestCase
             'name' => 'Vehicle Type',
         ]);
 
-        $factory = new BusinessFactory();
+        $factory = new BusinessFactory;
         $repository = new EloquentBusinessRepository($factory);
 
         $business = $factory->create([

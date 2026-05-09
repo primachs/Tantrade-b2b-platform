@@ -10,7 +10,7 @@ class TaxonomyFactoryTest extends TestCase
 {
     public function test_factory_creates_and_rehydrates(): void
     {
-        $factory = new TaxonomyFactory();
+        $factory = new TaxonomyFactory;
 
         $category = $factory->createCategory([
             'name' => 'Logistics',

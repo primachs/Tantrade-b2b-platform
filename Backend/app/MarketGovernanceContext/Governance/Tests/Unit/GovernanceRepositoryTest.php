@@ -48,7 +48,7 @@ class GovernanceRepositoryTest extends TestCase
         ]);
 
         $repository = app(GovernanceRepository::class);
-        $factory = new GovernanceFactory();
+        $factory = new GovernanceFactory;
 
         $office = $factory->createOffice([
             'market_id' => $market->id,

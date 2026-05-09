@@ -56,7 +56,7 @@ class EloquentEngagementRepositoryTest extends TestCase
             'created_at' => now(),
         ]);
 
-        $factory = new EngagementFactory();
+        $factory = new EngagementFactory;
         $repository = new EloquentEngagementRepository($factory);
 
         $session = $factory->createSession([

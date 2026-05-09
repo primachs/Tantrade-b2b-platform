@@ -13,7 +13,8 @@ class RfsControllerTest extends TestCase
 
     private function bindFakeService(string $rfsId): object
     {
-        $fakeService = new class($rfsId) extends RfsService {
+        $fakeService = new class($rfsId) extends RfsService
+        {
             public array $payloads = [];
 
             public function __construct(private readonly string $rfsId) {}

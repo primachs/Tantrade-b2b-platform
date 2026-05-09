@@ -2,12 +2,12 @@
 
 namespace App\MatchingContext\Matching\Tests\Unit;
 
-use App\MatchingContext\Matching\Application\MatchingService;
 use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessCapability;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessCapabilityAttribute;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessTrustMetrics;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessVerification;
+use App\MatchingContext\Matching\Application\MatchingService;
 use App\MatchingContext\Rfs\Infrastructure\Models\Rfs;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsAttribute;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsConstraint;

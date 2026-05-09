@@ -21,7 +21,7 @@ class PersonRepositoryTest extends TestCase
         ]);
 
         $repository = app(PersonRepository::class);
-        $factory = new PersonFactory();
+        $factory = new PersonFactory;
 
         $person = $factory->create([
             'user_id' => $user->id,

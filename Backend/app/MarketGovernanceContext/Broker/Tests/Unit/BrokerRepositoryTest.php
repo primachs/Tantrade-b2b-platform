@@ -48,7 +48,7 @@ class BrokerRepositoryTest extends TestCase
         ]);
 
         $repository = app(BrokerRepository::class);
-        $factory = new BrokerFactory();
+        $factory = new BrokerFactory;
 
         $registration = $factory->create([
             'person_id' => $person->id,

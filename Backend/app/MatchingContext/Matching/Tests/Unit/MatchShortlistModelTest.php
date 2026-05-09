@@ -14,7 +14,7 @@ class MatchShortlistModelTest extends TestCase
 
     public function test_match_shortlist_relationships(): void
     {
-        $model = new MatchShortlist();
+        $model = new MatchShortlist;
 
         $this->assertInstanceOf(BelongsTo::class, $model->rfs());
         $this->assertInstanceOf(HasMany::class, $model->candidates());

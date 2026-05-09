@@ -15,7 +15,7 @@ class RfsModelRelationsTest extends TestCase
 
     public function test_rfs_relationships(): void
     {
-        $model = new Rfs();
+        $model = new Rfs;
 
         $this->assertInstanceOf(BelongsTo::class, $model->buyer());
         $this->assertInstanceOf(BelongsTo::class, $model->serviceType());

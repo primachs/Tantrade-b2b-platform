@@ -10,7 +10,7 @@ class RfsFactoryTest extends TestCase
 {
     public function test_factory_from_state_and_payload(): void
     {
-        $factory = new RfsFactory();
+        $factory = new RfsFactory;
         $buyerId = Uuid::random()->value();
         $serviceTypeId = Uuid::random()->value();
 

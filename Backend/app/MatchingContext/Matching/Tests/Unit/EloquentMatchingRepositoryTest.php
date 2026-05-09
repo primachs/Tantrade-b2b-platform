@@ -20,7 +20,7 @@ class EloquentMatchingRepositoryTest extends TestCase
 
     public function test_matching_repository_methods(): void
     {
-        $repository = new EloquentMatchingRepository(new BusinessFactory());
+        $repository = new EloquentMatchingRepository(new BusinessFactory);
         $this->assertSame([], $repository->findCandidatesByServiceTypes([]));
 
         $buyer = Business::create([

@@ -14,7 +14,7 @@ class BusinessCapabilityModelTest extends TestCase
 
     public function test_capability_relationships(): void
     {
-        $model = new BusinessCapability();
+        $model = new BusinessCapability;
 
         $this->assertInstanceOf(BelongsTo::class, $model->business());
         $this->assertInstanceOf(BelongsTo::class, $model->serviceType());

@@ -10,7 +10,7 @@ class BusinessFactoryTest extends TestCase
 {
     public function test_factory_from_state_and_payload(): void
     {
-        $factory = new BusinessFactory();
+        $factory = new BusinessFactory;
 
         $payload = [
             'name' => 'Buyer Co',
