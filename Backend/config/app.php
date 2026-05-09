@@ -1,5 +1,20 @@
 <?php
 
+use App\MarketGovernanceContext\Broker\Infrastructure\BrokerServiceProvider;
+use App\MarketGovernanceContext\Governance\Infrastructure\GovernanceServiceProvider;
+use App\MarketGovernanceContext\Market\Infrastructure\MarketServiceProvider;
+use App\MarketGovernanceContext\Person\Infrastructure\PersonServiceProvider;
+use App\MatchingContext\Business\Infrastructure\BusinessServiceProvider;
+use App\MatchingContext\Engagement\Infrastructure\EngagementServiceProvider;
+use App\MatchingContext\Matching\Infrastructure\MatchingServiceProvider;
+use App\MatchingContext\Rfs\Infrastructure\RfsServiceProvider;
+use App\MatchingContext\SharedKernel\Infrastructure\SharedKernelServiceProvider;
+use App\MatchingContext\Signal\Infrastructure\SignalServiceProvider;
+use App\MatchingContext\Taxonomy\Infrastructure\TaxonomyServiceProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\AuthServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -163,22 +178,22 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
+        AppServiceProvider::class,
+        AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\MatchingContext\SharedKernel\Infrastructure\SharedKernelServiceProvider::class,
-        App\MatchingContext\Business\Infrastructure\BusinessServiceProvider::class,
-        App\MatchingContext\Taxonomy\Infrastructure\TaxonomyServiceProvider::class,
-        App\MatchingContext\Rfs\Infrastructure\RfsServiceProvider::class,
-        App\MatchingContext\Matching\Infrastructure\MatchingServiceProvider::class,
-        App\MatchingContext\Engagement\Infrastructure\EngagementServiceProvider::class,
-        App\MatchingContext\Signal\Infrastructure\SignalServiceProvider::class,
-        App\MarketGovernanceContext\Person\Infrastructure\PersonServiceProvider::class,
-        App\MarketGovernanceContext\Market\Infrastructure\MarketServiceProvider::class,
-        App\MarketGovernanceContext\Governance\Infrastructure\GovernanceServiceProvider::class,
-        App\MarketGovernanceContext\Broker\Infrastructure\BrokerServiceProvider::class,
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        SharedKernelServiceProvider::class,
+        BusinessServiceProvider::class,
+        TaxonomyServiceProvider::class,
+        RfsServiceProvider::class,
+        MatchingServiceProvider::class,
+        EngagementServiceProvider::class,
+        SignalServiceProvider::class,
+        PersonServiceProvider::class,
+        MarketServiceProvider::class,
+        GovernanceServiceProvider::class,
+        BrokerServiceProvider::class,
     ])->toArray(),
 
     /*

@@ -7,6 +7,7 @@ use App\MatchingContext\SharedKernel\Domain\Enums\ExpertiseLevel;
 use App\MatchingContext\SharedKernel\Domain\Enums\ProjectSize;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 class RfsController
@@ -31,8 +32,8 @@ class RfsController
                     $start = data_get($request->all(), 'constraints.start_date');
                     if ($start && $value) {
                         try {
-                            $startDate = \Illuminate\Support\Carbon::parse($start);
-                            $deadline = \Illuminate\Support\Carbon::parse($value);
+                            $startDate = Carbon::parse($start);
+                            $deadline = Carbon::parse($value);
                             if ($deadline->lt($startDate)) {
                                 $fail(sprintf('The %s must be a date after or equal to constraints.start_date.', $attribute));
                             }
@@ -83,8 +84,8 @@ class RfsController
                     $start = data_get($request->all(), 'constraints.start_date');
                     if ($start && $value) {
                         try {
-                            $startDate = \Illuminate\Support\Carbon::parse($start);
-                            $deadline = \Illuminate\Support\Carbon::parse($value);
+                            $startDate = Carbon::parse($start);
+                            $deadline = Carbon::parse($value);
                             if ($deadline->lt($startDate)) {
                                 $fail(sprintf('The %s must be a date after or equal to constraints.start_date.', $attribute));
                             }
