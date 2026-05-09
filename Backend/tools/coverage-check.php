@@ -2,6 +2,8 @@
 
 $coverageFile = $argv[1] ?? __DIR__.'/../coverage.xml';
 $minimum = isset($argv[2]) ? (float) $argv[2] : 100.0;
+$minimumMethods = isset($argv[3]) ? (float) $argv[3] : null;
+$methodPercentage = 0.0;
 
 if (! file_exists($coverageFile)) {
     fwrite(STDERR, "Coverage file not found: {$coverageFile}\n");
@@ -66,4 +68,38 @@ if ($percentage + 0.0001 < $minimum) {
     exit(1);
 }
 
+if ($minimumMethods !== null) {
+    $classMetricsNodes = $xml->xpath('//class/metrics');
+    if ($classMetricsNodes === false || count($classMetricsNodes) === 0) {
+        fwrite(STDERR, "Coverage file does not contain class metrics for method coverage.\n");
+        exit(1);
+    }
+
+    $totalMethods = 0.0;
+    $totalCoveredMethods = 0.0;
+    foreach ($classMetricsNodes as $metrics) {
+        $attrs = $metrics->attributes();
+        if (isset($attrs['methods']) && isset($attrs['coveredmethods'])) {
+            $totalMethods += (float) $attrs['methods'];
+            $totalCoveredMethods += (float) $attrs['coveredmethods'];
+        }
+    }
+
+    if ($totalMethods <= 0) {
+        fwrite(STDERR, "No methods found in class metrics.\n");
+        exit(1);
+    }
+
+    $methodRate = $totalCoveredMethods / $totalMethods;
+    $methodPercentage = $methodRate * 100.0;
+
+    if ($methodPercentage + 0.0001 < $minimumMethods) {
+        fwrite(STDERR, sprintf("Method coverage %.2f%% is below minimum %.2f%%.\n", $methodPercentage, $minimumMethods));
+        exit(1);
+    }
+}
+
 echo sprintf("Line coverage %.2f%% meets minimum %.2f%%.\n", $percentage, $minimum);
+if ($minimumMethods !== null) {
+    echo sprintf("Method coverage %.2f%% meets minimum %.2f%%.\n", $methodPercentage, $minimumMethods);
+}

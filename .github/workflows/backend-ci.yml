@@ -39,7 +39,7 @@ jobs:
           coverage: pcov
           extensions: pdo_sqlite, sqlite3, mbstring, dom, fileinfo
           tools: composer:v2
-          ini-values: pcov.directory=app
+          ini-values: pcov.directory=app/MatchingContext,app/MarketGovernanceContext
 
       - name: Validate composer.json
         run: composer validate --strict
@@ -54,4 +54,4 @@ jobs:
         run: php -d pcov.enabled=1 vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text
 
       - name: Enforce coverage threshold
-        run: php tools/coverage-check.php coverage.xml 90
+        run: php tools/coverage-check.php coverage.xml 90 90

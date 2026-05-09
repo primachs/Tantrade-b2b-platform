@@ -8,15 +8,20 @@
         <testsuite name="Unit">
             <directory suffix="Test.php">app/MatchingContext</directory>
             <exclude>app/MatchingContext/*/Tests/Feature</exclude>
+            <directory suffix="Test.php">app/MarketGovernanceContext</directory>
+            <exclude>app/MarketGovernanceContext/*/Tests/Feature</exclude>
         </testsuite>
         <testsuite name="Feature">
             <directory suffix="Test.php">app/MatchingContext</directory>
             <exclude>app/MatchingContext/*/Tests/Unit</exclude>
+            <directory suffix="Test.php">app/MarketGovernanceContext</directory>
+            <exclude>app/MarketGovernanceContext/*/Tests/Unit</exclude>
         </testsuite>
     </testsuites>
     <source>
         <include>
             <directory>app/MatchingContext</directory>
+            <directory>app/MarketGovernanceContext</directory>
         </include>
     </source>
     <php>

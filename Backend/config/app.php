@@ -175,6 +175,10 @@ return [
         App\MatchingContext\Matching\Infrastructure\MatchingServiceProvider::class,
         App\MatchingContext\Engagement\Infrastructure\EngagementServiceProvider::class,
         App\MatchingContext\Signal\Infrastructure\SignalServiceProvider::class,
+        App\MarketGovernanceContext\Person\Infrastructure\PersonServiceProvider::class,
+        App\MarketGovernanceContext\Market\Infrastructure\MarketServiceProvider::class,
+        App\MarketGovernanceContext\Governance\Infrastructure\GovernanceServiceProvider::class,
+        App\MarketGovernanceContext\Broker\Infrastructure\BrokerServiceProvider::class,
     ])->toArray(),
 
     /*

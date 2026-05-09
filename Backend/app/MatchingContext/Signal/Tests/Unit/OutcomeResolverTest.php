@@ -3,7 +3,7 @@
 namespace App\MatchingContext\Signal\Tests\Unit;
 
 use App\MatchingContext\Signal\Domain\Services\OutcomeResolver;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class OutcomeResolverTest extends TestCase
 {
@@ -20,6 +20,15 @@ class OutcomeResolverTest extends TestCase
         $resolver = new OutcomeResolver;
 
         $result = $resolver->resolve('NO_AGREEMENT', null);
+        $this->assertSame('NO_AGREEMENT', $result['outcome']);
+        $this->assertSame(0.6, $result['confidence']);
+    }
+
+    public function test_single_seller_report_resolution(): void
+    {
+        $resolver = new OutcomeResolver;
+
+        $result = $resolver->resolve(null, 'NO_AGREEMENT');
         $this->assertSame('NO_AGREEMENT', $result['outcome']);
         $this->assertSame(0.6, $result['confidence']);
     }

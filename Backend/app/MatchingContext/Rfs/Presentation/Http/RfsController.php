@@ -36,7 +36,7 @@ class RfsController
                             if ($deadline->lt($startDate)) {
                                 $fail(sprintf('The %s must be a date after or equal to constraints.start_date.', $attribute));
                             }
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                             $fail(sprintf('The %s must be a valid date.', $attribute));
                         }
                     }
@@ -88,7 +88,7 @@ class RfsController
                             if ($deadline->lt($startDate)) {
                                 $fail(sprintf('The %s must be a date after or equal to constraints.start_date.', $attribute));
                             }
-                        } catch (\Exception $e) {
+                        } catch (\Throwable $e) {
                             $fail(sprintf('The %s must be a valid date.', $attribute));
                         }
                     }

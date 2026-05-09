@@ -33,7 +33,7 @@ class RfsServiceTest extends TestCase
         $service = app(RfsService::class);
 
         $this->expectException(\RuntimeException::class);
-        $service->open($rfs);
+        $service->open($rfs->id);
     }
 
     public function test_open_requires_constraints(): void
@@ -53,7 +53,7 @@ class RfsServiceTest extends TestCase
         $service = app(RfsService::class);
 
         $this->expectException(\RuntimeException::class);
-        $service->open($rfs);
+        $service->open($rfs->id);
     }
 
     public function test_open_validates_budget(): void
@@ -79,7 +79,7 @@ class RfsServiceTest extends TestCase
         $service = app(RfsService::class);
 
         $this->expectException(\RuntimeException::class);
-        $service->open($rfs->refresh());
+        $service->open($rfs->refresh()->id);
     }
 
     public function test_open_validates_timeline(): void
@@ -105,7 +105,7 @@ class RfsServiceTest extends TestCase
         $service = app(RfsService::class);
 
         $this->expectException(\RuntimeException::class);
-        $service->open($rfs->refresh());
+        $service->open($rfs->refresh()->id);
     }
 
     public function test_update_rejects_closed_rfs(): void
@@ -125,7 +125,16 @@ class RfsServiceTest extends TestCase
         $service = app(RfsService::class);
 
         $this->expectException(\RuntimeException::class);
-        $service->update($rfs, ['title' => 'Updated']);
+        $service->update($rfs->id, ['title' => 'Updated']);
+    }
+
+    public function test_show_rejects_missing_rfs(): void
+    {
+        $service = app(RfsService::class);
+
+        $this->expectException(\RuntimeException::class);
+
+        $service->show('11111111-1111-1111-1111-111111111111');
     }
 
     private function seedRfsDependencies(): array
