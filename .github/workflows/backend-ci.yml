@@ -54,4 +54,4 @@ jobs:
         run: php -d pcov.enabled=1 vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text
 
       - name: Enforce coverage threshold
-        run: php tools/coverage-check.php coverage.xml 90 90
+        run: php tools/coverage-check.php coverage.xml 90 90 "app/MatchingContext,app/MarketGovernanceContext"

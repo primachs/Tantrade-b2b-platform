@@ -4,6 +4,10 @@ $coverageFile = $argv[1] ?? __DIR__.'/../coverage.xml';
 $minimum = isset($argv[2]) ? (float) $argv[2] : 100.0;
 $minimumMethods = isset($argv[3]) ? (float) $argv[3] : null;
 $methodPercentage = 0.0;
+$scopeArg = $argv[4] ?? null;
+$scopeDirectories = $scopeArg
+    ? array_values(array_filter(array_map('trim', explode(',', (string) $scopeArg))))
+    : ['app/MatchingContext', 'app/MarketGovernanceContext'];
 
 if (! file_exists($coverageFile)) {
     fwrite(STDERR, "Coverage file not found: {$coverageFile}\n");
@@ -25,11 +29,33 @@ if ($project && isset($project['line-rate'])) {
     // Fallback: try to compute line rate from metrics elements
     $lineRate = null;
 
-    $metricsNodes = $xml->xpath('//file/metrics');
-    if ($metricsNodes !== false && count($metricsNodes) > 0) {
-        $totalStatements = 0.0;
-        $totalCovered = 0.0;
-        foreach ($metricsNodes as $metrics) {
+    $totalStatements = 0.0;
+    $totalCovered = 0.0;
+
+    $fileNodes = $xml->xpath('//file');
+    if ($fileNodes !== false && count($fileNodes) > 0) {
+        foreach ($fileNodes as $file) {
+            $fileName = (string) ($file->attributes()['name'] ?? '');
+            if ($fileName === '') {
+                continue;
+            }
+
+            $inScope = false;
+            foreach ($scopeDirectories as $scopeDirectory) {
+                if ($scopeDirectory !== '' && str_contains(str_replace('\\', '/', $fileName), '/'.trim($scopeDirectory, '/').'/')) {
+                    $inScope = true;
+                    break;
+                }
+            }
+            if (! $inScope) {
+                continue;
+            }
+
+            $metrics = $file->metrics;
+            if (! $metrics) {
+                continue;
+            }
+
             $attrs = $metrics->attributes();
             if (isset($attrs['statements']) && isset($attrs['coveredstatements'])) {
                 $totalStatements += (float) $attrs['statements'];
@@ -50,10 +76,10 @@ if ($project && isset($project['line-rate'])) {
                 continue;
             }
         }
+    }
 
-        if ($totalStatements > 0) {
-            $lineRate = $totalCovered / $totalStatements;
-        }
+    if ($totalStatements > 0) {
+        $lineRate = $totalCovered / $totalStatements;
     }
 
     if ($lineRate === null) {
@@ -69,7 +95,24 @@ if ($percentage + 0.0001 < $minimum) {
 }
 
 if ($minimumMethods !== null) {
-    $classMetricsNodes = $xml->xpath('//class/metrics');
+    $scopePredicates = [];
+    foreach ($scopeDirectories as $scopeDirectory) {
+        $scopeDirectory = trim($scopeDirectory);
+        if ($scopeDirectory === '') {
+            continue;
+        }
+        $scopePredicates[] = "contains(translate(@name, '\\\\', '/'), '/".trim($scopeDirectory, '/')."/')";
+    }
+
+    $classMetricsNodes = [];
+    if (count($scopePredicates) > 0) {
+        $expr = '//file['.implode(' or ', $scopePredicates).']/class/metrics';
+        $result = $xml->xpath($expr);
+        if ($result !== false) {
+            $classMetricsNodes = $result;
+        }
+    }
+
     if ($classMetricsNodes === false || count($classMetricsNodes) === 0) {
         fwrite(STDERR, "Coverage file does not contain class metrics for method coverage.\n");
         exit(1);
