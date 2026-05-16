@@ -1,6 +1,1387 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1778320830">
-  <project timestamp="1778320830" name="Clover Coverage">
+<coverage generated="1778936760">
+  <project timestamp="1778936760" name="Clover Coverage">
+    <package name="App\AuthenticationContext\Auth\Application">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Application/AuthService.php">
+        <class name="App\AuthenticationContext\Auth\Application\AuthService" namespace="App\AuthenticationContext\Auth\Application">
+          <metrics complexity="16" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="62" coveredelements="62"/>
+        </class>
+        <line num="17" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="17"/>
+        <line num="20" type="stmt" count="17"/>
+        <line num="22" type="method" name="register" visibility="public" complexity="2" crap="2" count="15"/>
+        <line num="24" type="stmt" count="15"/>
+        <line num="25" type="stmt" count="15"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="15"/>
+        <line num="30" type="stmt" count="15"/>
+        <line num="31" type="stmt" count="15"/>
+        <line num="32" type="stmt" count="15"/>
+        <line num="33" type="stmt" count="15"/>
+        <line num="34" type="stmt" count="15"/>
+        <line num="35" type="stmt" count="15"/>
+        <line num="37" type="stmt" count="15"/>
+        <line num="39" type="stmt" count="15"/>
+        <line num="42" type="method" name="login" visibility="public" complexity="6" crap="6" count="8"/>
+        <line num="44" type="stmt" count="8"/>
+        <line num="45" type="stmt" count="8"/>
+        <line num="46" type="stmt" count="8"/>
+        <line num="48" type="stmt" count="8"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="53" type="stmt" count="7"/>
+        <line num="54" type="stmt" count="1"/>
+        <line num="57" type="stmt" count="6"/>
+        <line num="58" type="stmt" count="2"/>
+        <line num="61" type="stmt" count="5"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="64" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <line num="67" type="stmt" count="1"/>
+        <line num="68" type="stmt" count="1"/>
+        <line num="70" type="stmt" count="1"/>
+        <line num="73" type="stmt" count="4"/>
+        <line num="74" type="stmt" count="4"/>
+        <line num="75" type="stmt" count="4"/>
+        <line num="77" type="stmt" count="4"/>
+        <line num="78" type="stmt" count="4"/>
+        <line num="79" type="stmt" count="4"/>
+        <line num="80" type="stmt" count="4"/>
+        <line num="83" type="method" name="logout" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="85" type="stmt" count="3"/>
+        <line num="87" type="stmt" count="3"/>
+        <line num="88" type="stmt" count="2"/>
+        <line num="90" type="stmt" count="2"/>
+        <line num="93" type="stmt" count="1"/>
+        <line num="96" type="method" name="changePassword" visibility="public" complexity="2" crap="2" count="4"/>
+        <line num="98" type="stmt" count="4"/>
+        <line num="100" type="stmt" count="3"/>
+        <line num="101" type="stmt" count="1"/>
+        <line num="104" type="stmt" count="2"/>
+        <line num="106" type="stmt" count="2"/>
+        <line num="109" type="method" name="requireUser" visibility="private" complexity="2" crap="2" count="4"/>
+        <line num="111" type="stmt" count="4"/>
+        <line num="112" type="stmt" count="4"/>
+        <line num="113" type="stmt" count="1"/>
+        <line num="116" type="stmt" count="3"/>
+        <line num="119" type="method" name="sanitizeUser" visibility="private" complexity="1" crap="1" count="15"/>
+        <line num="121" type="stmt" count="15"/>
+        <line num="122" type="stmt" count="15"/>
+        <line num="124" type="stmt" count="15"/>
+        <metrics loc="127" ncloc="127" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="62" coveredelements="62"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Application/PermissionService.php">
+        <class name="App\AuthenticationContext\Auth\Application\PermissionService" namespace="App\AuthenticationContext\Auth\Application">
+          <metrics complexity="9" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="24" coveredelements="24"/>
+        </class>
+        <line num="12" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="16" type="stmt" count="3"/>
+        <line num="18" type="method" name="create" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="20" type="stmt" count="2"/>
+        <line num="21" type="stmt" count="2"/>
+        <line num="23" type="stmt" count="2"/>
+        <line num="26" type="method" name="assignPermission" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="28" type="stmt" count="3"/>
+        <line num="29" type="stmt" count="2"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="34" type="method" name="revokePermission" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="42" type="method" name="listPermissions" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="44" type="stmt" count="1"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="51" type="method" name="requireRole" visibility="private" complexity="2" crap="2" count="3"/>
+        <line num="53" type="stmt" count="3"/>
+        <line num="54" type="stmt" count="1"/>
+        <line num="58" type="method" name="requirePermission" visibility="private" complexity="2" crap="2" count="2"/>
+        <line num="60" type="stmt" count="2"/>
+        <line num="61" type="stmt" count="1"/>
+        <metrics loc="65" ncloc="65" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="24" coveredelements="24"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Application/RoleService.php">
+        <class name="App\AuthenticationContext\Auth\Application\RoleService" namespace="App\AuthenticationContext\Auth\Application">
+          <metrics complexity="9" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="24" coveredelements="24"/>
+        </class>
+        <line num="12" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="6"/>
+        <line num="16" type="stmt" count="6"/>
+        <line num="18" type="method" name="create" visibility="public" complexity="1" crap="1" count="5"/>
+        <line num="20" type="stmt" count="5"/>
+        <line num="21" type="stmt" count="5"/>
+        <line num="23" type="stmt" count="5"/>
+        <line num="26" type="method" name="assignRole" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="28" type="stmt" count="4"/>
+        <line num="29" type="stmt" count="3"/>
+        <line num="31" type="stmt" count="2"/>
+        <line num="34" type="method" name="revokeRole" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="36" type="stmt" count="2"/>
+        <line num="37" type="stmt" count="2"/>
+        <line num="39" type="stmt" count="2"/>
+        <line num="42" type="method" name="listRoles" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="44" type="stmt" count="2"/>
+        <line num="46" type="stmt" count="2"/>
+        <line num="48" type="stmt" count="2"/>
+        <line num="51" type="method" name="requireUser" visibility="private" complexity="2" crap="2" count="4"/>
+        <line num="53" type="stmt" count="4"/>
+        <line num="54" type="stmt" count="1"/>
+        <line num="58" type="method" name="requireRole" visibility="private" complexity="2" crap="2" count="3"/>
+        <line num="60" type="stmt" count="3"/>
+        <line num="61" type="stmt" count="1"/>
+        <metrics loc="65" ncloc="65" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="24" coveredelements="24"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\Auth\Domain\Entities">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Entities/AuthUser.php">
+        <class name="App\AuthenticationContext\Auth\Domain\Entities\AuthUser" namespace="App\AuthenticationContext\Auth\Domain\Entities">
+          <metrics complexity="13" methods="12" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="72" elements="84" coveredelements="84"/>
+        </class>
+        <line num="10" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="17"/>
+        <line num="25" type="stmt" count="17"/>
+        <line num="27" type="method" name="id" visibility="public" complexity="1" crap="1" count="6"/>
+        <line num="29" type="stmt" count="6"/>
+        <line num="32" type="method" name="email" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="37" type="method" name="passwordHash" visibility="public" complexity="1" crap="1" count="8"/>
+        <line num="39" type="stmt" count="8"/>
+        <line num="42" type="method" name="status" visibility="public" complexity="1" crap="1" count="8"/>
+        <line num="44" type="stmt" count="8"/>
+        <line num="47" type="method" name="failedLoginAttempts" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="49" type="stmt" count="2"/>
+        <line num="52" type="method" name="lockedUntil" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="54" type="stmt" count="1"/>
+        <line num="57" type="method" name="isLocked" visibility="public" complexity="2" crap="2" count="7"/>
+        <line num="59" type="stmt" count="7"/>
+        <line num="62" type="method" name="withLoginFailure" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="64" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <line num="66" type="stmt" count="1"/>
+        <line num="67" type="stmt" count="1"/>
+        <line num="68" type="stmt" count="1"/>
+        <line num="69" type="stmt" count="1"/>
+        <line num="70" type="stmt" count="1"/>
+        <line num="71" type="stmt" count="1"/>
+        <line num="72" type="stmt" count="1"/>
+        <line num="73" type="stmt" count="1"/>
+        <line num="74" type="stmt" count="1"/>
+        <line num="75" type="stmt" count="1"/>
+        <line num="76" type="stmt" count="1"/>
+        <line num="77" type="stmt" count="1"/>
+        <line num="78" type="stmt" count="1"/>
+        <line num="79" type="stmt" count="1"/>
+        <line num="82" type="method" name="withLoginSuccess" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="84" type="stmt" count="4"/>
+        <line num="85" type="stmt" count="4"/>
+        <line num="86" type="stmt" count="4"/>
+        <line num="87" type="stmt" count="4"/>
+        <line num="88" type="stmt" count="4"/>
+        <line num="89" type="stmt" count="4"/>
+        <line num="90" type="stmt" count="4"/>
+        <line num="91" type="stmt" count="4"/>
+        <line num="92" type="stmt" count="4"/>
+        <line num="93" type="stmt" count="4"/>
+        <line num="94" type="stmt" count="4"/>
+        <line num="95" type="stmt" count="4"/>
+        <line num="96" type="stmt" count="4"/>
+        <line num="97" type="stmt" count="4"/>
+        <line num="98" type="stmt" count="4"/>
+        <line num="99" type="stmt" count="4"/>
+        <line num="102" type="method" name="withPasswordHash" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="104" type="stmt" count="2"/>
+        <line num="105" type="stmt" count="2"/>
+        <line num="106" type="stmt" count="2"/>
+        <line num="107" type="stmt" count="2"/>
+        <line num="108" type="stmt" count="2"/>
+        <line num="109" type="stmt" count="2"/>
+        <line num="110" type="stmt" count="2"/>
+        <line num="111" type="stmt" count="2"/>
+        <line num="112" type="stmt" count="2"/>
+        <line num="113" type="stmt" count="2"/>
+        <line num="114" type="stmt" count="2"/>
+        <line num="115" type="stmt" count="2"/>
+        <line num="116" type="stmt" count="2"/>
+        <line num="117" type="stmt" count="2"/>
+        <line num="118" type="stmt" count="2"/>
+        <line num="119" type="stmt" count="2"/>
+        <line num="122" type="method" name="toArray" visibility="public" complexity="1" crap="1" count="16"/>
+        <line num="124" type="stmt" count="16"/>
+        <line num="125" type="stmt" count="16"/>
+        <line num="126" type="stmt" count="16"/>
+        <line num="127" type="stmt" count="16"/>
+        <line num="128" type="stmt" count="16"/>
+        <line num="129" type="stmt" count="16"/>
+        <line num="130" type="stmt" count="16"/>
+        <line num="131" type="stmt" count="16"/>
+        <line num="132" type="stmt" count="16"/>
+        <line num="133" type="stmt" count="16"/>
+        <line num="134" type="stmt" count="16"/>
+        <line num="135" type="stmt" count="16"/>
+        <line num="136" type="stmt" count="16"/>
+        <line num="137" type="stmt" count="16"/>
+        <line num="138" type="stmt" count="16"/>
+        <line num="139" type="stmt" count="16"/>
+        <metrics loc="142" ncloc="142" classes="1" methods="12" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="72" elements="84" coveredelements="84"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Entities/Permission.php">
+        <class name="App\AuthenticationContext\Auth\Domain\Entities\Permission" namespace="App\AuthenticationContext\Auth\Domain\Entities">
+          <metrics complexity="4" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="14" coveredelements="14"/>
+        </class>
+        <line num="9" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="15" type="stmt" count="4"/>
+        <line num="17" type="method" name="id" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="22" type="method" name="key" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="27" type="method" name="toArray" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="29" type="stmt" count="3"/>
+        <line num="30" type="stmt" count="3"/>
+        <line num="31" type="stmt" count="3"/>
+        <line num="32" type="stmt" count="3"/>
+        <line num="33" type="stmt" count="3"/>
+        <line num="34" type="stmt" count="3"/>
+        <line num="35" type="stmt" count="3"/>
+        <metrics loc="38" ncloc="38" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="14" coveredelements="14"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Entities/Role.php">
+        <class name="App\AuthenticationContext\Auth\Domain\Entities\Role" namespace="App\AuthenticationContext\Auth\Domain\Entities">
+          <metrics complexity="4" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="14" coveredelements="14"/>
+        </class>
+        <line num="9" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="8"/>
+        <line num="15" type="stmt" count="8"/>
+        <line num="17" type="method" name="id" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="19" type="stmt" count="2"/>
+        <line num="22" type="method" name="name" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="27" type="method" name="toArray" visibility="public" complexity="1" crap="1" count="7"/>
+        <line num="29" type="stmt" count="7"/>
+        <line num="30" type="stmt" count="7"/>
+        <line num="31" type="stmt" count="7"/>
+        <line num="32" type="stmt" count="7"/>
+        <line num="33" type="stmt" count="7"/>
+        <line num="34" type="stmt" count="7"/>
+        <line num="35" type="stmt" count="7"/>
+        <metrics loc="38" ncloc="38" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="14" coveredelements="14"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\Auth\Domain\Factories">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Factories/AuthUserFactory.php">
+        <class name="App\AuthenticationContext\Auth\Domain\Factories\AuthUserFactory" namespace="App\AuthenticationContext\Auth\Domain\Factories">
+          <metrics complexity="10" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="43" coveredstatements="41" elements="47" coveredelements="44"/>
+        </class>
+        <line num="12" type="method" name="create" visibility="public" complexity="1" crap="1" count="15"/>
+        <line num="14" type="stmt" count="15"/>
+        <line num="15" type="stmt" count="15"/>
+        <line num="16" type="stmt" count="15"/>
+        <line num="17" type="stmt" count="15"/>
+        <line num="18" type="stmt" count="15"/>
+        <line num="19" type="stmt" count="15"/>
+        <line num="20" type="stmt" count="15"/>
+        <line num="21" type="stmt" count="15"/>
+        <line num="22" type="stmt" count="15"/>
+        <line num="23" type="stmt" count="15"/>
+        <line num="24" type="stmt" count="15"/>
+        <line num="25" type="stmt" count="15"/>
+        <line num="26" type="stmt" count="15"/>
+        <line num="27" type="stmt" count="15"/>
+        <line num="28" type="stmt" count="15"/>
+        <line num="29" type="stmt" count="15"/>
+        <line num="32" type="method" name="fromState" visibility="public" complexity="1" crap="1" count="16"/>
+        <line num="34" type="stmt" count="16"/>
+        <line num="35" type="stmt" count="16"/>
+        <line num="36" type="stmt" count="16"/>
+        <line num="37" type="stmt" count="16"/>
+        <line num="38" type="stmt" count="16"/>
+        <line num="39" type="stmt" count="16"/>
+        <line num="40" type="stmt" count="16"/>
+        <line num="41" type="stmt" count="16"/>
+        <line num="42" type="stmt" count="16"/>
+        <line num="43" type="stmt" count="16"/>
+        <line num="44" type="stmt" count="16"/>
+        <line num="45" type="stmt" count="16"/>
+        <line num="46" type="stmt" count="16"/>
+        <line num="47" type="stmt" count="16"/>
+        <line num="48" type="stmt" count="16"/>
+        <line num="49" type="stmt" count="16"/>
+        <line num="52" type="method" name="parseDate" visibility="private" complexity="3" crap="3" count="16"/>
+        <line num="54" type="stmt" count="16"/>
+        <line num="55" type="stmt" count="16"/>
+        <line num="58" type="stmt" count="16"/>
+        <line num="61" type="method" name="normalizeRecoveryCodes" visibility="private" complexity="5" crap="5.39" count="16"/>
+        <line num="63" type="stmt" count="16"/>
+        <line num="64" type="stmt" count="15"/>
+        <line num="67" type="stmt" count="1"/>
+        <line num="68" type="stmt" count="0"/>
+        <line num="71" type="stmt" count="1"/>
+        <line num="72" type="stmt" count="1"/>
+        <line num="73" type="stmt" count="0"/>
+        <line num="76" type="stmt" count="1"/>
+        <metrics loc="79" ncloc="79" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="43" coveredstatements="41" elements="47" coveredelements="44"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Factories/PermissionFactory.php">
+        <class name="App\AuthenticationContext\Auth\Domain\Factories\PermissionFactory" namespace="App\AuthenticationContext\Auth\Domain\Factories">
+          <metrics complexity="4" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+        </class>
+        <line num="10" type="method" name="create" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="12" type="stmt" count="3"/>
+        <line num="13" type="stmt" count="3"/>
+        <line num="14" type="stmt" count="3"/>
+        <line num="15" type="stmt" count="3"/>
+        <line num="16" type="stmt" count="3"/>
+        <line num="17" type="stmt" count="3"/>
+        <line num="18" type="stmt" count="3"/>
+        <line num="21" type="method" name="fromState" visibility="public" complexity="3" crap="3" count="3"/>
+        <line num="23" type="stmt" count="3"/>
+        <line num="24" type="stmt" count="3"/>
+        <line num="25" type="stmt" count="3"/>
+        <line num="26" type="stmt" count="3"/>
+        <line num="27" type="stmt" count="3"/>
+        <line num="28" type="stmt" count="3"/>
+        <line num="29" type="stmt" count="3"/>
+        <metrics loc="32" ncloc="32" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Factories/RoleFactory.php">
+        <class name="App\AuthenticationContext\Auth\Domain\Factories\RoleFactory" namespace="App\AuthenticationContext\Auth\Domain\Factories">
+          <metrics complexity="4" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+        </class>
+        <line num="10" type="method" name="create" visibility="public" complexity="1" crap="1" count="7"/>
+        <line num="12" type="stmt" count="7"/>
+        <line num="13" type="stmt" count="7"/>
+        <line num="14" type="stmt" count="7"/>
+        <line num="15" type="stmt" count="7"/>
+        <line num="16" type="stmt" count="7"/>
+        <line num="17" type="stmt" count="7"/>
+        <line num="18" type="stmt" count="7"/>
+        <line num="21" type="method" name="fromState" visibility="public" complexity="3" crap="3" count="7"/>
+        <line num="23" type="stmt" count="7"/>
+        <line num="24" type="stmt" count="7"/>
+        <line num="25" type="stmt" count="7"/>
+        <line num="26" type="stmt" count="7"/>
+        <line num="27" type="stmt" count="7"/>
+        <line num="28" type="stmt" count="7"/>
+        <line num="29" type="stmt" count="7"/>
+        <metrics loc="32" ncloc="32" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+      </file>
+    </package>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Repositories/AuthUserRepository.php">
+      <metrics loc="27" ncloc="27" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Repositories/PermissionRepository.php">
+      <metrics loc="21" ncloc="20" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Domain/Repositories/RoleRepository.php">
+      <metrics loc="21" ncloc="20" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <package name="App\AuthenticationContext\Auth\Infrastructure">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/AuthServiceProvider.php">
+        <class name="App\AuthenticationContext\Auth\Infrastructure\AuthServiceProvider" namespace="App\AuthenticationContext\Auth\Infrastructure">
+          <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+        </class>
+        <line num="19" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
+        <line num="26" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="28" type="stmt" count="99"/>
+        <line num="30" type="stmt" count="99"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="99"/>
+        <line num="36" type="stmt" count="99"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="99"/>
+        <line num="40" type="stmt" count="99"/>
+        <line num="41" type="stmt" count="99"/>
+        <line num="42" type="stmt" count="99"/>
+        <metrics loc="45" ncloc="45" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\Auth\Infrastructure\Models">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Models/AuthUser.php">
+        <class name="App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser" namespace="App\AuthenticationContext\Auth\Infrastructure\Models">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+        </class>
+        <line num="50" type="method" name="roles" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="52" type="stmt" count="3"/>
+        <line num="53" type="stmt" count="3"/>
+        <metrics loc="56" ncloc="56" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Models/Permission.php">
+        <class name="App\AuthenticationContext\Auth\Infrastructure\Models\Permission" namespace="App\AuthenticationContext\Auth\Infrastructure\Models">
+          <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="0" elements="3" coveredelements="0"/>
+        </class>
+        <line num="20" type="method" name="roles" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="22" type="stmt" count="0"/>
+        <line num="23" type="stmt" count="0"/>
+        <metrics loc="26" ncloc="26" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="0" elements="3" coveredelements="0"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Models/Role.php">
+        <class name="App\AuthenticationContext\Auth\Infrastructure\Models\Role" namespace="App\AuthenticationContext\Auth\Infrastructure\Models">
+          <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="6" coveredelements="6"/>
+        </class>
+        <line num="20" type="method" name="users" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="26" type="method" name="permissions" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="28" type="stmt" count="3"/>
+        <line num="29" type="stmt" count="3"/>
+        <metrics loc="32" ncloc="32" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="6" coveredelements="6"/>
+      </file>
+    </package>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Persistence/Migrations/2026_05_15_000001_create_authentication_users_table.php">
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="11" type="stmt" count="1"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="19" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <line num="22" type="stmt" count="1"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="24" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="1"/>
+      <line num="27" type="stmt" count="1"/>
+      <line num="28" type="stmt" count="1"/>
+      <line num="29" type="stmt" count="1"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="1"/>
+      <metrics loc="37" ncloc="37" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="21" elements="22" coveredelements="21"/>
+    </file>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Persistence/Migrations/2026_05_15_000002_create_authentication_roles_table.php">
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="11" type="stmt" count="1"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="1"/>
+      <metrics loc="25" ncloc="25" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="10" elements="11" coveredelements="10"/>
+    </file>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Persistence/Migrations/2026_05_15_000003_create_authentication_permissions_table.php">
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="11" type="stmt" count="1"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="1"/>
+      <metrics loc="25" ncloc="25" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="10" elements="11" coveredelements="10"/>
+    </file>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Persistence/Migrations/2026_05_15_000004_create_authentication_role_user_table.php">
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="11" type="stmt" count="1"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="19" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="1"/>
+      <metrics loc="28" ncloc="28" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="12" elements="13" coveredelements="12"/>
+    </file>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Persistence/Migrations/2026_05_15_000005_create_authentication_permission_role_table.php">
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="11" type="stmt" count="1"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="19" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="1"/>
+      <metrics loc="28" ncloc="28" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="12" elements="13" coveredelements="12"/>
+    </file>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Persistence/Migrations/2026_05_15_000006_create_authentication_login_attempts_table.php">
+      <line num="7" type="stmt" count="1"/>
+      <line num="8" type="stmt" count="1"/>
+      <line num="11" type="stmt" count="1"/>
+      <line num="12" type="stmt" count="1"/>
+      <line num="13" type="stmt" count="1"/>
+      <line num="14" type="stmt" count="1"/>
+      <line num="15" type="stmt" count="1"/>
+      <line num="16" type="stmt" count="1"/>
+      <line num="17" type="stmt" count="1"/>
+      <line num="18" type="stmt" count="1"/>
+      <line num="20" type="stmt" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <line num="22" type="stmt" count="1"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="1"/>
+      <metrics loc="31" ncloc="31" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="15" elements="16" coveredelements="15"/>
+    </file>
+    <package name="App\AuthenticationContext\Auth\Infrastructure\Repositories">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Repositories/EloquentAuthUserRepository.php">
+        <class name="App\AuthenticationContext\Auth\Infrastructure\Repositories\EloquentAuthUserRepository" namespace="App\AuthenticationContext\Auth\Infrastructure\Repositories">
+          <metrics complexity="16" methods="10" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="70" coveredstatements="70" elements="80" coveredelements="80"/>
+        </class>
+        <line num="16" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="21"/>
+        <line num="18" type="method" name="create" visibility="public" complexity="1" crap="1" count="15"/>
+        <line num="20" type="stmt" count="15"/>
+        <line num="22" type="stmt" count="15"/>
+        <line num="23" type="stmt" count="15"/>
+        <line num="24" type="stmt" count="15"/>
+        <line num="25" type="stmt" count="15"/>
+        <line num="26" type="stmt" count="15"/>
+        <line num="27" type="stmt" count="15"/>
+        <line num="28" type="stmt" count="15"/>
+        <line num="29" type="stmt" count="15"/>
+        <line num="30" type="stmt" count="15"/>
+        <line num="31" type="stmt" count="15"/>
+        <line num="32" type="stmt" count="15"/>
+        <line num="33" type="stmt" count="15"/>
+        <line num="34" type="stmt" count="15"/>
+        <line num="35" type="stmt" count="15"/>
+        <line num="37" type="stmt" count="15"/>
+        <line num="40" type="method" name="update" visibility="public" complexity="1" crap="1" count="6"/>
+        <line num="42" type="stmt" count="6"/>
+        <line num="44" type="stmt" count="6"/>
+        <line num="45" type="stmt" count="6"/>
+        <line num="46" type="stmt" count="6"/>
+        <line num="47" type="stmt" count="6"/>
+        <line num="48" type="stmt" count="6"/>
+        <line num="49" type="stmt" count="6"/>
+        <line num="50" type="stmt" count="6"/>
+        <line num="51" type="stmt" count="6"/>
+        <line num="52" type="stmt" count="6"/>
+        <line num="53" type="stmt" count="6"/>
+        <line num="54" type="stmt" count="6"/>
+        <line num="55" type="stmt" count="6"/>
+        <line num="56" type="stmt" count="6"/>
+        <line num="57" type="stmt" count="6"/>
+        <line num="58" type="stmt" count="6"/>
+        <line num="59" type="stmt" count="6"/>
+        <line num="61" type="stmt" count="6"/>
+        <line num="64" type="method" name="findById" visibility="public" complexity="2" crap="2" count="18"/>
+        <line num="66" type="stmt" count="18"/>
+        <line num="67" type="stmt" count="18"/>
+        <line num="68" type="stmt" count="3"/>
+        <line num="71" type="stmt" count="15"/>
+        <line num="74" type="method" name="findByEmail" visibility="public" complexity="2" crap="2" count="17"/>
+        <line num="76" type="stmt" count="17"/>
+        <line num="77" type="stmt" count="17"/>
+        <line num="78" type="stmt" count="17"/>
+        <line num="81" type="stmt" count="8"/>
+        <line num="84" type="method" name="issueToken" visibility="public" complexity="2" crap="2" count="6"/>
+        <line num="86" type="stmt" count="6"/>
+        <line num="87" type="stmt" count="6"/>
+        <line num="88" type="stmt" count="1"/>
+        <line num="91" type="stmt" count="5"/>
+        <line num="94" type="method" name="revokeToken" visibility="public" complexity="3" crap="3" count="4"/>
+        <line num="96" type="stmt" count="4"/>
+        <line num="97" type="stmt" count="4"/>
+        <line num="98" type="stmt" count="1"/>
+        <line num="101" type="stmt" count="3"/>
+        <line num="102" type="stmt" count="1"/>
+        <line num="105" type="stmt" count="2"/>
+        <line num="108" type="method" name="revokeAllTokens" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="110" type="stmt" count="3"/>
+        <line num="111" type="stmt" count="3"/>
+        <line num="112" type="stmt" count="1"/>
+        <line num="115" type="stmt" count="2"/>
+        <line num="118" type="method" name="recordLoginAttempt" visibility="public" complexity="1" crap="1" count="6"/>
+        <line num="120" type="stmt" count="6"/>
+        <line num="121" type="stmt" count="6"/>
+        <line num="122" type="stmt" count="6"/>
+        <line num="123" type="stmt" count="6"/>
+        <line num="124" type="stmt" count="6"/>
+        <line num="125" type="stmt" count="6"/>
+        <line num="126" type="stmt" count="6"/>
+        <line num="127" type="stmt" count="6"/>
+        <line num="130" type="method" name="mapAuthUserModel" visibility="private" complexity="1" crap="1" count="15"/>
+        <line num="132" type="stmt" count="15"/>
+        <line num="133" type="stmt" count="15"/>
+        <line num="134" type="stmt" count="15"/>
+        <line num="135" type="stmt" count="15"/>
+        <line num="137" type="stmt" count="15"/>
+        <metrics loc="140" ncloc="140" classes="1" methods="10" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="70" coveredstatements="70" elements="80" coveredelements="80"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Repositories/EloquentPermissionRepository.php">
+        <class name="App\AuthenticationContext\Auth\Infrastructure\Repositories\EloquentPermissionRepository" namespace="App\AuthenticationContext\Auth\Infrastructure\Repositories">
+          <metrics complexity="10" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="30" coveredelements="30"/>
+        </class>
+        <line num="14" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="16" type="method" name="create" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="18" type="stmt" count="3"/>
+        <line num="20" type="stmt" count="3"/>
+        <line num="21" type="stmt" count="3"/>
+        <line num="22" type="stmt" count="3"/>
+        <line num="23" type="stmt" count="3"/>
+        <line num="24" type="stmt" count="3"/>
+        <line num="26" type="stmt" count="3"/>
+        <line num="29" type="method" name="findById" visibility="public" complexity="2" crap="2" count="4"/>
+        <line num="31" type="stmt" count="4"/>
+        <line num="32" type="stmt" count="4"/>
+        <line num="33" type="stmt" count="2"/>
+        <line num="36" type="stmt" count="3"/>
+        <line num="39" type="method" name="assignToRole" visibility="public" complexity="2" crap="2" count="2"/>
+        <line num="41" type="stmt" count="2"/>
+        <line num="42" type="stmt" count="2"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="46" type="stmt" count="2"/>
+        <line num="49" type="method" name="revokeFromRole" visibility="public" complexity="2" crap="2" count="2"/>
+        <line num="51" type="stmt" count="2"/>
+        <line num="52" type="stmt" count="2"/>
+        <line num="53" type="stmt" count="1"/>
+        <line num="56" type="stmt" count="2"/>
+        <line num="59" type="method" name="listForRole" visibility="public" complexity="2" crap="2" count="2"/>
+        <line num="61" type="stmt" count="2"/>
+        <line num="62" type="stmt" count="2"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="66" type="stmt" count="2"/>
+        <metrics loc="69" ncloc="69" classes="1" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="30" coveredelements="30"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Infrastructure/Repositories/EloquentRoleRepository.php">
+        <class name="App\AuthenticationContext\Auth\Infrastructure\Repositories\EloquentRoleRepository" namespace="App\AuthenticationContext\Auth\Infrastructure\Repositories">
+          <metrics complexity="10" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="30" coveredelements="30"/>
+        </class>
+        <line num="14" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="9"/>
+        <line num="16" type="method" name="create" visibility="public" complexity="1" crap="1" count="7"/>
+        <line num="18" type="stmt" count="7"/>
+        <line num="20" type="stmt" count="7"/>
+        <line num="21" type="stmt" count="7"/>
+        <line num="22" type="stmt" count="7"/>
+        <line num="23" type="stmt" count="7"/>
+        <line num="24" type="stmt" count="7"/>
+        <line num="26" type="stmt" count="7"/>
+        <line num="29" type="method" name="findById" visibility="public" complexity="2" crap="2" count="9"/>
+        <line num="31" type="stmt" count="9"/>
+        <line num="32" type="stmt" count="9"/>
+        <line num="33" type="stmt" count="3"/>
+        <line num="36" type="stmt" count="7"/>
+        <line num="39" type="method" name="assignToUser" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="41" type="stmt" count="3"/>
+        <line num="42" type="stmt" count="3"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="46" type="stmt" count="3"/>
+        <line num="49" type="method" name="revokeFromUser" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="51" type="stmt" count="3"/>
+        <line num="52" type="stmt" count="3"/>
+        <line num="53" type="stmt" count="1"/>
+        <line num="56" type="stmt" count="3"/>
+        <line num="59" type="method" name="listForUser" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="61" type="stmt" count="3"/>
+        <line num="62" type="stmt" count="3"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="66" type="stmt" count="3"/>
+        <metrics loc="69" ncloc="69" classes="1" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="30" coveredelements="30"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\Auth\Presentation\Http">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Presentation/Http/AuthController.php">
+        <class name="App\AuthenticationContext\Auth\Presentation\Http\AuthController" namespace="App\AuthenticationContext\Auth\Presentation\Http">
+          <metrics complexity="6" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="31" elements="36" coveredelements="36"/>
+        </class>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="14" type="stmt" count="1"/>
+        <line num="15" type="stmt" count="1"/>
+        <line num="16" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="25" type="method" name="login" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="41" type="method" name="me" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="46" type="method" name="logout" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="52" type="stmt" count="1"/>
+        <line num="55" type="method" name="changePassword" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="57" type="stmt" count="1"/>
+        <line num="58" type="stmt" count="1"/>
+        <line num="59" type="stmt" count="1"/>
+        <line num="60" type="stmt" count="1"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="64" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <line num="66" type="stmt" count="1"/>
+        <line num="68" type="stmt" count="1"/>
+        <metrics loc="71" ncloc="71" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="31" elements="36" coveredelements="36"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Presentation/Http/RoleController.php">
+        <class name="App\AuthenticationContext\Auth\Presentation\Http\RoleController" namespace="App\AuthenticationContext\Auth\Presentation\Http">
+          <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="20" coveredelements="20"/>
+        </class>
+        <line num="11" type="method" name="index" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="13" type="stmt" count="1"/>
+        <line num="14" type="stmt" count="1"/>
+        <line num="15" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="22" type="method" name="assign" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="35" type="method" name="revoke" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="45" type="stmt" count="1"/>
+        <metrics loc="48" ncloc="48" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="20" coveredelements="20"/>
+      </file>
+    </package>
+    <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Presentation/api.php">
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="11" type="stmt" count="99"/>
+      <line num="12" type="stmt" count="99"/>
+      <line num="13" type="stmt" count="99"/>
+      <line num="14" type="stmt" count="99"/>
+      <line num="15" type="stmt" count="99"/>
+      <line num="16" type="stmt" count="99"/>
+      <line num="17" type="stmt" count="99"/>
+      <line num="18" type="stmt" count="99"/>
+      <line num="19" type="stmt" count="99"/>
+      <metrics loc="20" ncloc="20" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="12" coveredelements="12"/>
+    </file>
+    <package name="App\AuthenticationContext\Auth\Tests\Feature">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Feature/AuthApiTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Feature\AuthApiTest" namespace="App\AuthenticationContext\Auth\Tests\Feature">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="25" elements="26" coveredelements="26"/>
+        </class>
+        <line num="12" type="method" name="test_auth_endpoints" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="14" type="stmt" count="1"/>
+        <line num="15" type="stmt" count="1"/>
+        <line num="16" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="45" type="stmt" count="1"/>
+        <metrics loc="48" ncloc="48" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="25" elements="26" coveredelements="26"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Feature/RoleApiTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Feature\RoleApiTest" namespace="App\AuthenticationContext\Auth\Tests\Feature">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="21" coveredelements="21"/>
+        </class>
+        <line num="16" type="method" name="test_role_endpoints" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <metrics loc="46" ncloc="46" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="21" coveredelements="21"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\Auth\Tests\Unit">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/AuthDomainEntityTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\AuthDomainEntityTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="39" coveredstatements="39" elements="41" coveredelements="41"/>
+        </class>
+        <line num="16" type="method" name="it_exposes_auth_user_state" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="45" type="method" name="it_exposes_role_and_permission_state" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="51" type="stmt" count="1"/>
+        <line num="52" type="stmt" count="1"/>
+        <line num="53" type="stmt" count="1"/>
+        <line num="54" type="stmt" count="1"/>
+        <line num="56" type="stmt" count="1"/>
+        <line num="57" type="stmt" count="1"/>
+        <line num="58" type="stmt" count="1"/>
+        <line num="59" type="stmt" count="1"/>
+        <line num="60" type="stmt" count="1"/>
+        <line num="61" type="stmt" count="1"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="64" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <metrics loc="68" ncloc="68" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="39" coveredstatements="39" elements="41" coveredelements="41"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/AuthServiceTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\AuthServiceTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="13" methods="11" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="162" coveredstatements="162" elements="173" coveredelements="173"/>
+        </class>
+        <line num="17" type="method" name="test_register_and_login_flow" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="45" type="method" name="test_login_lockout_after_failures" visibility="public" complexity="3" crap="3" count="1"/>
+        <line num="47" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="51" type="stmt" count="1"/>
+        <line num="52" type="stmt" count="1"/>
+        <line num="53" type="stmt" count="1"/>
+        <line num="55" type="stmt" count="1"/>
+        <line num="57" type="stmt" count="1"/>
+        <line num="58" type="stmt" count="1"/>
+        <line num="59" type="stmt" count="1"/>
+        <line num="60" type="stmt" count="1"/>
+        <line num="61" type="stmt" count="1"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="64" type="stmt" count="1"/>
+        <line num="69" type="stmt" count="1"/>
+        <line num="70" type="stmt" count="1"/>
+        <line num="72" type="stmt" count="1"/>
+        <line num="74" type="stmt" count="1"/>
+        <line num="75" type="stmt" count="1"/>
+        <line num="76" type="stmt" count="1"/>
+        <line num="77" type="stmt" count="1"/>
+        <line num="78" type="stmt" count="1"/>
+        <line num="79" type="stmt" count="1"/>
+        <line num="80" type="stmt" count="1"/>
+        <line num="83" type="method" name="test_register_rejects_duplicate_email" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="85" type="stmt" count="1"/>
+        <line num="87" type="stmt" count="1"/>
+        <line num="88" type="stmt" count="1"/>
+        <line num="89" type="stmt" count="1"/>
+        <line num="90" type="stmt" count="1"/>
+        <line num="91" type="stmt" count="1"/>
+        <line num="93" type="stmt" count="1"/>
+        <line num="95" type="stmt" count="1"/>
+        <line num="96" type="stmt" count="1"/>
+        <line num="97" type="stmt" count="1"/>
+        <line num="98" type="stmt" count="1"/>
+        <line num="99" type="stmt" count="1"/>
+        <line num="102" type="method" name="test_login_rejects_unknown_user" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="104" type="stmt" count="1"/>
+        <line num="106" type="stmt" count="1"/>
+        <line num="108" type="stmt" count="1"/>
+        <line num="109" type="stmt" count="1"/>
+        <line num="110" type="stmt" count="1"/>
+        <line num="111" type="stmt" count="1"/>
+        <line num="112" type="stmt" count="1"/>
+        <line num="113" type="stmt" count="1"/>
+        <line num="114" type="stmt" count="1"/>
+        <line num="117" type="method" name="test_login_rejects_disabled_user" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="119" type="stmt" count="1"/>
+        <line num="121" type="stmt" count="1"/>
+        <line num="122" type="stmt" count="1"/>
+        <line num="123" type="stmt" count="1"/>
+        <line num="124" type="stmt" count="1"/>
+        <line num="125" type="stmt" count="1"/>
+        <line num="127" type="stmt" count="1"/>
+        <line num="128" type="stmt" count="1"/>
+        <line num="129" type="stmt" count="1"/>
+        <line num="131" type="stmt" count="1"/>
+        <line num="133" type="stmt" count="1"/>
+        <line num="134" type="stmt" count="1"/>
+        <line num="135" type="stmt" count="1"/>
+        <line num="136" type="stmt" count="1"/>
+        <line num="137" type="stmt" count="1"/>
+        <line num="138" type="stmt" count="1"/>
+        <line num="139" type="stmt" count="1"/>
+        <line num="142" type="method" name="test_login_rejects_locked_user" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="144" type="stmt" count="1"/>
+        <line num="146" type="stmt" count="1"/>
+        <line num="147" type="stmt" count="1"/>
+        <line num="148" type="stmt" count="1"/>
+        <line num="149" type="stmt" count="1"/>
+        <line num="150" type="stmt" count="1"/>
+        <line num="152" type="stmt" count="1"/>
+        <line num="153" type="stmt" count="1"/>
+        <line num="154" type="stmt" count="1"/>
+        <line num="156" type="stmt" count="1"/>
+        <line num="158" type="stmt" count="1"/>
+        <line num="159" type="stmt" count="1"/>
+        <line num="160" type="stmt" count="1"/>
+        <line num="161" type="stmt" count="1"/>
+        <line num="162" type="stmt" count="1"/>
+        <line num="163" type="stmt" count="1"/>
+        <line num="164" type="stmt" count="1"/>
+        <line num="167" type="method" name="test_change_password_updates_hash" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="169" type="stmt" count="1"/>
+        <line num="171" type="stmt" count="1"/>
+        <line num="172" type="stmt" count="1"/>
+        <line num="173" type="stmt" count="1"/>
+        <line num="174" type="stmt" count="1"/>
+        <line num="175" type="stmt" count="1"/>
+        <line num="177" type="stmt" count="1"/>
+        <line num="178" type="stmt" count="1"/>
+        <line num="179" type="stmt" count="1"/>
+        <line num="180" type="stmt" count="1"/>
+        <line num="182" type="stmt" count="1"/>
+        <line num="184" type="stmt" count="1"/>
+        <line num="185" type="stmt" count="1"/>
+        <line num="188" type="method" name="test_change_password_rejects_invalid_user" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="190" type="stmt" count="1"/>
+        <line num="192" type="stmt" count="1"/>
+        <line num="194" type="stmt" count="1"/>
+        <line num="195" type="stmt" count="1"/>
+        <line num="196" type="stmt" count="1"/>
+        <line num="197" type="stmt" count="1"/>
+        <line num="200" type="method" name="test_change_password_rejects_invalid_current_password" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="202" type="stmt" count="1"/>
+        <line num="204" type="stmt" count="1"/>
+        <line num="205" type="stmt" count="1"/>
+        <line num="206" type="stmt" count="1"/>
+        <line num="207" type="stmt" count="1"/>
+        <line num="208" type="stmt" count="1"/>
+        <line num="210" type="stmt" count="1"/>
+        <line num="212" type="stmt" count="1"/>
+        <line num="213" type="stmt" count="1"/>
+        <line num="214" type="stmt" count="1"/>
+        <line num="215" type="stmt" count="1"/>
+        <line num="218" type="method" name="test_logout_revokes_token" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="220" type="stmt" count="1"/>
+        <line num="222" type="stmt" count="1"/>
+        <line num="223" type="stmt" count="1"/>
+        <line num="224" type="stmt" count="1"/>
+        <line num="225" type="stmt" count="1"/>
+        <line num="226" type="stmt" count="1"/>
+        <line num="228" type="stmt" count="1"/>
+        <line num="229" type="stmt" count="1"/>
+        <line num="230" type="stmt" count="1"/>
+        <line num="231" type="stmt" count="1"/>
+        <line num="232" type="stmt" count="1"/>
+        <line num="233" type="stmt" count="1"/>
+        <line num="234" type="stmt" count="1"/>
+        <line num="236" type="stmt" count="1"/>
+        <line num="237" type="stmt" count="1"/>
+        <line num="239" type="stmt" count="1"/>
+        <line num="241" type="stmt" count="1"/>
+        <line num="244" type="method" name="test_logout_revokes_all_tokens_when_token_missing" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="246" type="stmt" count="1"/>
+        <line num="248" type="stmt" count="1"/>
+        <line num="249" type="stmt" count="1"/>
+        <line num="250" type="stmt" count="1"/>
+        <line num="251" type="stmt" count="1"/>
+        <line num="252" type="stmt" count="1"/>
+        <line num="254" type="stmt" count="1"/>
+        <line num="255" type="stmt" count="1"/>
+        <line num="256" type="stmt" count="1"/>
+        <line num="257" type="stmt" count="1"/>
+        <line num="258" type="stmt" count="1"/>
+        <line num="259" type="stmt" count="1"/>
+        <line num="260" type="stmt" count="1"/>
+        <line num="262" type="stmt" count="1"/>
+        <line num="264" type="stmt" count="1"/>
+        <line num="265" type="stmt" count="1"/>
+        <metrics loc="268" ncloc="267" classes="1" methods="11" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="162" coveredstatements="162" elements="173" coveredelements="173"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/AuthUserFactoryTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\AuthUserFactoryTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="21" coveredstatements="21" elements="22" coveredelements="22"/>
+        </class>
+        <line num="11" type="method" name="it_normalizes_recovery_codes_from_state" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="14" type="stmt" count="1"/>
+        <line num="16" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <metrics loc="40" ncloc="40" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="21" coveredstatements="21" elements="22" coveredelements="22"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/AuthUserRepositoryTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\AuthUserRepositoryTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="18" elements="20" coveredelements="20"/>
+        </class>
+        <line num="16" type="method" name="test_repository_handles_missing_users" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="30" type="method" name="test_repository_revokes_tokens" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="44" type="stmt" count="1"/>
+        <line num="45" type="stmt" count="1"/>
+        <metrics loc="48" ncloc="48" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="18" elements="20" coveredelements="20"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/PermissionRepositoryTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\PermissionRepositoryTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="23" coveredelements="23"/>
+        </class>
+        <line num="17" type="method" name="test_permission_repository_paths" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="44" type="stmt" count="1"/>
+        <line num="45" type="stmt" count="1"/>
+        <metrics loc="48" ncloc="48" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="23" coveredelements="23"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/PermissionServiceTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\PermissionServiceTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="32" elements="35" coveredelements="35"/>
+        </class>
+        <line num="14" type="method" name="test_permission_assignment_flow" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="16" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="41" type="method" name="test_assign_permission_rejects_missing_role" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="45" type="stmt" count="1"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="47" type="stmt" count="1"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="52" type="stmt" count="1"/>
+        <line num="55" type="method" name="test_assign_permission_rejects_missing_permission" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="57" type="stmt" count="1"/>
+        <line num="58" type="stmt" count="1"/>
+        <line num="60" type="stmt" count="1"/>
+        <line num="61" type="stmt" count="1"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <line num="67" type="stmt" count="1"/>
+        <metrics loc="70" ncloc="70" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="32" elements="35" coveredelements="35"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/RoleModelTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\RoleModelTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="21" coveredelements="21"/>
+        </class>
+        <line num="16" type="method" name="test_role_relationships" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <metrics loc="44" ncloc="44" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="21" coveredelements="21"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/RoleRepositoryTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\RoleRepositoryTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="23" coveredelements="23"/>
+        </class>
+        <line num="16" type="method" name="test_role_repository_paths" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="44" type="stmt" count="1"/>
+        <metrics loc="47" ncloc="47" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="23" coveredelements="23"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Tests/Unit/RoleServiceTest.php">
+        <class name="App\AuthenticationContext\Auth\Tests\Unit\RoleServiceTest" namespace="App\AuthenticationContext\Auth\Tests\Unit">
+          <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="34" coveredstatements="34" elements="37" coveredelements="37"/>
+        </class>
+        <line num="14" type="method" name="test_role_assignment_flow" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="16" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="23" type="stmt" count="1"/>
+        <line num="25" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="36" type="stmt" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="42" type="method" name="test_assign_role_rejects_missing_user" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="44" type="stmt" count="1"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="47" type="stmt" count="1"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="51" type="stmt" count="1"/>
+        <line num="53" type="stmt" count="1"/>
+        <line num="56" type="method" name="test_assign_role_rejects_missing_role" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="58" type="stmt" count="1"/>
+        <line num="59" type="stmt" count="1"/>
+        <line num="61" type="stmt" count="1"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="64" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <line num="67" type="stmt" count="1"/>
+        <line num="69" type="stmt" count="1"/>
+        <metrics loc="72" ncloc="72" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="34" coveredstatements="34" elements="37" coveredelements="37"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\SharedKernel\Domain\Enums">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/SharedKernel/Domain/Enums/AuthUserStatus.php">
+        <class name="App\AuthenticationContext\SharedKernel\Domain\Enums\AuthUserStatus" namespace="App\AuthenticationContext\SharedKernel\Domain\Enums">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="1" elements="2" coveredelements="2"/>
+        </class>
+        <line num="11" type="method" name="values" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="13" type="stmt" count="1"/>
+        <metrics loc="16" ncloc="16" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="1" elements="2" coveredelements="2"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\SharedKernel\Domain\Exceptions">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/SharedKernel/Domain/Exceptions/DomainException.php">
+        <class name="App\AuthenticationContext\SharedKernel\Domain\Exceptions\DomainException" namespace="App\AuthenticationContext\SharedKernel\Domain\Exceptions">
+          <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+        </class>
+        <metrics loc="6" ncloc="6" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\SharedKernel\Domain\ValueObjects">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/SharedKernel/Domain/ValueObjects/EmailAddress.php">
+        <class name="App\AuthenticationContext\SharedKernel\Domain\ValueObjects\EmailAddress" namespace="App\AuthenticationContext\SharedKernel\Domain\ValueObjects">
+          <metrics complexity="5" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="5" elements="10" coveredelements="8"/>
+        </class>
+        <line num="11" type="method" name="__construct" visibility="private" complexity="2" crap="2" count="21"/>
+        <line num="13" type="stmt" count="21"/>
+        <line num="14" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="20"/>
+        <line num="20" type="method" name="fromString" visibility="public" complexity="1" crap="1" count="21"/>
+        <line num="22" type="stmt" count="21"/>
+        <line num="25" type="method" name="value" visibility="public" complexity="1" crap="1" count="20"/>
+        <line num="27" type="stmt" count="20"/>
+        <line num="30" type="method" name="__toString" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="32" type="stmt" count="0"/>
+        <metrics loc="35" ncloc="35" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="5" elements="10" coveredelements="8"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/SharedKernel/Domain/ValueObjects/Uuid.php">
+        <class name="App\AuthenticationContext\SharedKernel\Domain\ValueObjects\Uuid" namespace="App\AuthenticationContext\SharedKernel\Domain\ValueObjects">
+          <metrics complexity="6" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="19" coveredstatements="18" elements="24" coveredelements="22"/>
+        </class>
+        <line num="11" type="method" name="__construct" visibility="private" complexity="2" crap="2" count="27"/>
+        <line num="13" type="stmt" count="27"/>
+        <line num="14" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="26"/>
+        <line num="20" type="method" name="fromString" visibility="public" complexity="1" crap="1" count="27"/>
+        <line num="22" type="stmt" count="27"/>
+        <line num="25" type="method" name="random" visibility="public" complexity="1" crap="1" count="20"/>
+        <line num="27" type="stmt" count="20"/>
+        <line num="28" type="stmt" count="20"/>
+        <line num="29" type="stmt" count="20"/>
+        <line num="30" type="stmt" count="20"/>
+        <line num="32" type="stmt" count="20"/>
+        <line num="33" type="stmt" count="20"/>
+        <line num="34" type="stmt" count="20"/>
+        <line num="35" type="stmt" count="20"/>
+        <line num="36" type="stmt" count="20"/>
+        <line num="37" type="stmt" count="20"/>
+        <line num="38" type="stmt" count="20"/>
+        <line num="39" type="stmt" count="20"/>
+        <line num="41" type="stmt" count="20"/>
+        <line num="44" type="method" name="value" visibility="public" complexity="1" crap="1" count="25"/>
+        <line num="46" type="stmt" count="25"/>
+        <line num="49" type="method" name="__toString" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="51" type="stmt" count="0"/>
+        <metrics loc="54" ncloc="54" classes="1" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="19" coveredstatements="18" elements="24" coveredelements="22"/>
+      </file>
+    </package>
+    <package name="App\AuthenticationContext\SharedKernel\Tests\Unit">
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/SharedKernel/Tests/Unit/EnumCoverageTest.php">
+        <class name="App\AuthenticationContext\SharedKernel\Tests\Unit\EnumCoverageTest" namespace="App\AuthenticationContext\SharedKernel\Tests\Unit">
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
+        </class>
+        <line num="11" type="method" name="it_exposes_auth_user_status_values" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="14" type="stmt" count="1"/>
+        <line num="16" type="stmt" count="1"/>
+        <line num="17" type="stmt" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <metrics loc="21" ncloc="21" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
+      </file>
+      <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/SharedKernel/Tests/Unit/ValueObjectCoverageTest.php">
+        <class name="App\AuthenticationContext\SharedKernel\Tests\Unit\ValueObjectCoverageTest" namespace="App\AuthenticationContext\SharedKernel\Tests\Unit">
+          <metrics complexity="4" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="12" coveredelements="12"/>
+        </class>
+        <line num="13" type="method" name="it_accepts_valid_email_addresses" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="16" type="stmt" count="1"/>
+        <line num="18" type="stmt" count="1"/>
+        <line num="21" type="method" name="it_rejects_invalid_email_addresses" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="29" type="method" name="it_accepts_valid_uuids" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="37" type="method" name="it_rejects_invalid_uuids" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <metrics loc="45" ncloc="45" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="12" coveredelements="12"/>
+      </file>
+    </package>
     <package name="App\MarketGovernanceContext\Broker\Application">
       <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MarketGovernanceContext/Broker/Application/BrokerService.php">
         <class name="App\MarketGovernanceContext\Broker\Application\BrokerService" namespace="App\MarketGovernanceContext\Broker\Application">
@@ -97,13 +1478,13 @@
         <class name="App\MarketGovernanceContext\Broker\Infrastructure\BrokerServiceProvider" namespace="App\MarketGovernanceContext\Broker\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -203,11 +1584,11 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MarketGovernanceContext/Broker/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="5" coveredelements="5"/>
     </file>
     <package name="App\MarketGovernanceContext\Broker\Tests\Feature">
@@ -565,13 +1946,13 @@
         <class name="App\MarketGovernanceContext\Governance\Infrastructure\GovernanceServiceProvider" namespace="App\MarketGovernanceContext\Governance\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -728,11 +2109,11 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MarketGovernanceContext/Governance/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="5" coveredelements="5"/>
     </file>
     <package name="App\MarketGovernanceContext\Governance\Tests\Feature">
@@ -1135,13 +2516,13 @@
         <class name="App\MarketGovernanceContext\Market\Infrastructure\MarketServiceProvider" namespace="App\MarketGovernanceContext\Market\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -1245,11 +2626,11 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MarketGovernanceContext/Market/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="5" coveredelements="5"/>
     </file>
     <package name="App\MarketGovernanceContext\Market\Tests\Feature">
@@ -1512,13 +2893,13 @@
         <class name="App\MarketGovernanceContext\Person\Infrastructure\PersonServiceProvider" namespace="App\MarketGovernanceContext\Person\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -1607,11 +2988,11 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MarketGovernanceContext/Person/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="5" coveredelements="5"/>
     </file>
     <package name="App\MarketGovernanceContext\Person\Tests\Feature">
@@ -2238,13 +3619,13 @@
         <class name="App\MatchingContext\Business\Infrastructure\BusinessServiceProvider" namespace="App\MatchingContext\Business\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -2554,14 +3935,14 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MatchingContext/Business/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
-      <line num="11" type="stmt" count="67"/>
-      <line num="12" type="stmt" count="67"/>
-      <line num="13" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
+      <line num="11" type="stmt" count="99"/>
+      <line num="12" type="stmt" count="99"/>
+      <line num="13" type="stmt" count="99"/>
       <metrics loc="14" ncloc="14" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="8" coveredelements="8"/>
     </file>
     <package name="App\MatchingContext\Business\Tests\Feature">
@@ -3231,13 +4612,13 @@
         <class name="App\MatchingContext\Engagement\Infrastructure\EngagementServiceProvider" namespace="App\MatchingContext\Engagement\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -3420,15 +4801,15 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MatchingContext/Engagement/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
-      <line num="11" type="stmt" count="67"/>
-      <line num="12" type="stmt" count="67"/>
-      <line num="13" type="stmt" count="67"/>
-      <line num="14" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
+      <line num="11" type="stmt" count="99"/>
+      <line num="12" type="stmt" count="99"/>
+      <line num="13" type="stmt" count="99"/>
+      <line num="14" type="stmt" count="99"/>
       <metrics loc="15" ncloc="15" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="9" coveredelements="9"/>
     </file>
     <package name="App\MatchingContext\Engagement\Tests\Feature">
@@ -4074,13 +5455,13 @@
         <class name="App\MatchingContext\Matching\Infrastructure\MatchingServiceProvider" namespace="App\MatchingContext\Matching\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -4222,10 +5603,10 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MatchingContext/Matching/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
       <metrics loc="10" ncloc="10" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="4" coveredelements="4"/>
     </file>
     <package name="App\MatchingContext\Matching\Tests\Feature">
@@ -5253,13 +6634,13 @@
         <class name="App\MatchingContext\Rfs\Infrastructure\RfsServiceProvider" namespace="App\MatchingContext\Rfs\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -5355,12 +6736,12 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MatchingContext/Rfs/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
-      <line num="11" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
+      <line num="11" type="stmt" count="99"/>
       <metrics loc="12" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="6" elements="6" coveredelements="6"/>
     </file>
     <package name="App\MatchingContext\Rfs\Tests\Feature">
@@ -6117,18 +7498,18 @@
         <class name="App\MatchingContext\SharedKernel\Infrastructure\SharedKernelServiceProvider" namespace="App\MatchingContext\SharedKernel\Infrastructure">
           <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
         </class>
-        <line num="10" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="12" type="stmt" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="15" type="stmt" count="67"/>
-        <line num="16" type="stmt" count="67"/>
+        <line num="10" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="12" type="stmt" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="15" type="stmt" count="99"/>
+        <line num="16" type="stmt" count="99"/>
         <metrics loc="19" ncloc="19" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MatchingContext/SharedKernel/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
       <line num="7" type="stmt" count="0"/>
-      <line num="8" type="stmt" count="67"/>
+      <line num="8" type="stmt" count="99"/>
       <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="3" coveredelements="2"/>
     </file>
     <package name="App\MatchingContext\SharedKernel\Tests\Unit">
@@ -6381,10 +7762,10 @@
         <class name="App\MatchingContext\Signal\Infrastructure\SignalServiceProvider" namespace="App\MatchingContext\Signal\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="4" coveredelements="4"/>
         </class>
-        <line num="11" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="13" type="stmt" count="67"/>
-        <line num="16" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="18" type="stmt" count="67"/>
+        <line num="11" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="13" type="stmt" count="99"/>
+        <line num="16" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="18" type="stmt" count="99"/>
         <metrics loc="21" ncloc="21" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="4" coveredelements="4"/>
       </file>
     </package>
@@ -6864,13 +8245,13 @@
         <class name="App\MatchingContext\Taxonomy\Infrastructure\TaxonomyServiceProvider" namespace="App\MatchingContext\Taxonomy\Infrastructure">
           <metrics complexity="2" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
         </class>
-        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="14" type="stmt" count="67"/>
-        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="67"/>
-        <line num="19" type="stmt" count="67"/>
-        <line num="21" type="stmt" count="67"/>
-        <line num="22" type="stmt" count="67"/>
-        <line num="23" type="stmt" count="67"/>
+        <line num="12" type="method" name="register" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="14" type="stmt" count="99"/>
+        <line num="17" type="method" name="boot" visibility="public" complexity="1" crap="1" count="99"/>
+        <line num="19" type="stmt" count="99"/>
+        <line num="21" type="stmt" count="99"/>
+        <line num="22" type="stmt" count="99"/>
+        <line num="23" type="stmt" count="99"/>
         <metrics loc="26" ncloc="26" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
       </file>
     </package>
@@ -6916,13 +8297,13 @@
       </file>
     </package>
     <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/MatchingContext/Taxonomy/Presentation/api.php">
-      <line num="6" type="stmt" count="67"/>
-      <line num="7" type="stmt" count="67"/>
-      <line num="8" type="stmt" count="67"/>
-      <line num="9" type="stmt" count="67"/>
-      <line num="10" type="stmt" count="67"/>
-      <line num="11" type="stmt" count="67"/>
-      <line num="12" type="stmt" count="67"/>
+      <line num="6" type="stmt" count="99"/>
+      <line num="7" type="stmt" count="99"/>
+      <line num="8" type="stmt" count="99"/>
+      <line num="9" type="stmt" count="99"/>
+      <line num="10" type="stmt" count="99"/>
+      <line num="11" type="stmt" count="99"/>
+      <line num="12" type="stmt" count="99"/>
       <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="7" coveredelements="7"/>
     </file>
     <package name="App\MatchingContext\Taxonomy\Tests\Feature">
@@ -7005,6 +8386,6 @@
         <metrics loc="61" ncloc="61" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="36" coveredstatements="36" elements="37" coveredelements="37"/>
       </file>
     </package>
-    <metrics files="209" loc="11421" ncloc="11387" classes="172" methods="547" coveredmethods="504" conditionals="0" coveredconditionals="0" statements="5104" coveredstatements="5027" elements="5651" coveredelements="5531"/>
+    <metrics files="254" loc="13834" ncloc="13797" classes="206" methods="674" coveredmethods="627" conditionals="0" coveredconditionals="0" statements="6095" coveredstatements="6006" elements="6769" coveredelements="6633"/>
   </project>
 </coverage>

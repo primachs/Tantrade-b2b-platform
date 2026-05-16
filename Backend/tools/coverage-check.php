@@ -7,7 +7,7 @@ $methodPercentage = 0.0;
 $scopeArg = $argv[4] ?? null;
 $scopeDirectories = $scopeArg
     ? array_values(array_filter(array_map('trim', explode(',', (string) $scopeArg))))
-    : ['app/MatchingContext', 'app/MarketGovernanceContext'];
+    : ['app/MatchingContext', 'app/MarketGovernanceContext', 'app/AuthenticationContext'];
 
 if (! file_exists($coverageFile)) {
     fwrite(STDERR, "Coverage file not found: {$coverageFile}\n");

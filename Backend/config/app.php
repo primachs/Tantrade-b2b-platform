@@ -1,5 +1,6 @@
 <?php
 
+use App\AuthenticationContext\Auth\Infrastructure\AuthServiceProvider as AuthenticationAuthServiceProvider;
 use App\MarketGovernanceContext\Broker\Infrastructure\BrokerServiceProvider;
 use App\MarketGovernanceContext\Governance\Infrastructure\GovernanceServiceProvider;
 use App\MarketGovernanceContext\Market\Infrastructure\MarketServiceProvider;
@@ -179,10 +180,11 @@ return [
          * Application Service Providers...
          */
         AppServiceProvider::class,
-        AuthServiceProvider::class,
+        AuthenticationAuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
+        AuthServiceProvider::class,
         SharedKernelServiceProvider::class,
         BusinessServiceProvider::class,
         TaxonomyServiceProvider::class,
