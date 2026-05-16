@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1778936760">
-  <project timestamp="1778936760" name="Clover Coverage">
+<coverage generated="1778944549">
+  <project timestamp="1778944549" name="Clover Coverage">
     <package name="App\AuthenticationContext\Auth\Application">
       <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Application/AuthService.php">
         <class name="App\AuthenticationContext\Auth\Application\AuthService" namespace="App\AuthenticationContext\Auth\Application">
           <metrics complexity="16" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="62" coveredelements="62"/>
         </class>
-        <line num="17" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="17"/>
-        <line num="20" type="stmt" count="17"/>
-        <line num="22" type="method" name="register" visibility="public" complexity="2" crap="2" count="15"/>
-        <line num="24" type="stmt" count="15"/>
+        <line num="18" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="17"/>
+        <line num="21" type="stmt" count="17"/>
+        <line num="23" type="method" name="register" visibility="public" complexity="2" crap="2" count="15"/>
         <line num="25" type="stmt" count="15"/>
-        <line num="26" type="stmt" count="1"/>
-        <line num="29" type="stmt" count="15"/>
+        <line num="26" type="stmt" count="15"/>
+        <line num="27" type="stmt" count="1"/>
         <line num="30" type="stmt" count="15"/>
         <line num="31" type="stmt" count="15"/>
         <line num="32" type="stmt" count="15"/>
         <line num="33" type="stmt" count="15"/>
         <line num="34" type="stmt" count="15"/>
         <line num="35" type="stmt" count="15"/>
-        <line num="37" type="stmt" count="15"/>
-        <line num="39" type="stmt" count="15"/>
-        <line num="42" type="method" name="login" visibility="public" complexity="6" crap="6" count="8"/>
-        <line num="44" type="stmt" count="8"/>
+        <line num="36" type="stmt" count="15"/>
+        <line num="38" type="stmt" count="15"/>
+        <line num="40" type="stmt" count="15"/>
+        <line num="43" type="method" name="login" visibility="public" complexity="6" crap="6" count="8"/>
         <line num="45" type="stmt" count="8"/>
         <line num="46" type="stmt" count="8"/>
-        <line num="48" type="stmt" count="8"/>
-        <line num="49" type="stmt" count="1"/>
+        <line num="47" type="stmt" count="8"/>
+        <line num="49" type="stmt" count="8"/>
         <line num="50" type="stmt" count="1"/>
-        <line num="53" type="stmt" count="7"/>
-        <line num="54" type="stmt" count="1"/>
-        <line num="57" type="stmt" count="6"/>
-        <line num="58" type="stmt" count="2"/>
-        <line num="61" type="stmt" count="5"/>
-        <line num="62" type="stmt" count="1"/>
+        <line num="51" type="stmt" count="1"/>
+        <line num="54" type="stmt" count="7"/>
+        <line num="55" type="stmt" count="1"/>
+        <line num="58" type="stmt" count="6"/>
+        <line num="59" type="stmt" count="2"/>
+        <line num="62" type="stmt" count="5"/>
         <line num="63" type="stmt" count="1"/>
         <line num="64" type="stmt" count="1"/>
         <line num="65" type="stmt" count="1"/>
-        <line num="67" type="stmt" count="1"/>
+        <line num="66" type="stmt" count="1"/>
         <line num="68" type="stmt" count="1"/>
-        <line num="70" type="stmt" count="1"/>
-        <line num="73" type="stmt" count="4"/>
+        <line num="69" type="stmt" count="1"/>
+        <line num="71" type="stmt" count="1"/>
         <line num="74" type="stmt" count="4"/>
         <line num="75" type="stmt" count="4"/>
-        <line num="77" type="stmt" count="4"/>
+        <line num="76" type="stmt" count="4"/>
         <line num="78" type="stmt" count="4"/>
         <line num="79" type="stmt" count="4"/>
         <line num="80" type="stmt" count="4"/>
-        <line num="83" type="method" name="logout" visibility="public" complexity="2" crap="2" count="3"/>
-        <line num="85" type="stmt" count="3"/>
-        <line num="87" type="stmt" count="3"/>
-        <line num="88" type="stmt" count="2"/>
-        <line num="90" type="stmt" count="2"/>
-        <line num="93" type="stmt" count="1"/>
-        <line num="96" type="method" name="changePassword" visibility="public" complexity="2" crap="2" count="4"/>
-        <line num="98" type="stmt" count="4"/>
-        <line num="100" type="stmt" count="3"/>
-        <line num="101" type="stmt" count="1"/>
-        <line num="104" type="stmt" count="2"/>
-        <line num="106" type="stmt" count="2"/>
-        <line num="109" type="method" name="requireUser" visibility="private" complexity="2" crap="2" count="4"/>
-        <line num="111" type="stmt" count="4"/>
+        <line num="81" type="stmt" count="4"/>
+        <line num="84" type="method" name="logout" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="86" type="stmt" count="3"/>
+        <line num="88" type="stmt" count="3"/>
+        <line num="89" type="stmt" count="2"/>
+        <line num="91" type="stmt" count="2"/>
+        <line num="94" type="stmt" count="1"/>
+        <line num="97" type="method" name="changePassword" visibility="public" complexity="2" crap="2" count="4"/>
+        <line num="99" type="stmt" count="4"/>
+        <line num="101" type="stmt" count="3"/>
+        <line num="102" type="stmt" count="1"/>
+        <line num="105" type="stmt" count="2"/>
+        <line num="107" type="stmt" count="2"/>
+        <line num="110" type="method" name="requireUser" visibility="private" complexity="2" crap="2" count="4"/>
         <line num="112" type="stmt" count="4"/>
-        <line num="113" type="stmt" count="1"/>
-        <line num="116" type="stmt" count="3"/>
-        <line num="119" type="method" name="sanitizeUser" visibility="private" complexity="1" crap="1" count="15"/>
-        <line num="121" type="stmt" count="15"/>
+        <line num="113" type="stmt" count="4"/>
+        <line num="114" type="stmt" count="1"/>
+        <line num="117" type="stmt" count="3"/>
+        <line num="120" type="method" name="sanitizeUser" visibility="private" complexity="1" crap="1" count="15"/>
         <line num="122" type="stmt" count="15"/>
-        <line num="124" type="stmt" count="15"/>
-        <metrics loc="127" ncloc="127" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="62" coveredelements="62"/>
+        <line num="123" type="stmt" count="15"/>
+        <line num="125" type="stmt" count="15"/>
+        <metrics loc="128" ncloc="128" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="62" coveredelements="62"/>
       </file>
       <file name="/home/mirukibs/Development/TanTrade-B2B-Platform/Backend/app/AuthenticationContext/Auth/Application/PermissionService.php">
         <class name="App\AuthenticationContext\Auth\Application\PermissionService" namespace="App\AuthenticationContext\Auth\Application">
@@ -8386,6 +8386,6 @@
         <metrics loc="61" ncloc="61" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="36" coveredstatements="36" elements="37" coveredelements="37"/>
       </file>
     </package>
-    <metrics files="254" loc="13834" ncloc="13797" classes="206" methods="674" coveredmethods="627" conditionals="0" coveredconditionals="0" statements="6095" coveredstatements="6006" elements="6769" coveredelements="6633"/>
+    <metrics files="254" loc="13835" ncloc="13798" classes="206" methods="674" coveredmethods="627" conditionals="0" coveredconditionals="0" statements="6095" coveredstatements="6006" elements="6769" coveredelements="6633"/>
   </project>
 </coverage>

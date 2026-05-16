@@ -17,7 +17,7 @@ class RoleRepositoryTest extends TestCase
     {
         $authService = app(AuthService::class);
         $repository = app(RoleRepository::class);
-        $factory = new RoleFactory();
+        $factory = new RoleFactory;
 
         $user = $authService->register([
             'name' => 'Repo User',

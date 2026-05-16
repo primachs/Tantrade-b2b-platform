@@ -18,8 +18,8 @@ class PermissionRepositoryTest extends TestCase
     {
         $roleRepository = app(RoleRepository::class);
         $permissionRepository = app(PermissionRepository::class);
-        $roleFactory = new RoleFactory();
-        $permissionFactory = new PermissionFactory();
+        $roleFactory = new RoleFactory;
+        $permissionFactory = new PermissionFactory;
 
         $role = $roleRepository->create($roleFactory->create([
             'name' => 'PERMISSION_ROLE',

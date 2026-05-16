@@ -11,7 +11,7 @@ class AuthUserFactoryTest extends TestCase
     #[Test]
     public function it_normalizes_recovery_codes_from_state(): void
     {
-        $factory = new AuthUserFactory();
+        $factory = new AuthUserFactory;
 
         $state = [
             'id' => '11111111-1111-1111-1111-111111111111',

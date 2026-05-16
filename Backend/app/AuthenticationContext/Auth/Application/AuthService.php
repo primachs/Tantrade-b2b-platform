@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthService
 {
     private const MAX_FAILED_ATTEMPTS = 5;
+
     private const LOCKOUT_MINUTES = 15;
 
     public function __construct(
@@ -31,7 +32,7 @@ class AuthService
             'email' => $email->value(),
             'password_hash' => Hash::make($payload['password']),
             'status' => AuthUserStatus::ACTIVE->value,
-            'password_changed_at' => new \DateTimeImmutable(),
+            'password_changed_at' => new \DateTimeImmutable,
         ]);
 
         $saved = $this->repository->create($user);
@@ -43,7 +44,7 @@ class AuthService
     {
         $email = EmailAddress::fromString($payload['email']);
         $user = $this->repository->findByEmail($email);
-        $now = new \DateTimeImmutable();
+        $now = new \DateTimeImmutable;
 
         if (! $user) {
             $this->repository->recordLoginAttempt(null, $email->value(), $payload['ip'] ?? '', false, $payload['user_agent'] ?? null);
@@ -101,7 +102,7 @@ class AuthService
             throw new \RuntimeException('Current password is incorrect.');
         }
 
-        $updated = $user->withPasswordHash(Hash::make($payload['new_password']), new \DateTimeImmutable());
+        $updated = $user->withPasswordHash(Hash::make($payload['new_password']), new \DateTimeImmutable);
 
         $this->repository->update($updated);
     }

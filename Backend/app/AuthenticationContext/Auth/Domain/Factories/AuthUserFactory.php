@@ -20,7 +20,7 @@ class AuthUserFactory
             0,
             null,
             null,
-            $payload['password_changed_at'] ?? new \DateTimeImmutable(),
+            $payload['password_changed_at'] ?? new \DateTimeImmutable,
             $payload['mfa_enabled'] ?? false,
             $payload['mfa_secret'] ?? null,
             $payload['mfa_recovery_codes'] ?? null,
