@@ -58,4 +58,13 @@ class EloquentMarketRepository implements MarketRepository
 
         return $this->factory->fromState($model->toArray());
     }
+
+    public function list(): array
+    {
+        $models = MarketModel::query()->orderByDesc('created_at')->get();
+
+        return $models->map(function (MarketModel $model) {
+            return $this->factory->fromState($model->toArray());
+        })->all();
+    }
 }

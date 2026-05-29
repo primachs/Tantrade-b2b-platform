@@ -34,6 +34,11 @@ class MarketService
         return $this->requireMarket($marketId)->toArray();
     }
 
+    public function list(): array
+    {
+        return array_map(static fn ($market) => $market->toArray(), $this->repository->list());
+    }
+
     private function requireMarket(string $marketId)
     {
         $market = $this->repository->findById(Uuid::fromString($marketId));

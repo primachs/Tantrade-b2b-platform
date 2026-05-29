@@ -29,4 +29,7 @@ interface EngagementRepository
 
     /** @return EngagementSession[] */
     public function listSessionsBySeller(Uuid $sellerId): array;
+
+    /** @return EngagementSession[] */
+    public function listSessionsByBuyer(Uuid $buyerId): array;
 }

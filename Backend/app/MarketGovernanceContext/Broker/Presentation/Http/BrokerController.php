@@ -10,6 +10,11 @@ use Illuminate\Validation\Rule;
 
 class BrokerController
 {
+    public function index(BrokerService $service): JsonResponse
+    {
+        return response()->json($service->list());
+    }
+
     public function store(Request $request, BrokerService $service): JsonResponse
     {
         $payload = $request->validate([

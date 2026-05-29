@@ -12,4 +12,7 @@ interface MarketRepository
     public function update(Market $market): Market;
 
     public function findById(Uuid $marketId): ?Market;
+
+    /** @return Market[] */
+    public function list(): array;
 }

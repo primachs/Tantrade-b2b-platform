@@ -119,6 +119,16 @@ class EloquentEngagementRepository implements EngagementRepository
             ->all();
     }
 
+    public function listSessionsByBuyer(Uuid $buyerId): array
+    {
+        return EngagementSessionModel::where('buyer_id', $buyerId->value())
+            ->get()
+            ->map(function ($session) {
+                return $this->factory->fromState($this->mapSessionModel($session));
+            })
+            ->all();
+    }
+
     private function mapSessionModel(EngagementSessionModel $model): array
     {
         return [

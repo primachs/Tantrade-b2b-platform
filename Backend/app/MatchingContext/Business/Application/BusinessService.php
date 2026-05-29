@@ -29,6 +29,11 @@ class BusinessService
         return $this->repository->update($updated)->toArray();
     }
 
+    public function list(): array
+    {
+        return array_map(static fn ($business) => $business->toArray(), $this->repository->list());
+    }
+
     public function show(string $businessId): array
     {
         return $this->requireBusiness($businessId)->toArray();

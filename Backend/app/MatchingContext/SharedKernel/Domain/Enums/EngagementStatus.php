@@ -6,6 +6,7 @@ enum EngagementStatus: string
 {
     case INITIATED = 'INITIATED';
     case ACCEPTED = 'ACCEPTED';
+    case REJECTED = 'REJECTED';
     case ACTIVE = 'ACTIVE';
     case STALLED = 'STALLED';
     case CLOSED = 'CLOSED';

@@ -53,6 +53,15 @@ class EloquentBrokerRepository implements BrokerRepository
         return $this->factory->fromState($model->toArray());
     }
 
+    public function list(): array
+    {
+        $models = BrokerRegistrationModel::query()->orderByDesc('created_at')->get();
+
+        return $models->map(function (BrokerRegistrationModel $model) {
+            return $this->factory->fromState($model->toArray());
+        })->all();
+    }
+
     public function hasActiveRegistrationForPerson(Uuid $personId): bool
     {
         return BrokerRegistrationModel::query()

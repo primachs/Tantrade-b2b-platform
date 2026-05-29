@@ -82,6 +82,17 @@ class EloquentBusinessRepository implements BusinessRepository
         return $this->factory->fromState($this->mapBusinessModel($model));
     }
 
+    public function list(): array
+    {
+        $models = BusinessModel::with(['verification', 'capabilities.capabilityAttributes', 'trustMetrics'])
+            ->orderByDesc('created_at')
+            ->get();
+
+        return $models->map(function (BusinessModel $model) {
+            return $this->factory->fromState($this->mapBusinessModel($model));
+        })->all();
+    }
+
     public function upsertVerification(BusinessVerification $verification): BusinessVerification
     {
         $data = $verification->toArray();

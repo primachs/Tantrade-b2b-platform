@@ -12,4 +12,7 @@ interface PersonRepository
     public function update(Person $person): Person;
 
     public function findById(Uuid $personId): ?Person;
+
+    /** @return Person[] */
+    public function list(): array;
 }

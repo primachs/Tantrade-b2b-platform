@@ -4,6 +4,7 @@ use App\MatchingContext\Business\Presentation\Http\BusinessController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('businesses')->group(function () {
+    Route::get('/', [BusinessController::class, 'index']);
     Route::post('/', [BusinessController::class, 'store']);
     Route::get('/{businessId}', [BusinessController::class, 'show']);
     Route::patch('/{businessId}', [BusinessController::class, 'update']);

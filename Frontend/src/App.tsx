@@ -1,84 +1,58 @@
-import { EndpointCard } from "./presentation/components/EndpointCard";
-import { Hero } from "./presentation/components/Hero";
-import { ResponseTrace } from "./presentation/components/ResponseTrace";
-import { endpoints, groups } from "./modules/console/consoleConfig";
-import { useConsoleState } from "./modules/console/useConsoleState";
+import { useEffect, useState } from "react";
+import { BrandHeader } from "./presentation/components/BrandHeader";
+import { LandingPage } from "./presentation/pages/LandingPage";
+import { DashboardPage } from "./presentation/pages/DashboardPage";
+import { useAuth } from "./modules/auth/useAuth";
 
 export default function App() {
-  const {
-    apiBaseInput,
-    apiBase,
-    token,
-    authEmail,
-    authName,
-    payloads,
-    pathValues,
-    queryValues,
-    response,
-    busyId,
-    setApiBaseInput,
-    setToken,
-    updatePayload,
-    updatePathValue,
-    updateQueryValue,
-    runEndpoint
-  } = useConsoleState(endpoints);
+  const { token, user, loading, error, setError, login, logout } = useAuth();
+  const [route, setRoute] = useState<"landing" | "dashboard">("landing");
+
+  useEffect(() => {
+    if (user) {
+      setRoute("dashboard");
+    }
+  }, [user]);
+
+  const handleNavigate = (next: "landing" | "dashboard") => {
+    if (next === "dashboard" && !user) {
+      setRoute("landing");
+      return;
+    }
+    setRoute(next);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setRoute("landing");
+  };
 
   return (
     <div className="app-shell">
-      <Hero
-        apiBaseInput={apiBaseInput}
-        apiBase={apiBase}
-        token={token}
-        authEmail={authEmail}
-        authName={authName}
-        onApiBaseChange={setApiBaseInput}
-        onTokenChange={setToken}
-        onClearToken={() => setToken("")}
+      <BrandHeader
+        active={route}
+        onNavigate={handleNavigate}
+        userName={user?.name}
+        userEmail={user?.email}
+        userRoles={user?.roles}
+        onLogout={handleLogout}
       />
 
-      <main className="content">
-        {groups.map((group) => {
-          const Icon = group.icon;
-          const groupEndpoints = endpoints.filter((endpoint) => endpoint.group === group.id);
+      {route === "landing" && (
+        <LandingPage
+          onLogin={login}
+          loading={loading}
+          error={error}
+          onClearError={() => setError(null)}
+        />
+      )}
 
-          return (
-            <section key={group.id} className="section">
-              <div className="section-head">
-                <div className="section-title">
-                  <Icon className="icon" />
-                  <div>
-                    <h2>{group.title}</h2>
-                    <p>{group.description}</p>
-                  </div>
-                </div>
-                <span className="pill">{groupEndpoints.length} endpoints</span>
-              </div>
-              <div className="card-grid">
-                {groupEndpoints.map((endpoint, index) => (
-                  <EndpointCard
-                    key={endpoint.id}
-                    endpoint={endpoint}
-                    index={index}
-                    payload={payloads[endpoint.id] ?? ""}
-                    pathValues={pathValues[endpoint.id] ?? {}}
-                    queryValues={queryValues[endpoint.id] ?? {}}
-                    busy={busyId === endpoint.id}
-                    token={token}
-                    apiBase={apiBase}
-                    onPayloadChange={updatePayload}
-                    onPathChange={updatePathValue}
-                    onQueryChange={updateQueryValue}
-                    onRun={runEndpoint}
-                  />
-                ))}
-              </div>
-            </section>
-          );
-        })}
-
-        <ResponseTrace response={response} />
-      </main>
+      {route === "dashboard" && user && (
+        <DashboardPage
+          token={token}
+          user={user}
+        />
+      )}
     </div>
   );
 }

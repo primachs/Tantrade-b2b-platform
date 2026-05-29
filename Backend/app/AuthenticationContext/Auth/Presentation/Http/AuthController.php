@@ -3,6 +3,7 @@
 namespace App\AuthenticationContext\Auth\Presentation\Http;
 
 use App\AuthenticationContext\Auth\Application\AuthService;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
@@ -40,7 +41,34 @@ class AuthController
 
     public function me(Request $request): JsonResponse
     {
-        return response()->json($request->user());
+        $user = $request->user();
+        if (! $user) {
+            return response()->json(null, 401);
+        }
+
+        $user->load('roles');
+        $payload = $user->toArray();
+        $payload['roles'] = $user->roles->pluck('name')->values()->all();
+
+        return response()->json($payload);
+    }
+
+    public function users(): JsonResponse
+    {
+        $users = AuthUser::query()
+            ->with('roles:id,name')
+            ->orderBy('name')
+            ->get()
+            ->map(function (AuthUser $user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'roles' => $user->roles->pluck('name')->values()->all(),
+                ];
+            });
+
+        return response()->json($users);
     }
 
     public function logout(Request $request, AuthService $service): JsonResponse

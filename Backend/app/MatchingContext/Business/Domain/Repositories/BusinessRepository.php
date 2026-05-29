@@ -16,6 +16,9 @@ interface BusinessRepository
 
     public function findById(Uuid $businessId): ?Business;
 
+    /** @return Business[] */
+    public function list(): array;
+
     public function upsertVerification(BusinessVerification $verification): BusinessVerification;
 
     /** @param array<int, BusinessCapability> $capabilities */

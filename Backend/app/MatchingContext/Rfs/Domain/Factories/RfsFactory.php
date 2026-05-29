@@ -3,7 +3,6 @@
 namespace App\MatchingContext\Rfs\Domain\Factories;
 
 use App\MatchingContext\Rfs\Domain\Entities\Rfs;
-use App\MatchingContext\Rfs\Domain\Entities\RfsAttribute;
 use App\MatchingContext\Rfs\Domain\Entities\RfsConstraint;
 use App\MatchingContext\Rfs\Domain\Entities\RfsPreference;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\DateRange;
@@ -29,8 +28,7 @@ class RfsFactory
             'DRAFT',
             new \DateTimeImmutable,
             $this->constraintFromPayload($rfsId, $payload['constraints'] ?? []),
-            $this->preferenceFromPayload($rfsId, $payload['preferences'] ?? []),
-            $this->attributesFromPayload($rfsId, $payload['attributes'] ?? [])
+            $this->preferenceFromPayload($rfsId, $payload['preferences'] ?? [])
         );
     }
 
@@ -49,8 +47,7 @@ class RfsFactory
             $state['status'],
             isset($state['created_at']) ? new \DateTimeImmutable($state['created_at']) : null,
             isset($state['constraint']) ? $this->constraintFromState($state['constraint']) : null,
-            isset($state['preference']) ? $this->preferenceFromState($state['preference']) : null,
-            $this->attributesFromState($state['attributes'] ?? [])
+            isset($state['preference']) ? $this->preferenceFromState($state['preference']) : null
         );
     }
 
@@ -121,35 +118,4 @@ class RfsFactory
         );
     }
 
-    /** @return RfsAttribute[] */
-    public function attributesFromPayload(Uuid $rfsId, array $payload): array
-    {
-        $attributes = [];
-        foreach ($payload as $attribute) {
-            $attributes[] = new RfsAttribute(
-                null,
-                $rfsId,
-                Uuid::fromString($attribute['attribute_id']),
-                $attribute['value']
-            );
-        }
-
-        return $attributes;
-    }
-
-    /** @return RfsAttribute[] */
-    public function attributesFromState(array $payload): array
-    {
-        $attributes = [];
-        foreach ($payload as $attribute) {
-            $attributes[] = new RfsAttribute(
-                isset($attribute['id']) ? Uuid::fromString($attribute['id']) : null,
-                Uuid::fromString($attribute['rfs_id']),
-                Uuid::fromString($attribute['attribute_id']),
-                $attribute['value']
-            );
-        }
-
-        return $attributes;
-    }
 }

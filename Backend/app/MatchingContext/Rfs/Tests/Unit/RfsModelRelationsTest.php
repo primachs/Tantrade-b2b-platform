@@ -21,7 +21,6 @@ class RfsModelRelationsTest extends TestCase
         $this->assertInstanceOf(BelongsTo::class, $model->serviceType());
         $this->assertInstanceOf(HasOne::class, $model->constraints());
         $this->assertInstanceOf(HasOne::class, $model->preferences());
-        $this->assertInstanceOf(HasMany::class, $model->rfsAttributes());
         $this->assertInstanceOf(HasMany::class, $model->shortlists());
         $this->assertInstanceOf(HasMany::class, $model->engagementSessions());
     }

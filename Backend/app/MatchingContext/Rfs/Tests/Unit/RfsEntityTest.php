@@ -3,7 +3,6 @@
 namespace App\MatchingContext\Rfs\Tests\Unit;
 
 use App\MatchingContext\Rfs\Domain\Entities\Rfs;
-use App\MatchingContext\Rfs\Domain\Entities\RfsAttribute;
 use App\MatchingContext\Rfs\Domain\Entities\RfsConstraint;
 use App\MatchingContext\Rfs\Domain\Entities\RfsPreference;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\DateRange;
@@ -37,8 +36,6 @@ class RfsEntityTest extends TestCase
             ])
         );
 
-        $attribute = new RfsAttribute(null, $rfsId, Uuid::random(), 'Trucks');
-
         $rfs = new Rfs(
             $rfsId,
             $buyerId,
@@ -50,8 +47,7 @@ class RfsEntityTest extends TestCase
             'DRAFT',
             new \DateTimeImmutable('2026-01-01'),
             $constraint,
-            $preference,
-            [$attribute]
+            $preference
         );
 
         $this->assertSame($rfsId->value(), $rfs->id()->value());
@@ -59,8 +55,6 @@ class RfsEntityTest extends TestCase
         $this->assertSame($serviceTypeId->value(), $rfs->serviceTypeId()->value());
         $this->assertNotNull($rfs->constraint());
         $this->assertNotNull($rfs->preference());
-        $this->assertCount(1, $rfs->attributes());
-
         $opened = $rfs->withStatus('OPEN');
         $this->assertSame('OPEN', $opened->status());
 
@@ -73,7 +67,5 @@ class RfsEntityTest extends TestCase
         $withoutPreference = $rfs->withPreference(null);
         $this->assertNull($withoutPreference->toArray()['preference']);
 
-        $withoutAttributes = $rfs->withAttributes([]);
-        $this->assertSame([], $withoutAttributes->toArray()['attributes']);
     }
 }

@@ -56,11 +56,6 @@ class Rfs extends Model
         return $this->hasOne(RfsPreference::class, 'rfs_id');
     }
 
-    public function rfsAttributes(): HasMany
-    {
-        return $this->hasMany(RfsAttribute::class, 'rfs_id');
-    }
-
     public function shortlists(): HasMany
     {
         return $this->hasMany(MatchShortlist::class, 'rfs_id');

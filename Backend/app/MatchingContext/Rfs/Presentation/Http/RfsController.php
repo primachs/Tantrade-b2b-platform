@@ -12,6 +12,11 @@ use Illuminate\Validation\Rule;
 
 class RfsController
 {
+    public function index(RfsService $service): JsonResponse
+    {
+        return response()->json($service->list());
+    }
+
     public function store(Request $request, RfsService $service): JsonResponse
     {
         $payload = $request->validate([
@@ -51,9 +56,6 @@ class RfsController
             'preferences.speed_weight' => ['nullable', 'numeric', 'min:0'],
             'preferences.experience_weight' => ['nullable', 'numeric', 'min:0'],
             'preferences.location_weight' => ['nullable', 'numeric', 'min:0'],
-            'attributes' => ['nullable', 'array'],
-            'attributes.*.attribute_id' => ['required_with:attributes', 'uuid'],
-            'attributes.*.value' => ['required_with:attributes', 'string'],
         ]);
 
         $rfs = $service->create($payload);
@@ -103,9 +105,6 @@ class RfsController
             'preferences.speed_weight' => ['nullable', 'numeric', 'min:0'],
             'preferences.experience_weight' => ['nullable', 'numeric', 'min:0'],
             'preferences.location_weight' => ['nullable', 'numeric', 'min:0'],
-            'attributes' => ['nullable', 'array'],
-            'attributes.*.attribute_id' => ['required_with:attributes', 'uuid'],
-            'attributes.*.value' => ['required_with:attributes', 'string'],
         ]);
 
         $updated = $service->update($rfsId, $payload);

@@ -10,6 +10,11 @@ use Illuminate\Validation\Rule;
 
 class MarketController
 {
+    public function index(MarketService $service): JsonResponse
+    {
+        return response()->json($service->list());
+    }
+
     public function store(Request $request, MarketService $service): JsonResponse
     {
         $payload = $request->validate([

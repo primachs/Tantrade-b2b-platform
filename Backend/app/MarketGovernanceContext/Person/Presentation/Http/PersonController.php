@@ -10,6 +10,11 @@ use Illuminate\Validation\Rule;
 
 class PersonController
 {
+    public function index(PersonService $service): JsonResponse
+    {
+        return response()->json($service->list());
+    }
+
     public function store(Request $request, PersonService $service): JsonResponse
     {
         $payload = $request->validate([

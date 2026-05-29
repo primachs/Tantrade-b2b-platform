@@ -11,6 +11,24 @@ use Illuminate\Validation\Rule;
 
 class EngagementController
 {
+    public function index(Request $request, EngagementService $service): JsonResponse
+    {
+        $payload = $request->validate([
+            'seller_id' => ['nullable', 'uuid'],
+            'buyer_id' => ['nullable', 'uuid'],
+        ]);
+
+        if (! empty($payload['buyer_id'])) {
+            return response()->json($service->listByBuyer($payload['buyer_id']));
+        }
+
+        if (! empty($payload['seller_id'])) {
+            return response()->json($service->listBySeller($payload['seller_id']));
+        }
+
+        return response()->json([]);
+    }
+
     public function store(Request $request, EngagementService $service): JsonResponse
     {
         $payload = $request->validate([
@@ -32,6 +50,13 @@ class EngagementController
     public function accept(string $sessionId, EngagementService $service): JsonResponse
     {
         $updated = $service->accept($sessionId);
+
+        return response()->json($updated);
+    }
+
+    public function reject(string $sessionId, EngagementService $service): JsonResponse
+    {
+        $updated = $service->reject($sessionId);
 
         return response()->json($updated);
     }

@@ -6,8 +6,6 @@ use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
 
 final class Rfs
 {
-    /** @var RfsAttribute[] */
-    private array $attributes;
 
     public function __construct(
         private readonly Uuid $id,
@@ -20,11 +18,8 @@ final class Rfs
         private readonly string $status,
         private readonly ?\DateTimeImmutable $createdAt,
         private readonly ?RfsConstraint $constraint,
-        private readonly ?RfsPreference $preference,
-        array $attributes
-    ) {
-        $this->attributes = $attributes;
-    }
+        private readonly ?RfsPreference $preference
+    ) {}
 
     public function id(): Uuid
     {
@@ -51,12 +46,6 @@ final class Rfs
         return $this->preference;
     }
 
-    /** @return RfsAttribute[] */
-    public function attributes(): array
-    {
-        return $this->attributes;
-    }
-
     public function withStatus(string $status): self
     {
         return new self(
@@ -70,8 +59,7 @@ final class Rfs
             $status,
             $this->createdAt,
             $this->constraint,
-            $this->preference,
-            $this->attributes
+            $this->preference
         );
     }
 
@@ -88,8 +76,7 @@ final class Rfs
             $this->status,
             $this->createdAt,
             $this->constraint,
-            $this->preference,
-            $this->attributes
+            $this->preference
         );
     }
 
@@ -106,8 +93,7 @@ final class Rfs
             $this->status,
             $this->createdAt,
             $constraint,
-            $this->preference,
-            $this->attributes
+            $this->preference
         );
     }
 
@@ -124,27 +110,7 @@ final class Rfs
             $this->status,
             $this->createdAt,
             $this->constraint,
-            $preference,
-            $this->attributes
-        );
-    }
-
-    /** @param RfsAttribute[] $attributes */
-    public function withAttributes(array $attributes): self
-    {
-        return new self(
-            $this->id,
-            $this->buyerId,
-            $this->title,
-            $this->description,
-            $this->serviceTypeId,
-            $this->projectSize,
-            $this->expertiseLevel,
-            $this->status,
-            $this->createdAt,
-            $this->constraint,
-            $this->preference,
-            $attributes
+            $preference
         );
     }
 
@@ -162,7 +128,6 @@ final class Rfs
             'created_at' => $this->createdAt?->format('c'),
             'constraint' => $this->constraint?->toArray(),
             'preference' => $this->preference?->toArray(),
-            'attributes' => array_map(static fn (RfsAttribute $attribute) => $attribute->toArray(), $this->attributes),
         ];
     }
 }

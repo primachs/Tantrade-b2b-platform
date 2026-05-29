@@ -13,7 +13,7 @@ return new class extends Migration
             $table->uuid('rfs_id');
             $table->uuid('buyer_id');
             $table->uuid('seller_id');
-            $table->enum('status', ['INITIATED', 'ACCEPTED', 'ACTIVE', 'STALLED', 'CLOSED']);
+            $table->enum('status', ['INITIATED', 'ACCEPTED', 'REJECTED', 'ACTIVE', 'STALLED', 'CLOSED']);
             $table->enum('outcome', ['DEAL_CONFIRMED', 'NO_AGREEMENT', 'NO_RESPONSE', 'OUT_OF_SCOPE', 'MOVED_OFF_PLATFORM', 'DISPUTED'])->nullable();
             $table->float('confidence_score')->nullable();
             $table->timestamp('created_at')->useCurrent();

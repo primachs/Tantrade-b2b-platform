@@ -52,12 +52,12 @@ class RfsService
             }
         }
 
-        if (array_key_exists('attributes', $payload)) {
-            $attributes = $this->factory->attributesFromPayload(Uuid::fromString($rfsId), $payload['attributes'] ?? []);
-            $this->repository->replaceAttributes(Uuid::fromString($rfsId), $attributes);
-        }
-
         return $this->requireRfs($rfsId)->toArray();
+    }
+
+    public function list(): array
+    {
+        return array_map(static fn ($rfs) => $rfs->toArray(), $this->repository->list());
     }
 
     public function show(string $rfsId): array

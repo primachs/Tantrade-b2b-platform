@@ -3,13 +3,11 @@
 namespace App\MatchingContext\Rfs\Infrastructure\Repositories;
 
 use App\MatchingContext\Rfs\Domain\Entities\Rfs;
-use App\MatchingContext\Rfs\Domain\Entities\RfsAttribute;
 use App\MatchingContext\Rfs\Domain\Entities\RfsConstraint;
 use App\MatchingContext\Rfs\Domain\Entities\RfsPreference;
 use App\MatchingContext\Rfs\Domain\Factories\RfsFactory;
 use App\MatchingContext\Rfs\Domain\Repositories\RfsRepository;
 use App\MatchingContext\Rfs\Infrastructure\Models\Rfs as RfsModel;
-use App\MatchingContext\Rfs\Infrastructure\Models\RfsAttribute as RfsAttributeModel;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsConstraint as RfsConstraintModel;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsPreference as RfsPreferenceModel;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
@@ -45,10 +43,6 @@ class EloquentRfsRepository implements RfsRepository
                 $this->upsertPreference($this->factory->preferenceFromState($data['preference']));
             }
 
-            if (! empty($data['attributes'])) {
-                $this->replaceAttributes(Uuid::fromString($data['id']), $this->factory->attributesFromState($data['attributes']));
-            }
-
             return $this->findById(Uuid::fromString($data['id'])) ?? $rfs;
         });
     }
@@ -71,12 +65,23 @@ class EloquentRfsRepository implements RfsRepository
 
     public function findById(Uuid $rfsId): ?Rfs
     {
-        $model = RfsModel::with(['constraints', 'preferences', 'rfsAttributes'])->find($rfsId->value());
+        $model = RfsModel::with(['constraints', 'preferences'])->find($rfsId->value());
         if (! $model) {
             return null;
         }
 
         return $this->factory->fromState($this->mapRfsModel($model));
+    }
+
+    public function list(): array
+    {
+        $models = RfsModel::with(['constraints', 'preferences'])
+            ->orderByDesc('created_at')
+            ->get();
+
+        return $models->map(function (RfsModel $model) {
+            return $this->factory->fromState($this->mapRfsModel($model));
+        })->all();
     }
 
     public function updateStatus(Uuid $rfsId, string $status): void
@@ -111,20 +116,6 @@ class EloquentRfsRepository implements RfsRepository
         );
     }
 
-    public function replaceAttributes(Uuid $rfsId, array $attributes): void
-    {
-        RfsAttributeModel::where('rfs_id', $rfsId->value())->delete();
-
-        foreach ($attributes as $attribute) {
-            if (! $attribute instanceof RfsAttribute) {
-                continue;
-            }
-
-            $data = $attribute->toArray();
-            RfsAttributeModel::create($data);
-        }
-    }
-
     private function mapRfsModel(RfsModel $model): array
     {
         return [
@@ -139,9 +130,6 @@ class EloquentRfsRepository implements RfsRepository
             'created_at' => $model->created_at?->toAtomString(),
             'constraint' => $model->constraints?->toArray(),
             'preference' => $model->preferences?->toArray(),
-            'attributes' => $model->rfsAttributes->map(function ($attribute) {
-                return $attribute->toArray();
-            })->all(),
         ];
     }
 }

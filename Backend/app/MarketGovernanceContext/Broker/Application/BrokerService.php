@@ -42,6 +42,11 @@ class BrokerService
         return $this->requireRegistration($brokerId)->toArray();
     }
 
+    public function list(): array
+    {
+        return array_map(static fn ($registration) => $registration->toArray(), $this->repository->list());
+    }
+
     private function requireRegistration(string $brokerId)
     {
         $registration = $this->repository->findById(Uuid::fromString($brokerId));

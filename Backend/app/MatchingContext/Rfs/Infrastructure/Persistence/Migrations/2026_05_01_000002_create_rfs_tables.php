@@ -49,20 +49,10 @@ return new class extends Migration
             $table->foreign('rfs_id')->references('id')->on('rfs')->cascadeOnDelete();
         });
 
-        Schema::create('rfs_attributes', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('rfs_id');
-            $table->uuid('attribute_id');
-            $table->string('value');
-
-            $table->foreign('rfs_id')->references('id')->on('rfs')->cascadeOnDelete();
-            $table->foreign('attribute_id')->references('id')->on('service_attributes')->cascadeOnDelete();
-        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('rfs_attributes');
         Schema::dropIfExists('rfs_preferences');
         Schema::dropIfExists('rfs_constraints');
         Schema::dropIfExists('rfs');

@@ -34,6 +34,11 @@ class PersonService
         return $this->requirePerson($personId)->toArray();
     }
 
+    public function list(): array
+    {
+        return array_map(static fn ($person) => $person->toArray(), $this->repository->list());
+    }
+
     private function requirePerson(string $personId)
     {
         $person = $this->repository->findById(Uuid::fromString($personId));

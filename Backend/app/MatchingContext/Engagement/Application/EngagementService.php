@@ -32,6 +32,20 @@ class EngagementService
         return $session->toArray();
     }
 
+    public function listBySeller(string $sellerId): array
+    {
+        $sessions = $this->repository->listSessionsBySeller(Uuid::fromString($sellerId));
+
+        return array_map(static fn ($session) => $session->toArray(), $sessions);
+    }
+
+    public function listByBuyer(string $buyerId): array
+    {
+        $sessions = $this->repository->listSessionsByBuyer(Uuid::fromString($buyerId));
+
+        return array_map(static fn ($session) => $session->toArray(), $sessions);
+    }
+
     public function show(string $sessionId): array
     {
         return $this->requireSession($sessionId)->toArray();
@@ -45,6 +59,19 @@ class EngagementService
         }
 
         $updated = $session->withStatus('ACCEPTED');
+        $this->repository->update($updated);
+
+        return $updated->toArray();
+    }
+
+    public function reject(string $sessionId): array
+    {
+        $session = $this->requireSession($sessionId);
+        if ($session->status() !== 'INITIATED') {
+            throw new \RuntimeException('Only INITIATED sessions can be rejected.');
+        }
+
+        $updated = $session->withStatus('REJECTED');
         $this->repository->update($updated);
 
         return $updated->toArray();

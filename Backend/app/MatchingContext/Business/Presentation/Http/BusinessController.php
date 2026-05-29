@@ -13,6 +13,11 @@ use Illuminate\Validation\Rule;
 
 class BusinessController
 {
+    public function index(BusinessService $service): JsonResponse
+    {
+        return response()->json($service->list());
+    }
+
     public function store(Request $request, BusinessService $service): JsonResponse
     {
         $payload = $request->validate([

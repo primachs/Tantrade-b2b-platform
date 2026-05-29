@@ -13,5 +13,8 @@ interface BrokerRepository
 
     public function findById(Uuid $registrationId): ?BrokerRegistration;
 
+    /** @return BrokerRegistration[] */
+    public function list(): array;
+
     public function hasActiveRegistrationForPerson(Uuid $personId): bool;
 }

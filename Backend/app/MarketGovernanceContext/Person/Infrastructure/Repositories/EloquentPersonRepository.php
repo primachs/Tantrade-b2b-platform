@@ -64,4 +64,13 @@ class EloquentPersonRepository implements PersonRepository
 
         return $this->factory->fromState($model->toArray());
     }
+
+    public function list(): array
+    {
+        $models = PersonModel::query()->orderByDesc('created_at')->get();
+
+        return $models->map(function (PersonModel $model) {
+            return $this->factory->fromState($model->toArray());
+        })->all();
+    }
 }
