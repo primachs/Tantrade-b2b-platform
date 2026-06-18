@@ -1,6 +1,4 @@
 import { ShieldCheck, Building2, Zap, Phone, Mail, FileText, Users } from "lucide-react";
-import coatOfArms from "../../assets/tanzania-coat-of-arms.png";
-import tantradeLogo from "../../assets/tantrade-brand.png";
 
 type LandingPageProps = {
   onGetStarted: () => void;

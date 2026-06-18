@@ -3,6 +3,7 @@ import { AlertTriangle, CheckCircle2, Layers, MapPin, Radar } from "lucide-react
 import { BusinessView } from "../components/BusinessView";
 import { GovernanceView } from "../components/GovernanceView";
 import { AdminView } from "../components/AdminView";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 type AuthUser = {
   id: string;
@@ -84,6 +85,7 @@ export const DashboardPage = ({ token, user }: DashboardPageProps) => {
         </div>
       )}
 
+      <ErrorBoundary>
       {workspaces.length > 1 && activeWorkspace && (
         <nav className="workspace-tabs" aria-label="Workspace switcher">
           {workspaces.map((workspace) => (
@@ -133,11 +135,10 @@ export const DashboardPage = ({ token, user }: DashboardPageProps) => {
         <BusinessView
           token={token}
           user={user}
-          isBuyer={isBuyer}
-          isSeller={isSeller}
           setNotice={setNoticeMessage}
         />
       )}
+      </ErrorBoundary>
     </main>
   );
 };

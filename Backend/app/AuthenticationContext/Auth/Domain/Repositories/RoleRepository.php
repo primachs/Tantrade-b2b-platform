@@ -19,4 +19,7 @@ interface RoleRepository
 
     /** @return array<int, Role> */
     public function listForUser(Uuid $userId): array;
+
+    /** @return array<int, Role> */
+    public function listAll(): array;
 }

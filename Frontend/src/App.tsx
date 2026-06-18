@@ -53,6 +53,7 @@ export default function App() {
         userEmail={user?.email}
         userRoles={user?.roles}
         onLogout={handleLogout}
+        onLogoClick={() => handleNavigate("landing")}
       />
 
       {route === "landing" && (

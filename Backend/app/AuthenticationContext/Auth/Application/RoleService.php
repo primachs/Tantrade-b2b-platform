@@ -48,6 +48,13 @@ class RoleService
         return array_map(static fn ($role) => $role->toArray(), $roles);
     }
 
+    public function listAllRoles(): array
+    {
+        $roles = $this->repository->listAll();
+
+        return array_map(static fn ($role) => $role->toArray(), $roles);
+    }
+
     private function requireUser(string $userId): void
     {
         if (! $this->authUserRepository->findById(Uuid::fromString($userId))) {

@@ -6,17 +6,28 @@ type BrandHeaderProps = {
   userEmail?: string;
   userRoles?: string[];
   onLogout?: () => void;
+  onLogoClick: () => void; // Added this line
 };
 
 export const BrandHeader = ({
   userName,
   userEmail,
   userRoles,
-  onLogout
+  onLogout,
+  onLogoClick // Added this line
 }: BrandHeaderProps) => (
   <header className="top-nav" style={{ paddingTop: '0px', paddingBottom: '0px' }}>
     <div className="nav-brand">
-      <img className="nav-coat" src={coatOfArms} alt="Tanzania coat of arms" style={{ width: '80px', height: 'auto' }} />
+      <a 
+        href="#" 
+        className="nav-brand__link"
+        onClick={(e) => {
+          e.preventDefault();
+          onLogoClick();
+        }}
+      >
+        <img className="nav-coat" src={coatOfArms} alt="Tanzania coat of arms" style={{ width: '80px', height: 'auto' }} />
+      </a>
     </div>
     <div className="nav-brand__meta" style={{ marginLeft: 'auto' }}>
       <img className="nav-logo" src={tantradeLogo} alt="TanTrade logo" style={{ width: '80px', height: 'auto' }}/>

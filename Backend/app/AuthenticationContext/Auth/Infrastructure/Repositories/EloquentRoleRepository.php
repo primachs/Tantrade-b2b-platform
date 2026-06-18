@@ -75,4 +75,9 @@ class EloquentRoleRepository implements RoleRepository
 
         return $user->roles->map(fn (RoleModel $role) => $this->factory->fromState($role->toArray()))->all();
     }
+
+    public function listAll(): array
+    {
+        return RoleModel::query()->get()->map(fn ($role) => $this->factory->fromState($role->toArray()))->all();
+    }
 }

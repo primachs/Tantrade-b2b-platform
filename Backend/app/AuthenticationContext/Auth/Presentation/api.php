@@ -14,6 +14,7 @@ Route::prefix('auth')->group(function () {
         Route::get('/users', [AuthController::class, 'users']);
         Route::post('/password/change', [AuthController::class, 'changePassword']);
         Route::get('/roles', [RoleController::class, 'index']);
+        Route::get('/roles/all', [RoleController::class, 'all']);
         Route::post('/roles/{roleId}', [RoleController::class, 'assign']);
         Route::delete('/roles/{roleId}', [RoleController::class, 'revoke']);
     });

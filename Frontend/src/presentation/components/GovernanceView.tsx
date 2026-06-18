@@ -87,7 +87,7 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
 
   const fetchMarkets = async () => {
     try {
-      const res = await apiRequest("/market-governance/markets", "GET", undefined, token);
+      const res = await apiRequest<Market[]>("/market-governance/markets", { token });
       setMarkets(res);
     } catch (e: any) {
       setNotice("error", e.message || "Failed to load markets");
@@ -96,7 +96,7 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
 
   const fetchBrokers = async () => {
     try {
-      const res = await apiRequest("/market-governance/brokers", "GET", undefined, token);
+      const res = await apiRequest<Broker[]>("/market-governance/brokers", { token });
       setBrokers(res);
     } catch (e: any) {
       setNotice("error", e.message || "Failed to load brokers");
@@ -107,7 +107,7 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
     e.preventDefault();
     setLoading(true);
     try {
-      await apiRequest("/market-governance/markets", "POST", marketForm, token);
+      await apiRequest("/market-governance/markets", { method: "POST", token, body: marketForm });
       setNotice("success", "Market created successfully.");
       setMarketForm({ market_name: "", region: "", district: "", town: "", latitude: "", longitude: "" });
       fetchMarkets();
@@ -123,7 +123,7 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
     e.preventDefault();
     setLoading(true);
     try {
-      await apiRequest("/market-governance/brokers", "POST", brokerForm, token);
+      await apiRequest("/market-governance/brokers", { method: "POST", token, body: brokerForm });
       setNotice("success", "Broker registered successfully.");
       setBrokerForm({ market_id: "", broker_type: "PRODUCE_BROKER", first_name: "", middle_name: "", surname: "", nida_number: "", mobile: "", address: "" });
       fetchBrokers();

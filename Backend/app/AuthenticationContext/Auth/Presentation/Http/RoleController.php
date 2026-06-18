@@ -19,6 +19,11 @@ class RoleController
         return response()->json($service->listRoles($userId));
     }
 
+    public function all(RoleService $service): JsonResponse
+    {
+        return response()->json($service->listAllRoles());
+    }
+
     public function assign(string $roleId, Request $request, RoleService $service): JsonResponse
     {
         $payload = $request->validate([
