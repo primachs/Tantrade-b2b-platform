@@ -57,6 +57,35 @@ class AuthService
         return $this->sanitizeUser($saved);
     }
 
+    public function selectService(string $userId, string $service): array
+    {
+        $user = $this->requireUser($userId);
+        $existingRoles = $this->roleRepository->listForUser($user->id());
+
+        if (count($existingRoles) > 0) {
+            throw new \RuntimeException('Account already has a service role assigned.');
+        }
+
+        $roleName = match ($service) {
+            'matching' => 'BUYER',
+            'governance' => 'GOVERNANCE',
+            default => null,
+        };
+
+        if (! $roleName) {
+            throw new \RuntimeException('Invalid service selection.');
+        }
+
+        $role = $this->roleRepository->findByName($roleName);
+        if (! $role) {
+            throw new \RuntimeException('Service role is not configured.');
+        }
+
+        $this->roleRepository->assignToUser($user->id(), $role->id());
+
+        return $this->sanitizeUser($this->requireUser($userId));
+    }
+
     public function login(array $payload): array
     {
         $email = EmailAddress::fromString($payload['email']);

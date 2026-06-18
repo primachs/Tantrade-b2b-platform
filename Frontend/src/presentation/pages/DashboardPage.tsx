@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, Layers, MapPin, Radar } from "lucide-react";
 import { BusinessView } from "../components/BusinessView";
 import { GovernanceView } from "../components/GovernanceView";
-import { AdminView } from "../components/AdminView";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 
 type AuthUser = {
@@ -19,7 +18,7 @@ type DashboardPageProps = {
 
 type Notice = { type: "success" | "error"; message: string };
 
-type Workspace = "admin" | "governance" | "business";
+type Workspace = "governance" | "business";
 
 type WorkspaceOption = {
   id: Workspace;
@@ -40,9 +39,6 @@ export const DashboardPage = ({ token, user }: DashboardPageProps) => {
 
   const workspaces = useMemo(() => {
     const list: WorkspaceOption[] = [];
-    if (isAdmin) {
-      list.push({ id: "admin", label: "Platform Admin", icon: <Layers className="w-4 h-4" /> });
-    }
     if (isGovernance) {
       list.push({
         id: "governance",
@@ -58,7 +54,7 @@ export const DashboardPage = ({ token, user }: DashboardPageProps) => {
       });
     }
     return list;
-  }, [isAdmin, isGovernance, showBusiness]);
+  }, [isGovernance, showBusiness]);
 
   useEffect(() => {
     if (workspaces.length === 0) {
@@ -123,9 +119,6 @@ export const DashboardPage = ({ token, user }: DashboardPageProps) => {
         </section>
       )}
 
-      {activeWorkspace === "admin" && isAdmin && (
-        <AdminView token={token} user={user} setNotice={setNoticeMessage} />
-      )}
 
       {activeWorkspace === "governance" && isGovernance && (
         <GovernanceView token={token} user={user} setNotice={setNoticeMessage} />

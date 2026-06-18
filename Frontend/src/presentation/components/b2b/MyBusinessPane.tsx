@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { apiRequest } from "../../../api/client";
+import { apiRequest, ApiError } from "../../../api/client";
+import { RegionDistrictSelect } from "../RegionDistrictSelect";
 import { Business, ServiceType, TaxonomyResponse } from "./types";
 import { Edit2, Shield, Settings } from "lucide-react";
 
@@ -205,11 +206,11 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>TIN Number</label>
-              <input className="form-control" value={verificationForm.tin_number} onChange={e => setVerificationForm({...verificationForm, tin_number: e.target.value})} />
+              <input className="form-control" value={verificationForm.tin_number} onChange={e => setVerificationForm({...verificationForm, tin_number: e.target.value.replace(/\D/g, "").slice(0, 9)})} maxLength={9} />
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>BRELA Number</label>
-              <input className="form-control" value={verificationForm.brela_number} onChange={e => setVerificationForm({...verificationForm, brela_number: e.target.value})} />
+              <input className="form-control" value={verificationForm.brela_number} onChange={e => setVerificationForm({...verificationForm, brela_number: e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 12)})} maxLength={12} />
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.5rem" }}>
@@ -235,16 +236,12 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
               <input className="form-control" type="number" value={verificationForm.employee_count} onChange={e => setVerificationForm({...verificationForm, employee_count: e.target.value})} />
             </div>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Region</label>
-              <input className="form-control" value={verificationForm.region} onChange={e => setVerificationForm({...verificationForm, region: e.target.value})} />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>District</label>
-              <input className="form-control" value={verificationForm.district} onChange={e => setVerificationForm({...verificationForm, district: e.target.value})} />
-            </div>
-          </div>
+          <RegionDistrictSelect
+            region={verificationForm.region}
+            district={verificationForm.district}
+            onRegionChange={(region) => setVerificationForm((prev) => ({ ...prev, region, district: "" }))}
+            onDistrictChange={(district) => setVerificationForm((prev) => ({ ...prev, district }))}
+          />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
             <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Address</label>
             <textarea className="form-control" value={verificationForm.address} onChange={e => setVerificationForm({...verificationForm, address: e.target.value})} rows={3} />

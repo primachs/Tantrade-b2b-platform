@@ -2,12 +2,17 @@
 
 namespace App\MatchingContext\Business\Tests\Feature;
 
+use App\AuthenticationContext\Auth\Application\AuthService;
+use App\AuthenticationContext\Auth\Application\RoleService;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as AuthUserModel;
 use App\MatchingContext\Business\Application\BusinessService;
 use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceAttribute;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
+use Tests\Support\TanzaniaTestData;
 use Tests\TestCase;
 
 class BusinessApiTest extends TestCase
@@ -44,17 +49,17 @@ class BusinessApiTest extends TestCase
         $payload = [
             'name' => 'Buyer Co',
             'contact_person' => 'Jane Doe',
-            'phone' => '+255700000000',
+            'phone' => TanzaniaTestData::MOBILE,
             'email' => 'buyer@example.com',
-            'tin_number' => 'TIN-001',
-            'brela_number' => 'BRELA-001',
+            'tin_number' => TanzaniaTestData::TIN,
+            'brela_number' => TanzaniaTestData::BRELA,
             'business_size' => 'SMALL',
             'is_owner' => true,
             'owner_gender' => 'FEMALE',
             'employee_count' => 10,
             'revenue_range' => 'BELOW_50M',
-            'region' => 'Dar',
-            'district' => 'Ilala',
+            'region' => TanzaniaTestData::REGION,
+            'district' => TanzaniaTestData::DISTRICT,
             'address' => 'Street 1',
             'verification_status' => 'UNVERIFIED',
             'capabilities' => [
@@ -80,16 +85,29 @@ class BusinessApiTest extends TestCase
             'name' => 'Buyer Co Updated',
         ])->assertStatus(200);
 
+        $authService = app(AuthService::class);
+        $roleService = app(RoleService::class);
+        $authService->register([
+            'name' => 'Admin User',
+            'email' => 'admin.business.test@example.com',
+            'password' => 'StrongPassw0rd!2026',
+        ]);
+        $adminRole = collect($roleService->listAllRoles())->firstWhere('name', 'ADMIN')
+            ?? $roleService->create(['name' => 'ADMIN', 'description' => 'Platform administrator']);
+        $adminUser = AuthUserModel::query()->where('email', 'admin.business.test@example.com')->first();
+        $roleService->assignRole((string) $adminUser->id, $adminRole['id']);
+        Sanctum::actingAs($adminUser);
+
         $this->putJson("/api/businesses/{$businessId}/verification", [
-            'tin_number' => 'TIN-002',
-            'brela_number' => 'BRELA-002',
+            'tin_number' => TanzaniaTestData::TIN_ALT,
+            'brela_number' => TanzaniaTestData::BRELA_ALT,
             'business_size' => 'MEDIUM',
             'is_owner' => true,
             'owner_gender' => 'FEMALE',
             'employee_count' => 12,
             'revenue_range' => 'BETWEEN_50M_500M',
-            'region' => 'Dar',
-            'district' => 'Ilala',
+            'region' => TanzaniaTestData::REGION,
+            'district' => TanzaniaTestData::DISTRICT,
             'address' => 'Street 2',
             'verification_status' => 'PARTIALLY_VERIFIED',
         ])->assertStatus(200);

@@ -28,12 +28,12 @@ class GovernanceController
             'start_date' => ['required', 'date'],
             'end_date'   => ['nullable', 'date', 'after_or_equal:start_date'],
             // Optional profile fields — update AuthUser if provided
-            'nida_number' => ['nullable', 'string'],
-            'first_name'  => ['nullable', 'string'],
-            'middle_name' => ['nullable', 'string'],
-            'surname'     => ['nullable', 'string'],
+            'nida_number' => TanzaniaRules::nida(false),
+            'first_name'  => ['nullable', 'string', 'max:100'],
+            'middle_name' => ['nullable', 'string', 'max:100'],
+            'surname'     => ['nullable', 'string', 'max:100'],
             'gender'      => ['nullable', Rule::in(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY'])],
-            'mobile'      => ['nullable', 'string'],
+            'mobile'      => TanzaniaRules::mobile(false),
             'address'     => ['nullable', 'string'],
         ]);
 

@@ -9,12 +9,17 @@ import {
   ShieldCheck,
   TrendingUp,
   Briefcase,
+  AlertTriangle,
 } from "lucide-react";
 
 type ServiceSelectionPageProps = {
   onSelectService: (service: "matching" | "governance") => void;
-  onSignIn: () => void;
-  onBack: () => void;
+  onSignIn?: () => void;
+  onBack?: () => void;
+  setupMode?: boolean;
+  loading?: boolean;
+  error?: string | null;
+  onClearError?: () => void;
 };
 
 const matchingFeatures = [
@@ -37,30 +42,47 @@ export const ServiceSelectionPage = ({
   onSelectService,
   onSignIn,
   onBack,
+  setupMode = false,
+  loading = false,
+  error,
+  onClearError,
 }: ServiceSelectionPageProps) => {
   return (
     <main className="service-selection-page">
-      {/* Back link */}
-      <div className="service-selection-back">
-        <button type="button" className="service-back-btn" onClick={onBack}>
-          <ArrowLeft className="w-4 h-4" />
-          Back to home
-        </button>
-      </div>
+      {onBack && (
+        <div className="service-selection-back">
+          <button type="button" className="service-back-btn" onClick={onBack}>
+            <ArrowLeft className="w-4 h-4" />
+            Back to home
+          </button>
+        </div>
+      )}
 
-      {/* Header */}
       <div className="service-selection-header">
         <span className="service-selection-kicker">TanTrade B2B Platform</span>
-        <h1 className="service-selection-headline">Choose your service</h1>
+        <h1 className="service-selection-headline">
+          {setupMode ? "Complete your account setup" : "Choose your service"}
+        </h1>
         <p className="service-selection-sub">
-          Select the platform context that matches your role. Your account will be
-          configured with the right permissions automatically.
+          {setupMode
+            ? "Your account is signed in but has no service role yet. Select the platform you need — your permissions will be assigned automatically."
+            : "Select the platform context that matches your role. Your account will be configured with the right permissions automatically."}
         </p>
       </div>
 
-      {/* Service cards */}
+      {error && (
+        <div className="notice notice--error" role="alert">
+          <AlertTriangle className="icon" />
+          {error}
+          {onClearError && (
+            <button type="button" className="service-link-btn" onClick={onClearError} style={{ marginLeft: 8 }}>
+              Dismiss
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="service-cards-grid">
-        {/* B2B Matchmaking */}
         <div className="service-card service-card--matching">
           <div className="service-card__glow service-card__glow--blue" />
           <div className="service-card__inner">
@@ -68,41 +90,34 @@ export const ServiceSelectionPage = ({
               <Radar className="w-7 h-7" />
             </div>
             <div className="service-card__label">B2B Matchmaking Platform</div>
-            <h2 className="service-card__title">
-              Find the right business partner, faster
-            </h2>
+            <h2 className="service-card__title">Find the right business partner, faster</h2>
             <p className="service-card__desc">
               For businesses seeking or offering services. Publish structured requests,
               receive intelligent matches, and manage engagements end-to-end.
             </p>
-
             <ul className="service-card__features">
               {matchingFeatures.map((f) => (
                 <li key={f.text} className="service-feature">
-                  <span className="service-feature__icon service-feature__icon--blue">
-                    {f.icon}
-                  </span>
+                  <span className="service-feature__icon service-feature__icon--blue">{f.icon}</span>
                   {f.text}
                 </li>
               ))}
             </ul>
-
             <div className="service-card__role-badge">
               <CheckCircle2 className="w-3.5 h-3.5" />
               Assigned role: <strong>Buyer</strong>
             </div>
-
             <button
               type="button"
               className="button button--primary service-card__cta"
+              disabled={loading}
               onClick={() => onSelectService("matching")}
             >
-              Get started with Matchmaking
+              {loading ? "Assigning…" : setupMode ? "Select Matchmaking" : "Get started with Matchmaking"}
             </button>
           </div>
         </div>
 
-        {/* Broker Management */}
         <div className="service-card service-card--governance">
           <div className="service-card__glow service-card__glow--green" />
           <div className="service-card__inner">
@@ -110,51 +125,43 @@ export const ServiceSelectionPage = ({
               <MapPin className="w-7 h-7" />
             </div>
             <div className="service-card__label">Broker Management System</div>
-            <h2 className="service-card__title">
-              Govern markets with full oversight
-            </h2>
+            <h2 className="service-card__title">Govern markets with full oversight</h2>
             <p className="service-card__desc">
               For governance officers managing local markets, broker registrations, and
               chairperson office terms under TanTrade authority.
             </p>
-
             <ul className="service-card__features">
               {governanceFeatures.map((f) => (
                 <li key={f.text} className="service-feature">
-                  <span className="service-feature__icon service-feature__icon--green">
-                    {f.icon}
-                  </span>
+                  <span className="service-feature__icon service-feature__icon--green">{f.icon}</span>
                   {f.text}
                 </li>
               ))}
             </ul>
-
             <div className="service-card__role-badge service-card__role-badge--green">
               <CheckCircle2 className="w-3.5 h-3.5" />
               Assigned role: <strong>Governance Officer</strong>
             </div>
-
             <button
               type="button"
               className="button service-card__cta service-card__cta--green"
+              disabled={loading}
               onClick={() => onSelectService("governance")}
             >
-              Get started with Governance
+              {loading ? "Assigning…" : setupMode ? "Select Governance" : "Get started with Governance"}
             </button>
           </div>
         </div>
       </div>
 
-      <p className="service-selection-footer">
-        Already have an account?{" "}
-        <button
-          type="button"
-          className="service-link-btn"
-          onClick={onSignIn}
-        >
-          Sign in instead
-        </button>
-      </p>
+      {!setupMode && onSignIn && (
+        <p className="service-selection-footer">
+          Already have an account?{" "}
+          <button type="button" className="service-link-btn" onClick={onSignIn}>
+            Sign in instead
+          </button>
+        </p>
+      )}
     </main>
   );
 };

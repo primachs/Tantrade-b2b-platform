@@ -10,27 +10,64 @@ type AppRoute = "landing" | "service-select" | "auth" | "dashboard";
 type ServicePath = "matching" | "governance" | null;
 
 export default function App() {
-  const { token, user, loading, error, ready, setError, login, register, logout } =
-    useAuth();
+  const {
+    token,
+    user,
+    loading,
+    error,
+    ready,
+    setError,
+    login,
+    register,
+    logout,
+    selectService,
+    needsServiceSelection,
+  } = useAuth();
   const [route, setRoute] = useState<AppRoute>("landing");
   const [selectedService, setSelectedService] = useState<ServicePath>(null);
+  const [serviceSetupMode, setServiceSetupMode] = useState(false);
 
-  // Auto-route to dashboard once user is authenticated and ready
+  // Redirect authenticated users: no roles → service selection; otherwise dashboard
   useEffect(() => {
-    if (ready && user && (route === "landing" || route === "auth" || route === "service-select")) {
+    if (!ready || !user) return;
+
+    if (needsServiceSelection(user)) {
+      setServiceSetupMode(true);
+      if (route !== "service-select") {
+        setRoute("service-select");
+      }
+      return;
+    }
+
+    setServiceSetupMode(false);
+    if (route === "landing" || route === "auth" || route === "service-select") {
       setRoute("dashboard");
     }
-  }, [ready, route, user]);
+  }, [ready, user, route, needsServiceSelection]);
 
   const handleNavigate = (next: AppRoute) => {
     if (next === "dashboard" && !user) {
       setRoute("landing");
       return;
     }
+    if (next === "dashboard" && user && needsServiceSelection(user)) {
+      setServiceSetupMode(true);
+      setRoute("service-select");
+      return;
+    }
     setRoute(next);
   };
 
-  const handleServiceSelect = (service: "matching" | "governance") => {
+  const handleServiceSelect = async (service: "matching" | "governance") => {
+    if (serviceSetupMode && user) {
+      const ok = await selectService(service);
+      if (ok) {
+        setSelectedService(service);
+        setServiceSetupMode(false);
+        setRoute("dashboard");
+      }
+      return;
+    }
     setSelectedService(service);
     setRoute("auth");
   };
@@ -43,6 +80,7 @@ export default function App() {
   const handleLogout = async () => {
     await logout();
     setSelectedService(null);
+    setServiceSetupMode(false);
     setRoute("landing");
   };
 
@@ -62,9 +100,13 @@ export default function App() {
 
       {route === "service-select" && (
         <ServiceSelectionPage
+          setupMode={serviceSetupMode}
+          loading={loading}
+          error={error}
+          onClearError={() => setError(null)}
           onSelectService={handleServiceSelect}
-          onSignIn={handleSignIn}
-          onBack={() => handleNavigate("landing")}
+          onSignIn={serviceSetupMode ? undefined : handleSignIn}
+          onBack={() => (serviceSetupMode ? undefined : handleNavigate("landing"))}
         />
       )}
 
@@ -82,7 +124,7 @@ export default function App() {
         />
       )}
 
-      {route === "dashboard" && user && (
+      {route === "dashboard" && user && !needsServiceSelection(user) && (
         <DashboardPage token={token} user={user} />
       )}
     </div>

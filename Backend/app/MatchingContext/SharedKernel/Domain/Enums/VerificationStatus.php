@@ -7,6 +7,7 @@ enum VerificationStatus: string
     case UNVERIFIED = 'UNVERIFIED';
     case PARTIALLY_VERIFIED = 'PARTIALLY_VERIFIED';
     case VERIFIED = 'VERIFIED';
+    case REJECTED = 'REJECTED';
 
     public static function values(): array
     {

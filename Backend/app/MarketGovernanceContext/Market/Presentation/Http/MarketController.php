@@ -4,12 +4,39 @@ namespace App\MarketGovernanceContext\Market\Presentation\Http;
 
 use App\MarketGovernanceContext\Market\Application\MarketService;
 use App\MarketGovernanceContext\SharedKernel\Domain\Enums\MarketStatus;
+use App\Support\Geography\TanzaniaRegions;
+use App\Support\Validation\TanzaniaRules;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class MarketController
 {
+    private function validateDistrictForRegion(Validator $validator): void
+    {
+        $validator->after(function (Validator $v) {
+            $region = $v->getData()['region'] ?? null;
+            $district = $v->getData()['district'] ?? null;
+            if ($region && $district && ! TanzaniaRegions::isValidDistrict($region, $district)) {
+                $v->errors()->add('district', 'The selected district is not valid for the chosen region.');
+            }
+        });
+    }
+
+    private function marketRules(bool $partial = false): array
+    {
+        $required = $partial ? 'sometimes' : 'required';
+
+        return [
+            'market_name' => [$required, 'string', 'max:255'],
+            'region' => array_merge([$required], array_slice(TanzaniaRules::region(), 1)),
+            'district' => array_merge([$required], array_slice(TanzaniaRules::district(), 1)),
+            'ward' => ['nullable', 'string', 'max:100'],
+            'address' => [$required, 'string', 'max:500'],
+            'status' => ['nullable', Rule::in(MarketStatus::values())],
+        ];
+    }
     public function index(MarketService $service): JsonResponse
     {
         return response()->json($service->list());
@@ -17,14 +44,9 @@ class MarketController
 
     public function store(Request $request, MarketService $service): JsonResponse
     {
-        $payload = $request->validate([
-            'market_name' => ['required', 'string'],
-            'region' => ['required', 'string'],
-            'district' => ['required', 'string'],
-            'ward' => ['nullable', 'string'],
-            'address' => ['required', 'string'],
-            'status' => ['nullable', Rule::in(MarketStatus::values())],
-        ]);
+        $validator = validator($request->all(), $this->marketRules());
+        $this->validateDistrictForRegion($validator);
+        $payload = $validator->validate();
 
         $market = $service->create($payload);
 
@@ -38,14 +60,9 @@ class MarketController
 
     public function update(Request $request, string $marketId, MarketService $service): JsonResponse
     {
-        $payload = $request->validate([
-            'market_name' => ['sometimes', 'string'],
-            'region' => ['sometimes', 'string'],
-            'district' => ['sometimes', 'string'],
-            'ward' => ['nullable', 'string'],
-            'address' => ['sometimes', 'string'],
-            'status' => ['sometimes', Rule::in(MarketStatus::values())],
-        ]);
+        $validator = validator($request->all(), $this->marketRules(true));
+        $this->validateDistrictForRegion($validator);
+        $payload = $validator->validate();
 
         $updated = $service->update($marketId, $payload);
 

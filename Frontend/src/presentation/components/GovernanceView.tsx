@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
-import { apiRequest } from "../../api/client";
+import { apiRequest, ApiError } from "../../api/client";
+import { RegionDistrictSelect } from "./RegionDistrictSelect";
+import { validateMobile, validateNida, validateRegionDistrict } from "../../shared/validation/tanzania";
 import { MapPin, Users, Store, CheckCircle2, UserCircle, Briefcase, ChevronRight } from "lucide-react";
 
 type AuthUser = {
@@ -54,9 +56,8 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
     market_name: "",
     region: "",
     district: "",
-    town: "",
-    latitude: "",
-    longitude: "",
+    ward: "",
+    address: "",
   });
 
   const [brokerForm, setBrokerForm] = useState({
@@ -105,15 +106,21 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
 
   const handleCreateMarket = async (e: React.FormEvent) => {
     e.preventDefault();
+    const regionErrors = validateRegionDistrict(marketForm.region, marketForm.district);
+    if (!marketForm.market_name.trim() || !marketForm.address.trim() || Object.keys(regionErrors).length > 0) {
+      setNotice("error", Object.values(regionErrors)[0] || "Please complete all required market fields.");
+      return;
+    }
     setLoading(true);
     try {
       await apiRequest("/market-governance/markets", { method: "POST", token, body: marketForm });
       setNotice("success", "Market created successfully.");
-      setMarketForm({ market_name: "", region: "", district: "", town: "", latitude: "", longitude: "" });
+      setMarketForm({ market_name: "", region: "", district: "", ward: "", address: "" });
       fetchMarkets();
       setActivePane("markets");
-    } catch (err: any) {
-      setNotice("error", err.message || "Failed to create market.");
+    } catch (err) {
+      const message = err instanceof ApiError ? err.firstFieldError() ?? err.message : err instanceof Error ? err.message : "Failed to create market.";
+      setNotice("error", message);
     } finally {
       setLoading(false);
     }
@@ -121,6 +128,12 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
 
   const handleRegisterBroker = async (e: React.FormEvent) => {
     e.preventDefault();
+    const nidaErr = validateNida(brokerForm.nida_number);
+    const mobileErr = validateMobile(brokerForm.mobile, true);
+    if (nidaErr || mobileErr) {
+      setNotice("error", nidaErr || mobileErr || "Invalid broker details.");
+      return;
+    }
     setLoading(true);
     try {
       await apiRequest("/market-governance/brokers", { method: "POST", token, body: brokerForm });
@@ -128,8 +141,9 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
       setBrokerForm({ market_id: "", broker_type: "PRODUCE_BROKER", first_name: "", middle_name: "", surname: "", nida_number: "", mobile: "", address: "" });
       fetchBrokers();
       setActivePane("brokers");
-    } catch (err: any) {
-      setNotice("error", err.message || "Failed to register broker.");
+    } catch (err) {
+      const message = err instanceof ApiError ? err.firstFieldError() ?? err.message : err instanceof Error ? err.message : "Failed to register broker.";
+      setNotice("error", message);
     } finally {
       setLoading(false);
     }
@@ -562,7 +576,7 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
                     </div>
                     <div className="form-group">
                       <label>NIDA Number</label>
-                      <input type="text" className="form-control" required value={profileForm.nida_number} onChange={e => setProfileForm({...profileForm, nida_number: e.target.value})} />
+                      <input type="text" className="form-control" required maxLength={20} value={profileForm.nida_number} onChange={e => setProfileForm({...profileForm, nida_number: e.target.value.replace(/\D/g, "").slice(0, 20)})} placeholder="20 digits" />
                     </div>
                     <div className="form-group">
                       <label>Mobile Number</label>
@@ -603,25 +617,21 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
                       <label>Market Name</label>
                       <input type="text" className="form-control" required value={marketForm.market_name} onChange={e => setMarketForm({...marketForm, market_name: e.target.value})} />
                     </div>
+                    <RegionDistrictSelect
+                      region={marketForm.region}
+                      district={marketForm.district}
+                      onRegionChange={(region) => setMarketForm((prev) => ({ ...prev, region, district: "" }))}
+                      onDistrictChange={(district) => setMarketForm((prev) => ({ ...prev, district }))}
+                      className="form-grid"
+                      selectClassName="form-control"
+                    />
                     <div className="form-group">
-                      <label>Region</label>
-                      <input type="text" className="form-control" required value={marketForm.region} onChange={e => setMarketForm({...marketForm, region: e.target.value})} />
+                      <label>Ward (Optional)</label>
+                      <input type="text" className="form-control" value={marketForm.ward} onChange={e => setMarketForm({...marketForm, ward: e.target.value})} />
                     </div>
-                    <div className="form-group">
-                      <label>District</label>
-                      <input type="text" className="form-control" required value={marketForm.district} onChange={e => setMarketForm({...marketForm, district: e.target.value})} />
-                    </div>
-                    <div className="form-group">
-                      <label>Town</label>
-                      <input type="text" className="form-control" value={marketForm.town} onChange={e => setMarketForm({...marketForm, town: e.target.value})} />
-                    </div>
-                    <div className="form-group">
-                      <label>Latitude (Optional)</label>
-                      <input type="text" className="form-control" value={marketForm.latitude} onChange={e => setMarketForm({...marketForm, latitude: e.target.value})} />
-                    </div>
-                    <div className="form-group">
-                      <label>Longitude (Optional)</label>
-                      <input type="text" className="form-control" value={marketForm.longitude} onChange={e => setMarketForm({...marketForm, longitude: e.target.value})} />
+                    <div className="form-group full-width">
+                      <label>Physical Address</label>
+                      <input type="text" className="form-control" required value={marketForm.address} onChange={e => setMarketForm({...marketForm, address: e.target.value})} />
                     </div>
                   </div>
                   <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end' }}>
@@ -707,7 +717,7 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
                     </div>
                     <div className="form-group">
                       <label>NIDA Number</label>
-                      <input type="text" className="form-control" required value={brokerForm.nida_number} onChange={e => setBrokerForm({...brokerForm, nida_number: e.target.value})} />
+                      <input type="text" className="form-control" required maxLength={20} value={brokerForm.nida_number} onChange={e => setBrokerForm({...brokerForm, nida_number: e.target.value.replace(/\D/g, "").slice(0, 20)})} placeholder="20 digits" />
                     </div>
                     <div className="form-group">
                       <label>Mobile Number</label>

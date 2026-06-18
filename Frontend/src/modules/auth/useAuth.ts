@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { apiRequest } from "../../api/client";
+import { apiRequest, ApiError } from "../../api/client";
 
 type AuthUser = {
   id: string;
@@ -172,6 +172,54 @@ export const useAuth = () => {
     }
   };
 
+  const refreshUser = async () => {
+    if (!token) return null;
+    try {
+      const profile = await apiRequest<AuthUser>("/auth/me", { token });
+      setUser(profile);
+      return profile;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to refresh profile.");
+      return null;
+    }
+  };
+
+  const selectService = async (service: "matching" | "governance") => {
+    if (!token) {
+      setError("You must be signed in to select a service.");
+      return false;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const updated = await apiRequest<AuthUser>("/auth/select-service", {
+        method: "POST",
+        token,
+        body: { service },
+      });
+      setUser(updated);
+      return true;
+    } catch (err) {
+      const message =
+        err instanceof ApiError
+          ? err.firstFieldError() ?? err.message
+          : err instanceof Error
+          ? err.message
+          : "Failed to assign service role.";
+      setError(message);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const needsServiceSelection = (profile: AuthUser | null): boolean => {
+    if (!profile) return false;
+    const roles = profile.roles ?? [];
+    if (roles.includes("ADMIN")) return false;
+    return roles.length === 0;
+  };
+
   return {
     token,
     user,
@@ -183,5 +231,8 @@ export const useAuth = () => {
     register,
     changePassword,
     logout,
+    refreshUser,
+    selectService,
+    needsServiceSelection,
   };
 };

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../../api/client";
+import { RegionDistrictSelect } from "../RegionDistrictSelect";
 import { TaxonomyResponse, Business } from "./types";
 
 type CreateRfsPaneProps = {
@@ -138,16 +139,13 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
           </div>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Region Preference</label>
-            <input className="form-control" value={rfsForm.region} onChange={e => setRfsForm({...rfsForm, region: e.target.value})} placeholder="e.g. Dar es Salaam" />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>District Preference</label>
-            <input className="form-control" value={rfsForm.district} onChange={e => setRfsForm({...rfsForm, district: e.target.value})} placeholder="e.g. Kinondoni" />
-          </div>
-        </div>
+        <RegionDistrictSelect
+          region={rfsForm.region}
+          district={rfsForm.district}
+          onRegionChange={(region) => setRfsForm({ ...rfsForm, region, district: "" })}
+          onDistrictChange={(district) => setRfsForm({ ...rfsForm, district })}
+          required={false}
+        />
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

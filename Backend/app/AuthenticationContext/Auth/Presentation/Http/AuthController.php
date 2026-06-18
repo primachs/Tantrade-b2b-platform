@@ -37,6 +37,12 @@ class AuthController
 
         $result = $service->login($payload);
 
+        $userModel = AuthUser::find($result['user']['id']);
+        if ($userModel) {
+            $userModel->load('roles');
+            $result['user']['roles'] = $userModel->roles->pluck('name')->values()->all();
+        }
+
         return response()->json($result);
     }
 
@@ -102,5 +108,23 @@ class AuthController
         ]);
 
         return response()->json(['message' => 'Password updated.']);
+    }
+
+    public function selectService(Request $request, AuthService $service): JsonResponse
+    {
+        $payload = $request->validate([
+            'service' => ['required', 'string', 'in:matching,governance'],
+        ]);
+
+        $user = $request->user();
+        $updated = $service->selectService((string) $user->id, $payload['service']);
+
+        $userModel = AuthUser::find($updated['id']);
+        if ($userModel) {
+            $userModel->load('roles');
+            $updated['roles'] = $userModel->roles->pluck('name')->values()->all();
+        }
+
+        return response()->json($updated);
     }
 }

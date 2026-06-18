@@ -4,6 +4,7 @@ namespace App\MarketGovernanceContext\Broker\Presentation\Http;
 
 use App\MarketGovernanceContext\Broker\Application\BrokerService;
 use App\MarketGovernanceContext\SharedKernel\Domain\Enums\BrokerType;
+use App\Support\Validation\TanzaniaRules;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -20,12 +21,12 @@ class BrokerController
         $payload = $request->validate([
             'market_id'   => ['required', 'uuid'],
             'broker_type' => ['required', Rule::in(BrokerType::values())],
-            'first_name'  => ['required', 'string'],
-            'middle_name' => ['nullable', 'string'],
-            'surname'     => ['required', 'string'],
-            'nida_number' => ['nullable', 'string'],
-            'mobile'      => ['nullable', 'string'],
-            'address'     => ['nullable', 'string'],
+            'first_name'  => ['required', 'string', 'max:100'],
+            'middle_name' => ['nullable', 'string', 'max:100'],
+            'surname'     => ['required', 'string', 'max:100'],
+            'nida_number' => TanzaniaRules::nida(true),
+            'mobile'      => TanzaniaRules::mobile(true),
+            'address'     => ['nullable', 'string', 'max:500'],
         ]);
 
         $registration = $service->register($payload);

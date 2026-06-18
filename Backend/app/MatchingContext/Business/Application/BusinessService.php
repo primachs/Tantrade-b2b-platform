@@ -47,6 +47,24 @@ class BusinessService
         return $this->requireBusiness($businessId)->toArray();
     }
 
+    public function reviewVerification(string $businessId, string $status): array
+    {
+        $business = $this->requireBusiness($businessId);
+        $current = $business->toArray()['verification'] ?? null;
+
+        if (! $current) {
+            throw new \RuntimeException('Business has no verification record to review.');
+        }
+
+        if (! in_array($current['verification_status'] ?? '', ['UNVERIFIED', 'PARTIALLY_VERIFIED'], true)) {
+            throw new \RuntimeException('This business verification has already been reviewed.');
+        }
+
+        $payload = array_merge($current, ['verification_status' => $status]);
+
+        return $this->upsertVerification($businessId, $payload);
+    }
+
     public function syncCapabilities(string $businessId, array $payload): array
     {
         $capabilities = $this->factory->capabilitiesFromPayload(Uuid::fromString($businessId), $payload);

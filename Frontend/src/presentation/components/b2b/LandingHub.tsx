@@ -1,6 +1,13 @@
 import { Layers, Radar } from "lucide-react";
 import { useState } from "react";
-import { apiRequest } from "../../../api/client";
+import { apiRequest, ApiError } from "../../../api/client";
+import { RegionDistrictSelect } from "../RegionDistrictSelect";
+import {
+  validateBrela,
+  validateMobile,
+  validateRegionDistrict,
+  validateTin,
+} from "../../../shared/validation/tanzania";
 
 type LandingHubProps = {
   token: string;
@@ -16,6 +23,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubP
   const [rfsList, setRfsList] = useState<any[]>([]);
   const [taxonomy, setTaxonomy] = useState<any>(null);
 
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [registrationForm, setRegistrationForm] = useState({
     name: "",
     contact_person: user.name,
@@ -31,7 +39,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubP
     region: "",
     district: "",
     address: "",
-    verification_status: "UNVERIFIED"
+    verification_status: "UNVERIFIED",
   });
 
   const loadBrowseData = async () => {
@@ -60,7 +68,33 @@ export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubP
     return Number.isFinite(parsed) ? parsed : null;
   };
 
+  const validateStep1 = (): boolean => {
+    const errors: Record<string, string> = {};
+    if (!registrationForm.name.trim()) errors.name = "Business name is required.";
+    if (!registrationForm.contact_person.trim()) errors.contact_person = "Contact person is required.";
+    const phoneErr = validateMobile(registrationForm.phone, true);
+    if (phoneErr) errors.phone = phoneErr;
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const validateStep2 = (): boolean => {
+    const errors: Record<string, string> = {};
+    const tinErr = validateTin(registrationForm.tin_number);
+    if (tinErr) errors.tin_number = tinErr;
+    const brelaErr = validateBrela(registrationForm.brela_number);
+    if (brelaErr) errors.brela_number = brelaErr;
+    Object.assign(errors, validateRegionDistrict(registrationForm.region, registrationForm.district));
+    if (!registrationForm.address.trim()) errors.address = "Physical address is required.";
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleRegisterBusiness = async () => {
+    if (!validateStep2()) {
+      setNotice("error", "Please fix the highlighted fields before submitting.");
+      return;
+    }
     setLoading(true);
     try {
       const payload = {
@@ -72,7 +106,13 @@ export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubP
       setNotice("success", "Business registered successfully.");
       onRegistered();
     } catch (err) {
-      setNotice("error", "Failed to register business.");
+      const message =
+        err instanceof ApiError
+          ? err.firstFieldError() ?? err.message
+          : err instanceof Error
+          ? err.message
+          : "Failed to register business.";
+      setNotice("error", message);
     } finally {
       setLoading(false);
     }
@@ -117,7 +157,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubP
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: "2rem", paddingTop: "2rem", borderTop: "1px solid #e2e8f0" }}>
                 <button style={{ padding: '0.625rem 1.25rem', border: '1px solid #cbd5e1', borderRadius: '6px', background: 'transparent', cursor: 'pointer' }} onClick={() => setLandingMode("menu")}>Cancel</button>
-                <button style={{ padding: '0.625rem 1.25rem', border: 'none', borderRadius: '6px', background: '#2563eb', color: 'white', fontWeight: 500, cursor: 'pointer' }} onClick={() => setRegistrationStep(2)}>Next Step &rarr;</button>
+                <button style={{ padding: '0.625rem 1.25rem', border: 'none', borderRadius: '6px', background: '#2563eb', color: 'white', fontWeight: 500, cursor: 'pointer' }} onClick={() => { if (validateStep1()) setRegistrationStep(2); else setNotice("error", "Please complete all required fields."); }}>Next Step &rarr;</button>
               </div>
             </>
           ) : (
@@ -125,26 +165,27 @@ export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubP
                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                    <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>TIN Number</label>
-                   <input style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.tin_number} onChange={e => setRegistrationForm({...registrationForm, tin_number: e.target.value})} placeholder="e.g. 123-456-789" />
+                   <input style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.tin_number} onChange={e => setRegistrationForm({...registrationForm, tin_number: e.target.value.replace(/\D/g, "").slice(0, 9)})} placeholder="9 digits, e.g. 123456789" maxLength={9} />
+                   {fieldErrors.tin_number && <small style={{ color: '#9b1c1c' }}>{fieldErrors.tin_number}</small>}
                  </div>
                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                    <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>BRELA Number</label>
-                   <input style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.brela_number} onChange={e => setRegistrationForm({...registrationForm, brela_number: e.target.value})} placeholder="e.g. 123456" />
+                   <input style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.brela_number} onChange={e => setRegistrationForm({...registrationForm, brela_number: e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 12)})} placeholder="6–12 alphanumeric characters" maxLength={12} />
+                   {fieldErrors.brela_number && <small style={{ color: '#9b1c1c' }}>{fieldErrors.brela_number}</small>}
                  </div>
                </div>
-               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                   <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Region</label>
-                   <input style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.region} onChange={e => setRegistrationForm({...registrationForm, region: e.target.value})} placeholder="e.g. Dar es Salaam" />
-                 </div>
-                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                   <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>District</label>
-                   <input style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.district} onChange={e => setRegistrationForm({...registrationForm, district: e.target.value})} placeholder="e.g. Kinondoni" />
-                 </div>
-               </div>
+               <RegionDistrictSelect
+                 region={registrationForm.region}
+                 district={registrationForm.district}
+                 regionError={fieldErrors.region}
+                 districtError={fieldErrors.district}
+                 onRegionChange={(region) => setRegistrationForm({ ...registrationForm, region })}
+                 onDistrictChange={(district) => setRegistrationForm({ ...registrationForm, district })}
+               />
                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                  <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Physical Address</label>
                  <textarea style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.address} onChange={e => setRegistrationForm({...registrationForm, address: e.target.value})} rows={3} placeholder="Street address, building, floor" />
+                 {fieldErrors.address && <small style={{ color: '#9b1c1c' }}>{fieldErrors.address}</small>}
                </div>
                <div style={{ display: "flex", justifyContent: "space-between", marginTop: "2rem", paddingTop: "2rem", borderTop: "1px solid #e2e8f0" }}>
                  <button style={{ padding: '0.625rem 1.25rem', border: '1px solid #cbd5e1', borderRadius: '6px', background: 'transparent', cursor: 'pointer' }} onClick={() => setRegistrationStep(1)}>&larr; Back</button>

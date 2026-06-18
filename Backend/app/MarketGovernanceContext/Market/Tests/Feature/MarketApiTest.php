@@ -3,6 +3,7 @@
 namespace App\MarketGovernanceContext\Market\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Support\TanzaniaTestData;
 use Tests\TestCase;
 
 class MarketApiTest extends TestCase
@@ -13,8 +14,8 @@ class MarketApiTest extends TestCase
     {
         $payload = [
             'market_name' => 'Kariakoo Market',
-            'region' => 'Dar',
-            'district' => 'Ilala',
+            'region' => TanzaniaTestData::REGION,
+            'district' => TanzaniaTestData::DISTRICT,
             'ward' => 'Kariakoo',
             'address' => 'Street 3',
             'status' => 'ACTIVE',
