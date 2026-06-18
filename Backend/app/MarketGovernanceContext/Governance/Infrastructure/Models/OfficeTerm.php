@@ -15,7 +15,7 @@ class OfficeTerm extends Model
     protected $fillable = [
         'id',
         'office_id',
-        'person_id',
+        'user_id',
         'start_date',
         'end_date',
         'status',

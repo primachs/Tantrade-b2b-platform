@@ -25,7 +25,7 @@ class GovernanceFactory
         return new OfficeTerm(
             Uuid::random(),
             Uuid::fromString($payload['office_id']),
-            Uuid::fromString($payload['person_id']),
+            Uuid::fromString($payload['user_id']),
             new \DateTimeImmutable($payload['start_date']),
             new \DateTimeImmutable($payload['end_date']),
             $payload['status'] ?? OfficeTermStatus::ACTIVE->value,
@@ -50,7 +50,7 @@ class GovernanceFactory
         return new OfficeTerm(
             Uuid::fromString($state['id']),
             Uuid::fromString($state['office_id']),
-            Uuid::fromString($state['person_id']),
+            Uuid::fromString($state['user_id']),
             new \DateTimeImmutable($state['start_date']),
             new \DateTimeImmutable($state['end_date']),
             $state['status'],

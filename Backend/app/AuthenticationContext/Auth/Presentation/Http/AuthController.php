@@ -16,6 +16,7 @@ class AuthController
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:auth_users,email'],
             'password' => ['required', 'confirmed', Password::min(12)->mixedCase()->numbers()->symbols()],
+            'service' => ['nullable', 'string', 'in:matching,governance'],
         ]);
 
         $user = $service->register($payload);
@@ -61,10 +62,17 @@ class AuthController
             ->get()
             ->map(function (AuthUser $user) {
                 return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'roles' => $user->roles->pluck('name')->values()->all(),
+                    'id'          => $user->id,
+                    'name'        => $user->name,
+                    'email'       => $user->email,
+                    'roles'       => $user->roles->pluck('name')->values()->all(),
+                    'nida_number' => $user->nida_number,
+                    'first_name'  => $user->first_name,
+                    'middle_name' => $user->middle_name,
+                    'surname'     => $user->surname,
+                    'gender'      => $user->gender,
+                    'mobile'      => $user->mobile,
+                    'address'     => $user->address,
                 ];
             });
 

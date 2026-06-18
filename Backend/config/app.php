@@ -4,7 +4,7 @@ use App\AuthenticationContext\Auth\Infrastructure\AuthServiceProvider as Authent
 use App\MarketGovernanceContext\Broker\Infrastructure\BrokerServiceProvider;
 use App\MarketGovernanceContext\Governance\Infrastructure\GovernanceServiceProvider;
 use App\MarketGovernanceContext\Market\Infrastructure\MarketServiceProvider;
-use App\MarketGovernanceContext\Person\Infrastructure\PersonServiceProvider;
+
 use App\MatchingContext\Business\Infrastructure\BusinessServiceProvider;
 use App\MatchingContext\Engagement\Infrastructure\EngagementServiceProvider;
 use App\MatchingContext\Matching\Infrastructure\MatchingServiceProvider;
@@ -192,7 +192,7 @@ return [
         MatchingServiceProvider::class,
         EngagementServiceProvider::class,
         SignalServiceProvider::class,
-        PersonServiceProvider::class,
+
         MarketServiceProvider::class,
         GovernanceServiceProvider::class,
         BrokerServiceProvider::class,

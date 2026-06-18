@@ -12,9 +12,14 @@ class BrokerFactory
     {
         return new BrokerRegistration(
             Uuid::random(),
-            Uuid::fromString($payload['person_id']),
             Uuid::fromString($payload['market_id']),
             $payload['broker_type'],
+            $payload['first_name'],
+            $payload['middle_name'] ?? null,
+            $payload['surname'],
+            $payload['nida_number'] ?? null,
+            $payload['mobile'] ?? null,
+            $payload['address'] ?? null,
             $payload['status'] ?? BrokerStatus::ACTIVE->value,
             null,
             null
@@ -25,9 +30,14 @@ class BrokerFactory
     {
         return new BrokerRegistration(
             Uuid::fromString($state['id']),
-            Uuid::fromString($state['person_id']),
             Uuid::fromString($state['market_id']),
             $state['broker_type'],
+            $state['first_name'],
+            $state['middle_name'] ?? null,
+            $state['surname'],
+            $state['nida_number'] ?? null,
+            $state['mobile'] ?? null,
+            $state['address'] ?? null,
             $state['status'],
             isset($state['created_at']) ? new \DateTimeImmutable($state['created_at']) : null,
             isset($state['updated_at']) ? new \DateTimeImmutable($state['updated_at']) : null

@@ -7,10 +7,7 @@ use App\MarketGovernanceContext\Broker\Infrastructure\Models\BrokerRegistration;
 use App\MarketGovernanceContext\Governance\Infrastructure\Models\MarketOffice;
 use App\MarketGovernanceContext\Governance\Infrastructure\Models\OfficeTerm;
 use App\MarketGovernanceContext\Market\Infrastructure\Models\Market;
-use App\MarketGovernanceContext\Person\Infrastructure\Models\Person;
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -62,6 +59,7 @@ class MarketGovernanceSeeder extends Seeder
             $marketModels[$data['market_name']] = $market;
         }
 
+        // Seed profile details directly on the AuthUser records.
         $persons = [
             [
                 'email' => 'governance@tantrade.go.tz',
@@ -85,66 +83,43 @@ class MarketGovernanceSeeder extends Seeder
             ],
         ];
 
-        $personModels = [];
+        $userModels = [];
         foreach ($persons as $data) {
             $user = AuthUser::where('email', $data['email'])->first();
             if (! $user) {
                 continue;
             }
 
-            $coreUser = User::firstOrCreate(
-                ['email' => $user->email],
-                [
-                    'name' => $user->name,
-                    'password' => Hash::make('Password@2026!'),
-                ]
-            );
-
-            $person = Person::firstOrCreate(
-                ['user_id' => $coreUser->id],
-                [
-                    'id' => (string) Str::uuid(),
-                    'nida_number' => $data['nida_number'],
-                    'first_name' => $data['first_name'],
-                    'middle_name' => $data['middle_name'],
-                    'surname' => $data['surname'],
-                    'gender' => $data['gender'],
-                    'mobile' => $data['mobile'],
-                    'email' => $user->email,
-                    'address' => $data['address'],
-                ]
-            );
-
-            $person->update([
+            // Update profile directly on the AuthUser record.
+            $user->update([
                 'nida_number' => $data['nida_number'],
                 'first_name' => $data['first_name'],
                 'middle_name' => $data['middle_name'],
                 'surname' => $data['surname'],
                 'gender' => $data['gender'],
                 'mobile' => $data['mobile'],
-                'email' => $user->email,
                 'address' => $data['address'],
             ]);
 
-            $personModels[$data['email']] = $person;
+            $userModels[$data['email']] = $user;
         }
 
         $officeAssignments = [
             [
                 'market' => 'Kariakoo Market',
-                'person_email' => 'governance@tantrade.go.tz',
+                'user_email' => 'governance@tantrade.go.tz',
             ],
             [
                 'market' => 'Kilimanjaro Produce Hub',
-                'person_email' => 'admin@tantrade.go.tz',
+                'user_email' => 'admin@tantrade.go.tz',
             ],
         ];
 
         foreach ($officeAssignments as $assignment) {
             $market = $marketModels[$assignment['market']] ?? null;
-            $person = $personModels[$assignment['person_email']] ?? null;
+            $user = $userModels[$assignment['user_email']] ?? null;
 
-            if (! $market || ! $person) {
+            if (! $market || ! $user) {
                 continue;
             }
 
@@ -157,14 +132,14 @@ class MarketGovernanceSeeder extends Seeder
                 ['office_id' => $office->id, 'status' => 'ACTIVE'],
                 [
                     'id' => (string) Str::uuid(),
-                    'person_id' => $person->id,
+                    'user_id' => $user->id,
                     'start_date' => Carbon::now()->subMonths(3)->toDateString(),
                     'end_date' => Carbon::now()->addMonths(9)->toDateString(),
                 ]
             );
 
             $term->update([
-                'person_id' => $person->id,
+                'user_id' => $user->id,
                 'start_date' => Carbon::now()->subMonths(3)->toDateString(),
                 'end_date' => Carbon::now()->addMonths(9)->toDateString(),
                 'status' => 'ACTIVE',
@@ -172,12 +147,17 @@ class MarketGovernanceSeeder extends Seeder
 
             BrokerRegistration::firstOrCreate(
                 [
-                    'person_id' => $person->id,
+                    'first_name' => $user->first_name ?? 'Test',
+                    'surname' => $user->surname ?? 'Broker',
                     'market_id' => $market->id,
                     'broker_type' => 'COMMISSION_AGENT',
                 ],
                 [
                     'id' => (string) Str::uuid(),
+                    'middle_name' => null,
+                    'nida_number' => null,
+                    'mobile' => $user->mobile ?? '+255000000000',
+                    'address' => $user->address ?? 'Test Address',
                     'status' => 'ACTIVE',
                 ]
             );

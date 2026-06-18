@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('broker_registrations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('person_id');
             $table->uuid('market_id');
             $table->enum('broker_type', [
                 'PRODUCE_BROKER',
@@ -20,14 +19,19 @@ return new class extends Migration
                 'IMPORT_BROKER',
                 'COMMISSION_AGENT',
             ]);
-            $table->enum('status', ['ACTIVE', 'INACTIVE']);
+            // Person identity fields — brokers are standalone data entries
+            $table->string('first_name');
+            $table->string('middle_name')->nullable();
+            $table->string('surname');
+            $table->string('nida_number')->nullable();
+            $table->string('mobile')->nullable();
+            $table->string('address')->nullable();
+            $table->enum('status', ['ACTIVE', 'INACTIVE'])->default('ACTIVE');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
-            $table->foreign('person_id')->references('id')->on('persons')->cascadeOnDelete();
             $table->foreign('market_id')->references('id')->on('markets')->cascadeOnDelete();
             $table->index(['market_id', 'status']);
-            $table->index(['person_id', 'status']);
         });
     }
 
@@ -36,3 +40,4 @@ return new class extends Migration
         Schema::dropIfExists('broker_registrations');
     }
 };
+

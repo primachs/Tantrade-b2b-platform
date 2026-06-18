@@ -11,6 +11,8 @@ interface RoleRepository
 
     public function findById(Uuid $roleId): ?Role;
 
+    public function findByName(string $name): ?Role;
+
     public function assignToUser(Uuid $userId, Uuid $roleId): void;
 
     public function revokeFromUser(Uuid $userId, Uuid $roleId): void;

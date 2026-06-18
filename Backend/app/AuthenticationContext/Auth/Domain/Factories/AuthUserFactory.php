@@ -24,6 +24,13 @@ class AuthUserFactory
             $payload['mfa_enabled'] ?? false,
             $payload['mfa_secret'] ?? null,
             $payload['mfa_recovery_codes'] ?? null,
+            $payload['nida_number'] ?? null,
+            $payload['first_name'] ?? null,
+            $payload['middle_name'] ?? null,
+            $payload['surname'] ?? null,
+            $payload['gender'] ?? null,
+            $payload['mobile'] ?? null,
+            $payload['address'] ?? null,
             null,
             null
         );
@@ -44,6 +51,13 @@ class AuthUserFactory
             (bool) ($state['mfa_enabled'] ?? false),
             $state['mfa_secret'] ?? null,
             $this->normalizeRecoveryCodes($state['mfa_recovery_codes'] ?? null),
+            $state['nida_number'] ?? null,
+            $state['first_name'] ?? null,
+            $state['middle_name'] ?? null,
+            $state['surname'] ?? null,
+            $state['gender'] ?? null,
+            $state['mobile'] ?? null,
+            $state['address'] ?? null,
             $this->parseDate($state['created_at'] ?? null),
             $this->parseDate($state['updated_at'] ?? null)
         );

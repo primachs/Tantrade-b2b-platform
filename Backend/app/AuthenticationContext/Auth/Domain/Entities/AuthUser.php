@@ -20,6 +20,13 @@ final class AuthUser
         private readonly bool $mfaEnabled,
         private readonly ?string $mfaSecret,
         private readonly ?array $mfaRecoveryCodes,
+        private readonly ?string $nidaNumber,
+        private readonly ?string $firstName,
+        private readonly ?string $middleName,
+        private readonly ?string $surname,
+        private readonly ?string $gender,
+        private readonly ?string $mobile,
+        private readonly ?string $address,
         private readonly ?\DateTimeImmutable $createdAt,
         private readonly ?\DateTimeImmutable $updatedAt
     ) {}
@@ -49,6 +56,41 @@ final class AuthUser
         return $this->failedLoginAttempts;
     }
 
+    public function nidaNumber(): ?string
+    {
+        return $this->nidaNumber;
+    }
+
+    public function firstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function middleName(): ?string
+    {
+        return $this->middleName;
+    }
+
+    public function surname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function gender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function mobile(): ?string
+    {
+        return $this->mobile;
+    }
+
+    public function address(): ?string
+    {
+        return $this->address;
+    }
+
     public function lockedUntil(): ?\DateTimeImmutable
     {
         return $this->lockedUntil;
@@ -74,6 +116,13 @@ final class AuthUser
             $this->mfaEnabled,
             $this->mfaSecret,
             $this->mfaRecoveryCodes,
+            $this->nidaNumber,
+            $this->firstName,
+            $this->middleName,
+            $this->surname,
+            $this->gender,
+            $this->mobile,
+            $this->address,
             $this->createdAt,
             $this->updatedAt
         );
@@ -94,6 +143,13 @@ final class AuthUser
             $this->mfaEnabled,
             $this->mfaSecret,
             $this->mfaRecoveryCodes,
+            $this->nidaNumber,
+            $this->firstName,
+            $this->middleName,
+            $this->surname,
+            $this->gender,
+            $this->mobile,
+            $this->address,
             $this->createdAt,
             $this->updatedAt
         );
@@ -114,6 +170,13 @@ final class AuthUser
             $this->mfaEnabled,
             $this->mfaSecret,
             $this->mfaRecoveryCodes,
+            $this->nidaNumber,
+            $this->firstName,
+            $this->middleName,
+            $this->surname,
+            $this->gender,
+            $this->mobile,
+            $this->address,
             $this->createdAt,
             $this->updatedAt
         );
@@ -134,6 +197,13 @@ final class AuthUser
             'mfa_enabled' => $this->mfaEnabled,
             'mfa_secret' => $this->mfaSecret,
             'mfa_recovery_codes' => $this->mfaRecoveryCodes,
+            'nida_number' => $this->nidaNumber,
+            'first_name' => $this->firstName,
+            'middle_name' => $this->middleName,
+            'surname' => $this->surname,
+            'gender' => $this->gender,
+            'mobile' => $this->mobile,
+            'address' => $this->address,
             'created_at' => $this->createdAt?->format('c'),
             'updated_at' => $this->updatedAt?->format('c'),
         ];

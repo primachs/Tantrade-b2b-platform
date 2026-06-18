@@ -1,11 +1,7 @@
 import tantradeLogo from "../../assets/tantrade-brand.png";
 import coatOfArms from "../../assets/tanzania-coat-of-arms.png";
 
-type NavTarget = "landing" | "dashboard";
-
 type BrandHeaderProps = {
-  active: NavTarget;
-  onNavigate: (target: NavTarget) => void;
   userName?: string;
   userEmail?: string;
   userRoles?: string[];
@@ -13,37 +9,19 @@ type BrandHeaderProps = {
 };
 
 export const BrandHeader = ({
-  active,
-  onNavigate,
   userName,
   userEmail,
   userRoles,
   onLogout
 }: BrandHeaderProps) => (
-  <header className="top-nav">
+  <header className="top-nav" style={{ paddingTop: '0px', paddingBottom: '0px' }}>
     <div className="nav-brand">
-      <img className="nav-coat" src={coatOfArms} alt="Tanzania coat of arms" />
-      <div className="nav-brand__meta">
-        <img className="nav-logo" src={tantradeLogo} alt="TanTrade logo" />
-        <span className="nav-caption">Tanzania Trade Development Authority</span>
-      </div>
+      <img className="nav-coat" src={coatOfArms} alt="Tanzania coat of arms" style={{ width: '80px', height: 'auto' }} />
     </div>
-    <nav className="nav-links">
-      <button
-        type="button"
-        className={`nav-link ${active === "landing" ? "active" : ""}`}
-        onClick={() => onNavigate("landing")}
-      >
-        Home
-      </button>
-      <button
-        type="button"
-        className={`nav-link ${active === "dashboard" ? "active" : ""}`}
-        onClick={() => onNavigate("dashboard")}
-      >
-        Matching
-      </button>
-    </nav>
+    <div className="nav-brand__meta" style={{ marginLeft: 'auto' }}>
+      <img className="nav-logo" src={tantradeLogo} alt="TanTrade logo" style={{ width: '80px', height: 'auto' }}/>
+      <span className="nav-caption">Tanzania Trade Development Authority</span>
+    </div>
     <div className="nav-actions">
       {userName ? (
         <>
@@ -58,11 +36,7 @@ export const BrandHeader = ({
             Sign out
           </button>
         </>
-      ) : (
-          <button type="button" className="button" onClick={() => onNavigate("landing")}>
-          Sign in
-        </button>
-      )}
+      ) : null}
     </div>
   </header>
 );

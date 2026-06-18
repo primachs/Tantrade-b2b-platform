@@ -13,6 +13,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('nida_number')->unique()->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('surname')->nullable();
+            $table->enum('gender', ['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY'])->nullable();
+            $table->string('mobile')->nullable();
+            $table->text('address')->nullable();
             $table->enum('status', ['ACTIVE', 'LOCKED', 'DISABLED']);
             $table->unsignedSmallInteger('failed_login_attempts')->default(0);
             $table->timestamp('locked_until')->nullable();

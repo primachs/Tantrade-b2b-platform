@@ -8,9 +8,14 @@ final class BrokerRegistration
 {
     public function __construct(
         private readonly Uuid $id,
-        private readonly Uuid $personId,
         private readonly Uuid $marketId,
         private readonly string $brokerType,
+        private readonly string $firstName,
+        private readonly ?string $middleName,
+        private readonly string $surname,
+        private readonly ?string $nidaNumber,
+        private readonly ?string $mobile,
+        private readonly ?string $address,
         private readonly string $status,
         private readonly ?\DateTimeImmutable $createdAt,
         private readonly ?\DateTimeImmutable $updatedAt
@@ -25,9 +30,14 @@ final class BrokerRegistration
     {
         return new self(
             $this->id,
-            $this->personId,
             $this->marketId,
             $this->brokerType,
+            $this->firstName,
+            $this->middleName,
+            $this->surname,
+            $this->nidaNumber,
+            $this->mobile,
+            $this->address,
             $status,
             $this->createdAt,
             $this->updatedAt
@@ -37,13 +47,18 @@ final class BrokerRegistration
     public function toArray(): array
     {
         return [
-            'id' => $this->id->value(),
-            'person_id' => $this->personId->value(),
-            'market_id' => $this->marketId->value(),
+            'id'          => $this->id->value(),
+            'market_id'   => $this->marketId->value(),
             'broker_type' => $this->brokerType,
-            'status' => $this->status,
-            'created_at' => $this->createdAt?->format('c'),
-            'updated_at' => $this->updatedAt?->format('c'),
+            'first_name'  => $this->firstName,
+            'middle_name' => $this->middleName,
+            'surname'     => $this->surname,
+            'nida_number' => $this->nidaNumber,
+            'mobile'      => $this->mobile,
+            'address'     => $this->address,
+            'status'      => $this->status,
+            'created_at'  => $this->createdAt?->format('c'),
+            'updated_at'  => $this->updatedAt?->format('c'),
         ];
     }
 }

@@ -18,11 +18,16 @@ class EloquentBrokerRepository implements BrokerRepository
         $data = $registration->toArray();
 
         BrokerRegistrationModel::create([
-            'id' => $data['id'],
-            'person_id' => $data['person_id'],
-            'market_id' => $data['market_id'],
+            'id'          => $data['id'],
+            'market_id'   => $data['market_id'],
             'broker_type' => $data['broker_type'],
-            'status' => $data['status'],
+            'first_name'  => $data['first_name'],
+            'middle_name' => $data['middle_name'],
+            'surname'     => $data['surname'],
+            'nida_number' => $data['nida_number'],
+            'mobile'      => $data['mobile'],
+            'address'     => $data['address'],
+            'status'      => $data['status'],
         ]);
 
         return $this->findById(Uuid::fromString($data['id'])) ?? $registration;
@@ -35,8 +40,7 @@ class EloquentBrokerRepository implements BrokerRepository
         BrokerRegistrationModel::query()
             ->where('id', $data['id'])
             ->update([
-                'broker_type' => $data['broker_type'],
-                'status' => $data['status'],
+                'status'     => $data['status'],
                 'updated_at' => Carbon::now(),
             ]);
 
@@ -60,13 +64,5 @@ class EloquentBrokerRepository implements BrokerRepository
         return $models->map(function (BrokerRegistrationModel $model) {
             return $this->factory->fromState($model->toArray());
         })->all();
-    }
-
-    public function hasActiveRegistrationForPerson(Uuid $personId): bool
-    {
-        return BrokerRegistrationModel::query()
-            ->where('person_id', $personId->value())
-            ->where('status', 'ACTIVE')
-            ->exists();
     }
 }

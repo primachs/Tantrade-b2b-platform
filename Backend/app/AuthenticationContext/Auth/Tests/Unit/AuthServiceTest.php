@@ -3,6 +3,8 @@
 namespace App\AuthenticationContext\Auth\Tests\Unit;
 
 use App\AuthenticationContext\Auth\Application\AuthService;
+use App\AuthenticationContext\Auth\Domain\Factories\RoleFactory;
+use App\AuthenticationContext\Auth\Domain\Repositories\RoleRepository;
 use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as AuthUserModel;
 use App\AuthenticationContext\SharedKernel\Domain\Enums\AuthUserStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,6 +15,48 @@ use Tests\TestCase;
 class AuthServiceTest extends TestCase
 {
     use RefreshDatabase;
+
+    private function seedRole(string $name): void
+    {
+        $repository = app(RoleRepository::class);
+        $factory = new RoleFactory;
+        $repository->create($factory->create([
+            'name' => $name,
+            'description' => "{$name} role",
+        ]));
+    }
+
+    public function test_register_assigns_buyer_role_for_matching_service(): void
+    {
+        $this->seedRole('BUYER');
+        $service = app(AuthService::class);
+
+        $registered = $service->register([
+            'name' => 'Matching User',
+            'email' => 'matching.user@example.com',
+            'password' => 'StrongPassw0rd!2026',
+            'service' => 'matching',
+        ]);
+
+        $userModel = AuthUserModel::query()->with('roles')->find($registered['id']);
+        $this->assertSame(['BUYER'], $userModel->roles->pluck('name')->all());
+    }
+
+    public function test_register_assigns_governance_role_for_governance_service(): void
+    {
+        $this->seedRole('GOVERNANCE');
+        $service = app(AuthService::class);
+
+        $registered = $service->register([
+            'name' => 'Governance User',
+            'email' => 'governance.user@example.com',
+            'password' => 'StrongPassw0rd!2026',
+            'service' => 'governance',
+        ]);
+
+        $userModel = AuthUserModel::query()->with('roles')->find($registered['id']);
+        $this->assertSame(['GOVERNANCE'], $userModel->roles->pluck('name')->all());
+    }
 
     public function test_register_and_login_flow(): void
     {

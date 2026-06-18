@@ -13,9 +13,14 @@ class BrokerRegistration extends Model
 
     protected $fillable = [
         'id',
-        'person_id',
         'market_id',
         'broker_type',
+        'first_name',
+        'middle_name',
+        'surname',
+        'nida_number',
+        'mobile',
+        'address',
         'status',
     ];
 }

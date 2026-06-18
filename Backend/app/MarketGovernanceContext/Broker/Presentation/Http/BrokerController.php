@@ -18,9 +18,14 @@ class BrokerController
     public function store(Request $request, BrokerService $service): JsonResponse
     {
         $payload = $request->validate([
-            'person_id' => ['required', 'uuid'],
-            'market_id' => ['required', 'uuid'],
+            'market_id'   => ['required', 'uuid'],
             'broker_type' => ['required', Rule::in(BrokerType::values())],
+            'first_name'  => ['required', 'string'],
+            'middle_name' => ['nullable', 'string'],
+            'surname'     => ['required', 'string'],
+            'nida_number' => ['nullable', 'string'],
+            'mobile'      => ['nullable', 'string'],
+            'address'     => ['nullable', 'string'],
         ]);
 
         $registration = $service->register($payload);

@@ -20,7 +20,7 @@ interface GovernanceRepository
 
     public function findOfficeTermById(Uuid $termId): ?OfficeTerm;
 
-    public function hasActiveOfficeTermForPerson(Uuid $personId): bool;
+    public function hasActiveOfficeTermForUser(Uuid $userId): bool;
 
     public function hasActiveOfficeTermForOffice(Uuid $officeId): bool;
 

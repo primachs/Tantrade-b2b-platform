@@ -59,7 +59,7 @@ class EloquentGovernanceRepository implements GovernanceRepository
         OfficeTermModel::create([
             'id' => $data['id'],
             'office_id' => $data['office_id'],
-            'person_id' => $data['person_id'],
+            'user_id' => $data['user_id'],
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],
             'status' => $data['status'],
@@ -94,10 +94,10 @@ class EloquentGovernanceRepository implements GovernanceRepository
         return $this->factory->termFromState($model->toArray());
     }
 
-    public function hasActiveOfficeTermForPerson(Uuid $personId): bool
+    public function hasActiveOfficeTermForUser(Uuid $userId): bool
     {
         return OfficeTermModel::query()
-            ->where('person_id', $personId->value())
+            ->where('user_id', $userId->value())
             ->where('status', 'ACTIVE')
             ->exists();
     }

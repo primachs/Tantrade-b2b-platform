@@ -4,6 +4,7 @@ namespace App\AuthenticationContext\Auth\Application;
 
 use App\AuthenticationContext\Auth\Domain\Factories\AuthUserFactory;
 use App\AuthenticationContext\Auth\Domain\Repositories\AuthUserRepository;
+use App\AuthenticationContext\Auth\Domain\Repositories\RoleRepository;
 use App\AuthenticationContext\SharedKernel\Domain\Enums\AuthUserStatus;
 use App\AuthenticationContext\SharedKernel\Domain\ValueObjects\EmailAddress;
 use App\AuthenticationContext\SharedKernel\Domain\ValueObjects\Uuid;
@@ -17,7 +18,8 @@ class AuthService
 
     public function __construct(
         private readonly AuthUserRepository $repository,
-        private readonly AuthUserFactory $factory
+        private readonly AuthUserFactory $factory,
+        private readonly RoleRepository $roleRepository
     ) {}
 
     public function register(array $payload): array
@@ -36,6 +38,21 @@ class AuthService
         ]);
 
         $saved = $this->repository->create($user);
+
+        if (! empty($payload['service'])) {
+            $roleName = match ($payload['service']) {
+                'matching' => 'BUYER',
+                'governance' => 'GOVERNANCE',
+                default => null,
+            };
+
+            if ($roleName) {
+                $role = $this->roleRepository->findByName($roleName);
+                if ($role) {
+                    $this->roleRepository->assignToUser($saved->id(), $role->id());
+                }
+            }
+        }
 
         return $this->sanitizeUser($saved);
     }

@@ -9,7 +9,7 @@ final class OfficeTerm
     public function __construct(
         private readonly Uuid $id,
         private readonly Uuid $officeId,
-        private readonly Uuid $personId,
+        private readonly Uuid $userId,
         private readonly \DateTimeImmutable $startDate,
         private readonly \DateTimeImmutable $endDate,
         private readonly string $status,
@@ -27,7 +27,7 @@ final class OfficeTerm
         return new self(
             $this->id,
             $this->officeId,
-            $this->personId,
+            $this->userId,
             $this->startDate,
             $this->endDate,
             $status,
@@ -41,7 +41,7 @@ final class OfficeTerm
         return new self(
             $this->id,
             $this->officeId,
-            $this->personId,
+            $this->userId,
             $this->startDate,
             $endDate,
             $this->status,
@@ -55,7 +55,7 @@ final class OfficeTerm
         return [
             'id' => $this->id->value(),
             'office_id' => $this->officeId->value(),
-            'person_id' => $this->personId->value(),
+            'user_id' => $this->userId->value(),
             'start_date' => $this->startDate->format('Y-m-d'),
             'end_date' => $this->endDate->format('Y-m-d'),
             'status' => $this->status,

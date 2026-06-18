@@ -2,7 +2,7 @@
 
 namespace App\MarketGovernanceContext\Governance\Application;
 
-use App\MarketGovernanceContext\Broker\Domain\Repositories\BrokerRepository;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\MarketGovernanceContext\Governance\Domain\Factories\GovernanceFactory;
 use App\MarketGovernanceContext\Governance\Domain\Repositories\GovernanceRepository;
 use App\MarketGovernanceContext\SharedKernel\Domain\Enums\OfficeTermStatus;
@@ -13,10 +13,20 @@ class GovernanceService
 {
     private const TERM_YEARS = 5;
 
+    /** Profile fields that can be synced to the AuthUser record. */
+    private const PROFILE_FIELDS = [
+        'nida_number',
+        'first_name',
+        'middle_name',
+        'surname',
+        'gender',
+        'mobile',
+        'address',
+    ];
+
     public function __construct(
         private readonly GovernanceRepository $repository,
-        private readonly GovernanceFactory $factory,
-        private readonly BrokerRepository $brokerRepository
+        private readonly GovernanceFactory $factory
     ) {}
 
     public function createOffice(string $marketId, array $payload): array
@@ -40,11 +50,6 @@ class GovernanceService
     public function assignChairperson(string $officeId, array $payload): array
     {
         $officeUuid = Uuid::fromString($officeId);
-        $personUuid = Uuid::fromString($payload['person_id']);
-
-        if ($this->brokerRepository->hasActiveRegistrationForPerson($personUuid)) {
-            throw new \RuntimeException('Person already has an active broker registration.');
-        }
 
         if ($this->repository->hasActiveOfficeTermForOffice($officeUuid)) {
             throw new \RuntimeException('Office already has an active term.');
@@ -64,9 +69,17 @@ class GovernanceService
             throw new \RuntimeException('Office term cannot exceed 5 years.');
         }
 
+        // Update the AuthUser profile if profile details are provided.
+        $profileData = array_intersect_key($payload, array_flip(self::PROFILE_FIELDS));
+        if (! empty($profileData)) {
+            AuthUser::where('id', $payload['user_id'])->update(
+                array_filter($profileData, static fn ($v) => $v !== null && $v !== '')
+            );
+        }
+
         $term = $this->factory->createOfficeTerm([
             'office_id' => $officeId,
-            'person_id' => $payload['person_id'],
+            'user_id' => $payload['user_id'],
             'start_date' => $startDate->format('Y-m-d'),
             'end_date' => $endDate->format('Y-m-d'),
             'status' => OfficeTermStatus::ACTIVE->value,

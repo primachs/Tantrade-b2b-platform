@@ -22,7 +22,7 @@ return new class extends Migration
         Schema::create('office_terms', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('office_id');
-            $table->uuid('person_id');
+            $table->uuid('user_id');
             $table->date('start_date');
             $table->date('end_date');
             $table->enum('status', ['ACTIVE', 'ENDED']);
@@ -30,9 +30,9 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('office_id')->references('id')->on('market_offices')->cascadeOnDelete();
-            $table->foreign('person_id')->references('id')->on('persons')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('auth_users')->cascadeOnDelete();
             $table->index(['office_id', 'status']);
-            $table->index(['person_id', 'status']);
+            $table->index(['user_id', 'status']);
         });
     }
 

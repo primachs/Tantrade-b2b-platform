@@ -36,6 +36,16 @@ class EloquentRoleRepository implements RoleRepository
         return $this->factory->fromState($model->toArray());
     }
 
+    public function findByName(string $name): ?Role
+    {
+        $model = RoleModel::query()->where('name', $name)->first();
+        if (! $model) {
+            return null;
+        }
+
+        return $this->factory->fromState($model->toArray());
+    }
+
     public function assignToUser(Uuid $userId, Uuid $roleId): void
     {
         $user = AuthUserModel::query()->find($userId->value());
