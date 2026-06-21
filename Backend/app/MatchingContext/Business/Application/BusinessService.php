@@ -39,6 +39,12 @@ class BusinessService
         return $this->requireBusiness($businessId)->toArray();
     }
 
+    public function findByUserId(string $userId): ?array
+    {
+        $business = $this->repository->findByUserId(Uuid::fromString($userId));
+        return $business ? $business->toArray() : null;
+    }
+
     public function upsertVerification(string $businessId, array $payload): array
     {
         $verification = $this->factory->verificationFromPayload(Uuid::fromString($businessId), $payload);

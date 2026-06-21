@@ -50,6 +50,17 @@ class BusinessController
         return response()->json($service->list());
     }
 
+    public function myBusiness(Request $request, BusinessService $service): JsonResponse
+    {
+        $userId = $request->user()?->id;
+        if (!$userId) {
+            return response()->json(null);
+        }
+
+        $business = $service->findByUserId($userId);
+        return response()->json($business);
+    }
+
     public function store(Request $request, BusinessService $service): JsonResponse
     {
         $validator = validator($request->all(), array_merge([
@@ -67,6 +78,9 @@ class BusinessController
 
         $this->validateDistrictForRegion($validator);
         $payload = $validator->validate();
+
+        // Attach the authenticated user's ID
+        $payload['user_id'] = $request->user()?->id;
 
         $business = $service->create($payload);
 

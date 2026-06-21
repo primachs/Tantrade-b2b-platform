@@ -40,14 +40,14 @@ class AuthService
         $saved = $this->repository->create($user);
 
         if (! empty($payload['service'])) {
-            $roleName = match ($payload['service']) {
-                'matching' => 'BUYER',
-                'governance' => 'GOVERNANCE',
-                default => null,
+            $roleNames = match ($payload['service']) {
+                'matching' => ['BUYER', 'SELLER'],
+                'governance' => ['GOVERNANCE'],
+                default => [],
             };
 
-            if ($roleName) {
-                $role = $this->roleRepository->findByName($roleName);
+            foreach ($roleNames as $rName) {
+                $role = $this->roleRepository->findByName($rName);
                 if ($role) {
                     $this->roleRepository->assignToUser($saved->id(), $role->id());
                 }
@@ -66,22 +66,23 @@ class AuthService
             throw new \RuntimeException('Account already has a service role assigned.');
         }
 
-        $roleName = match ($service) {
-            'matching' => 'BUYER',
-            'governance' => 'GOVERNANCE',
-            default => null,
+        $roleNames = match ($service) {
+            'matching' => ['BUYER', 'SELLER'],
+            'governance' => ['GOVERNANCE'],
+            default => [],
         };
 
-        if (! $roleName) {
+        if (empty($roleNames)) {
             throw new \RuntimeException('Invalid service selection.');
         }
 
-        $role = $this->roleRepository->findByName($roleName);
-        if (! $role) {
-            throw new \RuntimeException('Service role is not configured.');
+        foreach ($roleNames as $rName) {
+            $role = $this->roleRepository->findByName($rName);
+            if (! $role) {
+                throw new \RuntimeException("Service role {$rName} is not configured.");
+            }
+            $this->roleRepository->assignToUser($user->id(), $role->id());
         }
-
-        $this->roleRepository->assignToUser($user->id(), $role->id());
 
         return $this->sanitizeUser($this->requireUser($userId));
     }

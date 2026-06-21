@@ -14,9 +14,11 @@ type LandingHubProps = {
   user: { name: string; email: string };
   setNotice: (type: "success" | "error", msg: string) => void;
   onRegistered: () => void;
+  hasBusiness?: boolean;
+  onGoToDashboard?: () => void;
 };
 
-export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubProps) => {
+export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, onGoToDashboard }: LandingHubProps) => {
   const [landingMode, setLandingMode] = useState<"menu" | "register" | "browse">("menu");
   const [registrationStep, setRegistrationStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -283,14 +285,25 @@ export const LandingHub = ({ token, user, setNotice, onRegistered }: LandingHubP
         zIndex: 10,
         width: "100%"
       }}>
-        <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", cursor: "pointer", border: "1px solid #e2e8f0" }} onClick={() => { setLandingMode("register"); setRegistrationStep(1); }}>
-          <div style={{ background: "rgba(37, 99, 235, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>
-            <Layers style={{ color: "#2563eb", width: "32px", height: "32px" }} />
+        {hasBusiness ? (
+          <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", cursor: "pointer", border: "1px solid #e2e8f0" }} onClick={onGoToDashboard}>
+            <div style={{ background: "rgba(37, 99, 235, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>
+              <Layers style={{ color: "#2563eb", width: "32px", height: "32px" }} />
+            </div>
+            <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Access My Dashboard</h3>
+            <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Manage your business profile, respond to RFSs, and view matchmaking analytics.</p>
+            <div style={{ color: "#2563eb", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>Go to Dashboard &rarr;</div>
           </div>
-          <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Register Business Profile</h3>
-          <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Create your verified profile to participate in the marketplace and unlock matchmaking features.</p>
-          <div style={{ color: "#2563eb", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>Start Registration &rarr;</div>
-        </div>
+        ) : (
+          <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", cursor: "pointer", border: "1px solid #e2e8f0" }} onClick={() => { setLandingMode("register"); setRegistrationStep(1); }}>
+            <div style={{ background: "rgba(37, 99, 235, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>
+              <Layers style={{ color: "#2563eb", width: "32px", height: "32px" }} />
+            </div>
+            <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Register Business Profile</h3>
+            <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Create your verified profile to participate in the marketplace and unlock matchmaking features.</p>
+            <div style={{ color: "#2563eb", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>Start Registration &rarr;</div>
+          </div>
+        )}
 
         <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", cursor: "pointer", border: "1px solid #e2e8f0" }} onClick={() => handleModeChange("browse")}>
           <div style={{ background: "rgba(16, 185, 129, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>

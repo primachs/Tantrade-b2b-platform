@@ -16,6 +16,7 @@ class RfsFactory
     public function create(array $payload): Rfs
     {
         $rfsId = Uuid::random();
+        $shortId = 'RFS-' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
 
         return new Rfs(
             $rfsId,
@@ -28,7 +29,9 @@ class RfsFactory
             'DRAFT',
             new \DateTimeImmutable,
             $this->constraintFromPayload($rfsId, $payload['constraints'] ?? []),
-            $this->preferenceFromPayload($rfsId, $payload['preferences'] ?? [])
+            $this->preferenceFromPayload($rfsId, $payload['preferences'] ?? []),
+            $shortId,
+            null
         );
     }
 
@@ -47,7 +50,9 @@ class RfsFactory
             $state['status'],
             isset($state['created_at']) ? new \DateTimeImmutable($state['created_at']) : null,
             isset($state['constraint']) ? $this->constraintFromState($state['constraint']) : null,
-            isset($state['preference']) ? $this->preferenceFromState($state['preference']) : null
+            isset($state['preference']) ? $this->preferenceFromState($state['preference']) : null,
+            $state['short_id'] ?? null,
+            $state['buyer_name'] ?? null
         );
     }
 

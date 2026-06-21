@@ -47,7 +47,7 @@ class EloquentEngagementRepository implements EngagementRepository
 
     public function findById(Uuid $sessionId): ?EngagementSession
     {
-        $model = EngagementSessionModel::with('reports')->find($sessionId->value());
+        $model = EngagementSessionModel::with(['reports', 'buyer', 'seller', 'rfs'])->find($sessionId->value());
         if (! $model) {
             return null;
         }
@@ -63,6 +63,8 @@ class EloquentEngagementRepository implements EngagementRepository
             ['session_id' => $data['session_id'], 'reported_by' => $data['reported_by']],
             [
                 'outcome' => $data['outcome'],
+                'reason' => $data['reason'] ?? null,
+                'notes' => $data['notes'] ?? null,
                 'created_at' => $data['created_at'],
             ]
         );
@@ -111,7 +113,8 @@ class EloquentEngagementRepository implements EngagementRepository
 
     public function listSessionsBySeller(Uuid $sellerId): array
     {
-        return EngagementSessionModel::where('seller_id', $sellerId->value())
+        return EngagementSessionModel::with(['reports', 'buyer', 'seller', 'rfs'])
+            ->where('seller_id', $sellerId->value())
             ->get()
             ->map(function ($session) {
                 return $this->factory->fromState($this->mapSessionModel($session));
@@ -121,7 +124,8 @@ class EloquentEngagementRepository implements EngagementRepository
 
     public function listSessionsByBuyer(Uuid $buyerId): array
     {
-        return EngagementSessionModel::where('buyer_id', $buyerId->value())
+        return EngagementSessionModel::with(['reports', 'buyer', 'seller', 'rfs'])
+            ->where('buyer_id', $buyerId->value())
             ->get()
             ->map(function ($session) {
                 return $this->factory->fromState($this->mapSessionModel($session));
@@ -134,8 +138,11 @@ class EloquentEngagementRepository implements EngagementRepository
         return [
             'id' => $model->id,
             'rfs_id' => $model->rfs_id,
+            'rfs_short_id' => $model->rfs?->short_id,
             'buyer_id' => $model->buyer_id,
+            'buyer_name' => $model->buyer?->name,
             'seller_id' => $model->seller_id,
+            'seller_name' => $model->seller?->name,
             'status' => $model->status,
             'outcome' => $model->outcome,
             'confidence_score' => $model->confidence_score,

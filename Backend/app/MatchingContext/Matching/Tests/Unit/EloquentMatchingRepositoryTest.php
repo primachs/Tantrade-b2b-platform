@@ -66,7 +66,7 @@ class EloquentMatchingRepositoryTest extends TestCase
             Uuid::fromString($rfs->id),
             new \DateTimeImmutable('2026-01-01'),
             [
-                new MatchCandidate(null, Uuid::fromString($seller->id), 0.9, 1),
+                new MatchCandidate(null, Uuid::fromString($seller->id), null, 0.9, 1),
             ]
         );
 

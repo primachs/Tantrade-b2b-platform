@@ -80,6 +80,8 @@ class EngagementController
         $payload = $request->validate([
             'reported_by' => ['required', Rule::in(ReportedBy::values())],
             'outcome' => ['required', Rule::in(EngagementOutcome::values())],
+            'reason' => ['nullable', 'string', 'max:255'],
+            'notes' => ['nullable', 'string', 'max:1000'],
         ]);
 
         $report = $service->reportOutcome($sessionId, $payload);

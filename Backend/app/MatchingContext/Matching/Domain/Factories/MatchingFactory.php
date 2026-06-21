@@ -19,6 +19,7 @@ class MatchingFactory
             $candidateEntities[] = new MatchCandidate(
                 null,
                 Uuid::fromString($candidate['seller_id']),
+                null,
                 (float) $candidate['score'],
                 $rank
             );

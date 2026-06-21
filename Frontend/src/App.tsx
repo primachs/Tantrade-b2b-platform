@@ -92,6 +92,7 @@ export default function App() {
         userRoles={user?.roles}
         onLogout={handleLogout}
         onLogoClick={() => handleNavigate("landing")}
+        onLoginClick={handleSignIn}
       />
 
       {route === "landing" && (

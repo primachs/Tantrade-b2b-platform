@@ -123,24 +123,8 @@ class MatchingService
 
     private function attributeMatchRatio(Rfs $rfs, $candidate): float
     {
-        $rfsAttributes = $rfs->attributes();
-        if ($rfsAttributes === []) {
-            return 1.0;
-        }
-
-        $candidateAttributes = $candidate->attributes();
-        $matches = 0;
-
-        foreach ($rfsAttributes as $attribute) {
-            foreach ($candidateAttributes as $candidateAttribute) {
-                if ($candidateAttribute->attributeId()->value() === $attribute->toArray()['attribute_id']
-                    && $candidateAttribute->value() === $attribute->toArray()['value']) {
-                    $matches++;
-                    break;
-                }
-            }
-        }
-
-        return $matches / count($rfsAttributes);
+        // RFS attributes have been refactored into constraints and preferences.
+        // For now, return a baseline ratio. Future iterations can match specific constraints.
+        return 1.0;
     }
 }

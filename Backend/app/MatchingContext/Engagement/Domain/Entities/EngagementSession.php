@@ -19,7 +19,10 @@ final class EngagementSession
         private readonly ?float $confidenceScore,
         private readonly ?\DateTimeImmutable $createdAt,
         private readonly ?\DateTimeImmutable $closedAt,
-        array $reports
+        array $reports,
+        private readonly ?string $buyerName = null,
+        private readonly ?string $sellerName = null,
+        private readonly ?string $rfsShortId = null
     ) {
         $this->reports = $reports;
     }
@@ -51,7 +54,10 @@ final class EngagementSession
             $this->confidenceScore,
             $this->createdAt,
             $this->closedAt,
-            $this->reports
+            $this->reports,
+            $this->buyerName,
+            $this->sellerName,
+            $this->rfsShortId
         );
     }
 
@@ -67,7 +73,10 @@ final class EngagementSession
             $confidence,
             $this->createdAt,
             $closedAt,
-            $this->reports
+            $this->reports,
+            $this->buyerName,
+            $this->sellerName,
+            $this->rfsShortId
         );
     }
 
@@ -82,8 +91,11 @@ final class EngagementSession
         return [
             'id' => $this->id->value(),
             'rfs_id' => $this->rfsId->value(),
+            'rfs_short_id' => $this->rfsShortId,
             'buyer_id' => $this->buyerId->value(),
+            'buyer_name' => $this->buyerName,
             'seller_id' => $this->sellerId->value(),
+            'seller_name' => $this->sellerName,
             'status' => $this->status,
             'outcome' => $this->outcome,
             'confidence_score' => $this->confidenceScore,

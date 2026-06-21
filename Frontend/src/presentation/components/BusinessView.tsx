@@ -12,27 +12,41 @@ type BusinessViewProps = {
 
 export const BusinessView = ({ token, user, setNotice }: BusinessViewProps) => {
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<"hub" | "dashboard">("hub");
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [myBusiness, setMyBusiness] = useState<Business | null>(null);
   const [rfsList, setRfsList] = useState<Rfs[]>([]);
   const [taxonomy, setTaxonomy] = useState<TaxonomyResponse | null>(null);
 
-  const loadData = async () => {
+  const loadData = async (forceDashboard = false) => {
     setLoading(true);
     try {
-      const [biz, rfs, tax] = await Promise.all([
-        apiRequest<Business[]>("/businesses", { token }),
+      // First try to load the user's specific business
+      let myBiz: Business | null = null;
+      try {
+        const myBizResponse = await apiRequest<Business>("/businesses/my-business", { token });
+        if (myBizResponse && myBizResponse.id) {
+            myBiz = myBizResponse;
+        }
+      } catch (e) {
+          // It's expected to fail 404 if the user hasn't registered a business yet
+      }
+
+      // Then load other required data
+      const [rfs, tax] = await Promise.all([
         apiRequest<Rfs[]>("/rfs", { token }),
         apiRequest<TaxonomyResponse>("/taxonomy", { token })
       ]);
-      const loadedBusinesses = Array.isArray(biz) ? biz : [];
-      setBusinesses(loadedBusinesses);
+      
       setRfsList(Array.isArray(rfs) ? rfs : []);
       setTaxonomy(tax && typeof tax === "object" ? tax : null);
+      setMyBusiness(myBiz);
+      setBusinesses(myBiz ? [myBiz] : []);
 
-      // Simple match logic: find by exact email, or name fallback. In reality handled safely on backend.
-      const found = loadedBusinesses.find((business) => business.email === user.email || business.name === user.name);
-      setMyBusiness(found || null);
+      if (forceDashboard && myBiz) {
+        setViewMode("dashboard");
+      }
+
     } catch (err) {
       setNotice("error", "Failed to load Business Workspace");
     } finally {
@@ -52,13 +66,15 @@ export const BusinessView = ({ token, user, setNotice }: BusinessViewProps) => {
     );
   }
 
-  if (!myBusiness) {
+  if (viewMode === "hub" || !myBusiness) {
     return (
       <LandingHub 
         token={token} 
         user={user} 
         setNotice={setNotice} 
-        onRegistered={loadData} 
+        onRegistered={() => loadData(true)} 
+        hasBusiness={!!myBusiness}
+        onGoToDashboard={() => setViewMode("dashboard")}
       />
     );
   }
@@ -70,7 +86,7 @@ export const BusinessView = ({ token, user, setNotice }: BusinessViewProps) => {
       taxonomy={taxonomy} 
       rfsList={rfsList} 
       loading={loading}
-      onRefresh={loadData}
+      onRefresh={() => loadData(true)}
       setNotice={setNotice} 
     />
   );

@@ -14,7 +14,7 @@ type MyBusinessPaneProps = {
 
 export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotice }: MyBusinessPaneProps) => {
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState<"profile" | "verification" | "capabilities">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "verification" | "offerings">("profile");
 
   const [profileForm, setProfileForm] = useState({
     name: myBusiness.name,
@@ -157,14 +157,14 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
           <Shield style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Verification
         </button>
         <button 
-          onClick={() => setActiveTab("capabilities")}
+          onClick={() => setActiveTab("offerings")}
           style={{ 
             background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "capabilities" ? "#2563eb" : "#64748b",
-            borderBottom: activeTab === "capabilities" ? "2px solid #2563eb" : "none",
+            color: activeTab === "offerings" ? "#2563eb" : "#64748b",
+            borderBottom: activeTab === "offerings" ? "2px solid #2563eb" : "none",
             paddingBottom: "0.5rem"
           }}>
-          <Settings style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Capabilities
+          <Settings style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Offerings (Products & Services)
         </button>
       </div>
 
@@ -252,18 +252,35 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
         </div>
       )}
 
-      {activeTab === "capabilities" && (
+      {activeTab === "offerings" && (
         <div style={{ display: "grid", gap: "1.5rem" }}>
-          <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#0f172a" }}>Business Capabilities</h2>
+          <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#0f172a" }}>Offerings (Products & Services)</h2>
           
           <div style={{ padding: "1.5rem", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-            <h3 style={{ fontSize: "1rem", margin: "0 0 1rem 0" }}>Add New Capability</h3>
+            <h3 style={{ fontSize: "1rem", margin: "0 0 1rem 0" }}>Add New Offering</h3>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1rem" }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Service Type</label>
+                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Offering (Product or Service)</label>
                 <select className="form-control" value={capabilityForm.service_type_id} onChange={e => setCapabilityForm({...capabilityForm, service_type_id: e.target.value})}>
-                  <option value="">Select Service Type...</option>
-                  {serviceTypes.map(t => (
+                  <option value="">Select Offering...</option>
+                  {Array.isArray(taxonomy?.categories) && taxonomy.categories.filter(c => c.level === 1).map(cat => {
+                    const typesInCategory = serviceTypes.filter(t => t.category_id === cat.id);
+                    if (typesInCategory.length === 0) return null;
+                    
+                    const parentCat = taxonomy.categories?.find(c => c.id === cat.parent_id);
+                    const groupLabel = parentCat ? `${parentCat.name} > ${cat.name}` : cat.name;
+
+                    return (
+                      <optgroup key={cat.id} label={groupLabel}>
+                        {typesInCategory.map(t => (
+                          <option key={t.id} value={t.id}>{t.name}</option>
+                        ))}
+                      </optgroup>
+                    );
+                  })}
+                  
+                  {/* Fallback for types without categories or unknown mapping */}
+                  {serviceTypes.filter(t => !taxonomy?.categories?.find(c => c.id === t.category_id)).map(t => (
                     <option key={t.id} value={t.id}>{t.name}</option>
                   ))}
                 </select>
@@ -300,14 +317,14 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
             )}
             
             <button onClick={handleAddCapability} style={{ marginTop: "1.5rem", padding: "0.5rem 1rem", background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: "6px", cursor: "pointer" }}>
-              Queue Capability
+              Add Offering to List
             </button>
           </div>
 
           <div>
-            <h3 style={{ fontSize: "1rem", margin: "1.5rem 0 1rem 0" }}>Current Capabilities</h3>
+            <h3 style={{ fontSize: "1rem", margin: "1.5rem 0 1rem 0" }}>Current Offerings</h3>
             {capabilitiesDraft.length === 0 ? (
-              <p style={{ color: "#64748b", fontSize: "0.875rem" }}>No capabilities added yet.</p>
+              <p style={{ color: "#64748b", fontSize: "0.875rem" }}>No offerings added yet.</p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {capabilitiesDraft.map((cap, i) => (
@@ -329,7 +346,7 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
           </div>
 
           <button className="button" style={{ background: "#2563eb", color: "white", padding: "0.5rem 1rem", border: "none", borderRadius: "6px", cursor: "pointer", alignSelf: "flex-start", marginTop: "1rem" }} onClick={handleSaveCapabilities} disabled={loading}>
-            {loading ? "Saving..." : "Save All Capabilities"}
+            {loading ? "Saving..." : "Save Offerings"}
           </button>
         </div>
       )}

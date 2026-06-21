@@ -20,7 +20,10 @@ class EngagementFactory
             null,
             new \DateTimeImmutable,
             null,
-            []
+            [],
+            null,
+            null,
+            null
         );
     }
 
@@ -41,7 +44,10 @@ class EngagementFactory
             isset($state['confidence_score']) ? (float) $state['confidence_score'] : null,
             isset($state['created_at']) ? new \DateTimeImmutable($state['created_at']) : null,
             isset($state['closed_at']) ? new \DateTimeImmutable($state['closed_at']) : null,
-            $reports
+            $reports,
+            $state['buyer_name'] ?? null,
+            $state['seller_name'] ?? null,
+            $state['rfs_short_id'] ?? null
         );
     }
 
@@ -52,6 +58,8 @@ class EngagementFactory
             $sessionId,
             $payload['reported_by'],
             $payload['outcome'],
+            $payload['reason'] ?? null,
+            $payload['notes'] ?? null,
             new \DateTimeImmutable
         );
     }
@@ -63,6 +71,8 @@ class EngagementFactory
             Uuid::fromString($state['session_id']),
             $state['reported_by'],
             $state['outcome'],
+            $state['reason'] ?? null,
+            $state['notes'] ?? null,
             new \DateTimeImmutable($state['created_at'])
         );
     }

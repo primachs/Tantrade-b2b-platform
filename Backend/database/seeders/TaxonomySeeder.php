@@ -17,8 +17,13 @@ class TaxonomySeeder extends Seeder
             ['name' => 'Agriculture & Agro-processing', 'parent' => null, 'level' => 0],
             ['name' => 'Logistics & Transport', 'parent' => null, 'level' => 0],
             ['name' => 'Quality & Compliance', 'parent' => null, 'level' => 0],
+            ['name' => 'Products', 'parent' => null, 'level' => 0],
+            ['name' => 'Technology & IT', 'parent' => null, 'level' => 0],
             ['name' => 'Horticulture', 'parent' => 'Agriculture & Agro-processing', 'level' => 1],
             ['name' => 'Food Processing', 'parent' => 'Agriculture & Agro-processing', 'level' => 1],
+            ['name' => 'Farm Produce', 'parent' => 'Products', 'level' => 1],
+            ['name' => 'Software Products', 'parent' => 'Products', 'level' => 1],
+            ['name' => 'Software Development', 'parent' => 'Technology & IT', 'level' => 1],
         ];
 
         $categoryModels = [];
@@ -52,6 +57,12 @@ class TaxonomySeeder extends Seeder
             ['name' => 'Packaging & Labeling', 'category' => 'Food Processing'],
             ['name' => 'Quality Assurance', 'category' => 'Quality & Compliance'],
             ['name' => 'Export Documentation', 'category' => 'Quality & Compliance'],
+            ['name' => 'Fresh Fruits', 'category' => 'Farm Produce'],
+            ['name' => 'Grains', 'category' => 'Farm Produce'],
+            ['name' => 'SaaS', 'category' => 'Software Products'],
+            ['name' => 'Web App Development', 'category' => 'Software Development'],
+            ['name' => 'IT Consultation', 'category' => 'Technology & IT'],
+            ['name' => 'Software Consultation', 'category' => 'Technology & IT'],
         ];
 
         $typeModels = [];

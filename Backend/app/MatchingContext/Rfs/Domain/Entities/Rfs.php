@@ -18,12 +18,24 @@ final class Rfs
         private readonly string $status,
         private readonly ?\DateTimeImmutable $createdAt,
         private readonly ?RfsConstraint $constraint,
-        private readonly ?RfsPreference $preference
+        private readonly ?RfsPreference $preference,
+        private readonly ?string $shortId = null,
+        private readonly ?string $buyerName = null
     ) {}
 
     public function id(): Uuid
     {
         return $this->id;
+    }
+
+    public function shortId(): ?string
+    {
+        return $this->shortId;
+    }
+
+    public function buyerName(): ?string
+    {
+        return $this->buyerName;
     }
 
     public function status(): string
@@ -59,7 +71,9 @@ final class Rfs
             $status,
             $this->createdAt,
             $this->constraint,
-            $this->preference
+            $this->preference,
+            $this->shortId,
+            $this->buyerName
         );
     }
 
@@ -76,7 +90,9 @@ final class Rfs
             $this->status,
             $this->createdAt,
             $this->constraint,
-            $this->preference
+            $this->preference,
+            $this->shortId,
+            $this->buyerName
         );
     }
 
@@ -93,7 +109,9 @@ final class Rfs
             $this->status,
             $this->createdAt,
             $constraint,
-            $this->preference
+            $this->preference,
+            $this->shortId,
+            $this->buyerName
         );
     }
 
@@ -110,7 +128,9 @@ final class Rfs
             $this->status,
             $this->createdAt,
             $this->constraint,
-            $preference
+            $preference,
+            $this->shortId,
+            $this->buyerName
         );
     }
 
@@ -118,7 +138,9 @@ final class Rfs
     {
         return [
             'id' => $this->id->value(),
+            'short_id' => $this->shortId,
             'buyer_id' => $this->buyerId->value(),
+            'buyer_name' => $this->buyerName,
             'title' => $this->title,
             'description' => $this->description,
             'service_type_id' => $this->serviceTypeId->value(),

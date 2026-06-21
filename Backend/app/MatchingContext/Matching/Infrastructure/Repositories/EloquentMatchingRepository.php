@@ -85,7 +85,7 @@ class EloquentMatchingRepository implements MatchingRepository
 
     public function findLatestShortlist(Uuid $rfsId): ?MatchShortlist
     {
-        $shortlist = MatchShortlistModel::with('candidates')
+        $shortlist = MatchShortlistModel::with('candidates.seller')
             ->where('rfs_id', $rfsId->value())
             ->latest('created_at')
             ->first();
@@ -98,6 +98,7 @@ class EloquentMatchingRepository implements MatchingRepository
             return new MatchCandidate(
                 Uuid::fromString($candidate->id),
                 Uuid::fromString($candidate->seller_id),
+                $candidate->seller?->name,
                 (float) $candidate->score,
                 (int) $candidate->rank
             );

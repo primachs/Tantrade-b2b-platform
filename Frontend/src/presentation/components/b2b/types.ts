@@ -52,17 +52,26 @@ export type ServiceAttribute = {
   name: string;
 };
 
+export type Category = {
+  id: string;
+  name: string;
+  parent_id?: string | null;
+  level: number;
+};
+
 export type TaxonomyResponse = {
-  categories?: unknown[];
+  categories?: Category[];
   service_types?: ServiceType[];
   attributes?: ServiceAttribute[];
 };
 
 export type Rfs = {
   id: string;
+  short_id?: string;
   title: string;
   status: string;
   buyer_id: string;
+  buyer_name?: string;
   service_type_id: string;
   description?: string;
   project_size?: string;
@@ -87,6 +96,7 @@ export type Rfs = {
 export type MatchCandidate = {
   id?: string | null;
   seller_id: string;
+  seller_name?: string;
   score: number;
   rank: number;
 };
@@ -98,11 +108,25 @@ export type MatchShortlist = {
   candidates: MatchCandidate[];
 };
 
+export type SessionReport = {
+  id?: string;
+  session_id: string;
+  reported_by: string;
+  outcome: string;
+  reason?: string | null;
+  notes?: string | null;
+  created_at: string;
+};
+
 export type EngagementSession = {
   id: string;
   rfs_id: string;
+  rfs_short_id?: string;
   buyer_id: string;
+  buyer_name?: string;
   seller_id: string;
+  seller_name?: string;
   status: string;
   created_at: string;
+  reports?: SessionReport[];
 };

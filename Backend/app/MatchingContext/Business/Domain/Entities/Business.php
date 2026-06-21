@@ -20,7 +20,8 @@ final class Business
         array $capabilities,
         private readonly ?BusinessTrustMetrics $trustMetrics,
         private readonly ?\DateTimeImmutable $createdAt,
-        private readonly ?\DateTimeImmutable $updatedAt
+        private readonly ?\DateTimeImmutable $updatedAt,
+        private readonly ?Uuid $userId = null
     ) {
         $this->capabilities = $capabilities;
     }
@@ -28,6 +29,11 @@ final class Business
     public function id(): Uuid
     {
         return $this->id;
+    }
+
+    public function userId(): ?Uuid
+    {
+        return $this->userId;
     }
 
     public function withProfileUpdates(array $payload): self
@@ -42,7 +48,8 @@ final class Business
             $this->capabilities,
             $this->trustMetrics,
             $this->createdAt,
-            $this->updatedAt
+            $this->updatedAt,
+            $this->userId
         );
     }
 
@@ -58,7 +65,8 @@ final class Business
             $this->capabilities,
             $this->trustMetrics,
             $this->createdAt,
-            $this->updatedAt
+            $this->updatedAt,
+            $this->userId
         );
     }
 
@@ -75,7 +83,8 @@ final class Business
             $capabilities,
             $this->trustMetrics,
             $this->createdAt,
-            $this->updatedAt
+            $this->updatedAt,
+            $this->userId
         );
     }
 
@@ -91,7 +100,8 @@ final class Business
             $this->capabilities,
             $metrics,
             $this->createdAt,
-            $this->updatedAt
+            $this->updatedAt,
+            $this->userId
         );
     }
 
@@ -99,6 +109,7 @@ final class Business
     {
         return [
             'id' => $this->id->value(),
+            'user_id' => $this->userId?->value(),
             'name' => $this->name,
             'contact_person' => $this->contactPerson,
             'phone' => $this->phone,

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { apiRequest } from "../../../api/client";
 import { Rfs, MatchShortlist, TaxonomyResponse, Business } from "./types";
 import { Search, Eye, PlayCircle, Briefcase } from "lucide-react";
+import { BusinessProfileModal } from "./BusinessProfileModal";
 
 type RfsRegistryPaneProps = {
   token: string;
@@ -10,12 +11,16 @@ type RfsRegistryPaneProps = {
   taxonomy: TaxonomyResponse | null;
   onRefresh: () => void;
   setNotice: (type: "success" | "error", msg: string) => void;
+  onEdit: (rfs: Rfs) => void;
+  onNavigate?: (pane: string) => void;
 };
 
-export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefresh, setNotice }: RfsRegistryPaneProps) => {
+export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefresh, setNotice, onEdit, onNavigate }: RfsRegistryPaneProps) => {
   const [loading, setLoading] = useState(false);
   const [selectedRfs, setSelectedRfs] = useState<Rfs | null>(null);
   const [shortlist, setShortlist] = useState<MatchShortlist | null>(null);
+  const [engagedSellers, setEngagedSellers] = useState<Set<string>>(new Set());
+  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
 
   const serviceTypes = Array.isArray(taxonomy?.service_types) ? taxonomy.service_types : [];
   const serviceTypeMap = new Map(serviceTypes.map(t => [t.id, t.name]));
@@ -49,6 +54,7 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
       try {
         const latestShortlist = await apiRequest<MatchShortlist>(`/rfs/${rfsId}/shortlist`, { token });
         setShortlist(latestShortlist);
+        setEngagedSellers(new Set()); // Reset on new RFS
       } catch (e) {
         setShortlist(null); // No shortlist exists yet
       }
@@ -73,7 +79,11 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
         },
       });
       setNotice("success", "Engagement session created.");
+      setEngagedSellers(prev => new Set(prev).add(sellerId));
       onRefresh();
+      if (onNavigate) {
+        onNavigate("engagements");
+      }
     } catch (err) {
       setNotice("error", "Failed to create engagement session.");
     } finally {
@@ -84,7 +94,13 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       <div className="card" style={{ padding: "1.5rem" }}>
-        <h2 style={{ margin: "0 0 1rem 0", fontSize: "1.25rem", color: "#0f172a" }}>RFS Registry</h2>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+          <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#0f172a" }}>RFS Registry</h2>
+          <div style={{ fontSize: "0.875rem", color: "#64748b", display: "flex", gap: "1rem" }}>
+            <span><span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#94a3b8", marginRight: 4 }}></span><strong>DRAFT:</strong> Private, editable</span>
+            <span><span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#22c55e", marginRight: 4 }}></span><strong>OPEN:</strong> Visible to market, ready for matching</span>
+          </div>
+        </div>
         
         {rfsList.length === 0 ? (
           <div style={{ textAlign: "center", padding: "3rem", background: "#f8fafc", borderRadius: "8px", border: "1px dashed #cbd5e1" }}>
@@ -135,13 +151,23 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
                             <Eye style={{ width: "14px", height: "14px" }} /> Inspect
                           </button>
                           
+                          {isMine && rfs.status === "DRAFT" && (
+                            <button 
+                              onClick={() => onEdit(rfs)}
+                              style={{ padding: "0.375rem 0.75rem", background: "#fff", border: "1px solid #cbd5e1", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.875rem" }}
+                            >
+                              <Briefcase style={{ width: "14px", height: "14px" }} /> Edit
+                            </button>
+                          )}
+                          
                           {isMine && (rfs.status === "DRAFT" || rfs.status === "OPEN") && (
                             <button 
                               onClick={() => handleOpenMatch(rfs.id, rfs.status)}
                               disabled={loading}
                               style={{ padding: "0.375rem 0.75rem", background: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.875rem" }}
+                              title={rfs.status === "DRAFT" ? "Open this RFS to the market and run matching" : "Run matching engine"}
                             >
-                              <PlayCircle style={{ width: "14px", height: "14px" }} /> {loading ? "..." : "Run Match"}
+                              <PlayCircle style={{ width: "14px", height: "14px" }} /> {loading ? "..." : (rfs.status === "DRAFT" ? "Publish & Match" : "Run Match")}
                             </button>
                           )}
                         </div>
@@ -171,14 +197,14 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
             <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "1.5rem" }}>
               <h4 style={{ margin: "0 0 1rem 0", display: "flex", alignItems: "center", gap: "0.5rem" }}><Search style={{ width: "18px", height: "18px", color: "#10b981" }} /> Matching Shortlist</h4>
               
-              {shortlist.candidates.length === 0 ? (
+              {(!shortlist.candidates || shortlist.candidates.length === 0) ? (
                 <p style={{ color: "#64748b", background: "#f8fafc", padding: "1rem", borderRadius: "6px" }}>No matching sellers found for these criteria.</p>
               ) : (
                 <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
                   <thead>
                     <tr>
                       <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>Rank</th>
-                      <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>Seller ID</th>
+                      <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>Candidate Name</th>
                       <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>Score</th>
                       <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0", textAlign: "right" }}>Action</th>
                     </tr>
@@ -187,16 +213,31 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
                     {shortlist.candidates.map(candidate => (
                       <tr key={candidate.seller_id}>
                         <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0", fontWeight: 600, color: "#0f172a" }}>#{candidate.rank}</td>
-                        <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0", fontFamily: "monospace", color: "#475569" }}>{candidate.seller_id}</td>
+                        <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0", color: "#475569" }}>
+                          <button 
+                            onClick={() => setSelectedProfileId(candidate.seller_id)}
+                            style={{ background: "none", border: "none", color: "#2563eb", cursor: "pointer", textDecoration: "underline", padding: 0, textAlign: "left", fontSize: "0.875rem" }}
+                          >
+                            {candidate.seller_name || <span style={{fontFamily: "monospace"}}>{candidate.seller_id}</span>}
+                          </button>
+                        </td>
                         <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0" }}>
                           <span style={{ background: "#dcfce7", color: "#166534", padding: "0.25rem 0.5rem", borderRadius: "4px", fontSize: "0.875rem", fontWeight: 600 }}>{Math.round(candidate.score * 100)}%</span>
                         </td>
                         <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0", textAlign: "right" }}>
                           <button 
                             onClick={() => handleInitiateEngagement(candidate.seller_id)}
-                            style={{ padding: "0.375rem 0.75rem", background: "#10b981", color: "white", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "0.875rem", fontWeight: 500 }}
+                            disabled={engagedSellers.has(candidate.seller_id) || loading}
+                            style={{ 
+                              padding: "0.375rem 0.75rem", 
+                              background: engagedSellers.has(candidate.seller_id) ? "#f1f5f9" : "#10b981", 
+                              color: engagedSellers.has(candidate.seller_id) ? "#475569" : "white", 
+                              border: engagedSellers.has(candidate.seller_id) ? "1px solid #cbd5e1" : "none", 
+                              borderRadius: "6px", cursor: engagedSellers.has(candidate.seller_id) ? "default" : "pointer", 
+                              fontSize: "0.875rem", fontWeight: 500 
+                            }}
                           >
-                            Engage
+                            {engagedSellers.has(candidate.seller_id) ? "Engaged ✓" : "Engage"}
                           </button>
                         </td>
                       </tr>
@@ -208,6 +249,15 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
           )}
         </div>
       )}
+
+      <BusinessProfileModal 
+        businessId={selectedProfileId || ""}
+        token={token}
+        isOpen={!!selectedProfileId}
+        onClose={() => setSelectedProfileId(null)}
+        canViewContact={false}
+        taxonomy={taxonomy}
+      />
     </div>
   );
 };

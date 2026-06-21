@@ -27,6 +27,7 @@ export const BusinessDashboard = ({
 }: BusinessDashboardProps) => {
   const [activePane, setActivePane] = useState("registry");
   const [isPaneMenuOpen, setIsPaneMenuOpen] = useState(false);
+  const [editingRfs, setEditingRfs] = useState<Rfs | null>(null);
 
   const paneItems = [
     { id: "registry", label: "RFS Registry", icon: Briefcase },
@@ -38,7 +39,7 @@ export const BusinessDashboard = ({
   const getPaneTitle = () => {
     switch (activePane) {
       case "registry": return "RFS Registry";
-      case "create-rfs": return "Create RFS";
+      case "create-rfs": return editingRfs ? "Edit RFS" : "Create RFS";
       case "engagements": return "Engagements";
       case "my-business": return "My Business Profile";
     }
@@ -218,7 +219,7 @@ export const BusinessDashboard = ({
           <button className={`nav-item ${activePane === "registry" ? "active" : ""}`} onClick={() => { setActivePane("registry"); setIsPaneMenuOpen(false); }}>
             <Briefcase /> Registry
           </button>
-          <button className={`nav-item ${activePane === "create-rfs" ? "active" : ""}`} onClick={() => { setActivePane("create-rfs"); setIsPaneMenuOpen(false); }}>
+          <button className={`nav-item ${activePane === "create-rfs" ? "active" : ""}`} onClick={() => { setEditingRfs(null); setActivePane("create-rfs"); setIsPaneMenuOpen(false); }}>
             <FilePlus /> Create RFS
           </button>
           <button className={`nav-item ${activePane === "engagements" ? "active" : ""}`} onClick={() => { setActivePane("engagements"); setIsPaneMenuOpen(false); }}>
@@ -247,13 +248,13 @@ export const BusinessDashboard = ({
 
         <div className="content-body">
           {activePane === "registry" && (
-            <RfsRegistryPane token={token} rfsList={rfsList} myBusiness={myBusiness} taxonomy={taxonomy} onRefresh={onRefresh} setNotice={setNotice} />
+            <RfsRegistryPane token={token} rfsList={rfsList} myBusiness={myBusiness} taxonomy={taxonomy} onRefresh={onRefresh} setNotice={setNotice} onEdit={(rfs) => { setEditingRfs(rfs); setActivePane("create-rfs"); }} onNavigate={setActivePane} />
           )}
           {activePane === "create-rfs" && (
-            <CreateRfsPane token={token} myBusiness={myBusiness} taxonomy={taxonomy} onCreated={() => { onRefresh(); setActivePane("registry"); }} setNotice={setNotice} />
+            <CreateRfsPane token={token} myBusiness={myBusiness} taxonomy={taxonomy} onCreated={() => { onRefresh(); setEditingRfs(null); setActivePane("registry"); }} setNotice={setNotice} editingRfs={editingRfs} />
           )}
           {activePane === "engagements" && (
-            <EngagementsPane token={token} myBusiness={myBusiness} setNotice={setNotice} />
+            <EngagementsPane token={token} myBusiness={myBusiness} setNotice={setNotice} taxonomy={taxonomy} />
           )}
           {activePane === "my-business" && (
             <MyBusinessPane token={token} myBusiness={myBusiness} taxonomy={taxonomy} onUpdate={onRefresh} setNotice={setNotice} />

@@ -25,6 +25,7 @@ class EloquentRfsRepository implements RfsRepository
 
             RfsModel::create([
                 'id' => $data['id'],
+                'short_id' => $data['short_id'],
                 'buyer_id' => $data['buyer_id'],
                 'title' => $data['title'],
                 'description' => $data['description'],
@@ -65,7 +66,7 @@ class EloquentRfsRepository implements RfsRepository
 
     public function findById(Uuid $rfsId): ?Rfs
     {
-        $model = RfsModel::with(['constraints', 'preferences'])->find($rfsId->value());
+        $model = RfsModel::with(['constraints', 'preferences', 'buyer'])->find($rfsId->value());
         if (! $model) {
             return null;
         }
@@ -75,7 +76,7 @@ class EloquentRfsRepository implements RfsRepository
 
     public function list(): array
     {
-        $models = RfsModel::with(['constraints', 'preferences'])
+        $models = RfsModel::with(['constraints', 'preferences', 'buyer'])
             ->orderByDesc('created_at')
             ->get();
 
@@ -120,7 +121,9 @@ class EloquentRfsRepository implements RfsRepository
     {
         return [
             'id' => $model->id,
+            'short_id' => $model->short_id,
             'buyer_id' => $model->buyer_id,
+            'buyer_name' => $model->buyer?->name,
             'title' => $model->title,
             'description' => $model->description,
             'service_type_id' => $model->service_type_id,

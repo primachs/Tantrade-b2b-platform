@@ -16,6 +16,8 @@ interface BusinessRepository
 
     public function findById(Uuid $businessId): ?Business;
 
+    public function findByUserId(Uuid $userId): ?Business;
+
     /** @return Business[] */
     public function list(): array;
 

@@ -19,6 +19,8 @@ class SessionReport extends Model
         'session_id',
         'reported_by',
         'outcome',
+        'reason',
+        'notes',
         'created_at',
     ];
 

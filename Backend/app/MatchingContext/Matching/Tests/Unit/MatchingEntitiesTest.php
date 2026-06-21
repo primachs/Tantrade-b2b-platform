@@ -19,7 +19,7 @@ class MatchingEntitiesTest extends TestCase
         $this->assertSame('Trucks', $attribute->value());
         $this->assertSame('Trucks', $attribute->toArray()['value']);
 
-        $candidate = new MatchCandidate(null, Uuid::random(), 0.9, 1);
+        $candidate = new MatchCandidate(null, Uuid::random(), null, 0.9, 1);
         $shortlist = new MatchShortlist(
             Uuid::random(),
             Uuid::random(),

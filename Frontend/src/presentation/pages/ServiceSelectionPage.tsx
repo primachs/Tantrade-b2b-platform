@@ -105,7 +105,7 @@ export const ServiceSelectionPage = ({
             </ul>
             <div className="service-card__role-badge">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              Assigned role: <strong>Buyer</strong>
+              Assigned role: <strong>Buyer & Seller</strong>
             </div>
             <button
               type="button"

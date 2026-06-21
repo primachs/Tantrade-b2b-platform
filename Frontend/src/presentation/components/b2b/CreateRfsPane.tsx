@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../../api/client";
 import { RegionDistrictSelect } from "../RegionDistrictSelect";
-import { TaxonomyResponse, Business } from "./types";
+import { TaxonomyResponse, Business, Rfs } from "./types";
 
 type CreateRfsPaneProps = {
   token: string;
@@ -9,9 +9,10 @@ type CreateRfsPaneProps = {
   taxonomy: TaxonomyResponse | null;
   onCreated: () => void;
   setNotice: (type: "success" | "error", msg: string) => void;
+  editingRfs?: Rfs | null;
 };
 
-export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotice }: CreateRfsPaneProps) => {
+export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotice, editingRfs }: CreateRfsPaneProps) => {
   const [loading, setLoading] = useState(false);
   const [openAfterCreate, setOpenAfterCreate] = useState(true);
 
@@ -20,7 +21,7 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
   const [rfsForm, setRfsForm] = useState({
     title: "",
     description: "",
-    service_type_id: serviceTypes[0]?.id || "",
+    service_type_id: "",
     project_size: "MEDIUM",
     expertise_level: "INTERMEDIATE",
     min_budget: "",
@@ -32,10 +33,25 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
   });
 
   useEffect(() => {
-    if (!rfsForm.service_type_id && serviceTypes.length > 0) {
-      setRfsForm(prev => ({ ...prev, service_type_id: serviceTypes[0].id }));
+    if (editingRfs) {
+      setRfsForm({
+        title: editingRfs.title,
+        description: editingRfs.description,
+        service_type_id: editingRfs.service_type_id,
+        project_size: editingRfs.project_size,
+        expertise_level: editingRfs.expertise_level,
+        min_budget: String(editingRfs.constraint?.min_budget || ""),
+        max_budget: String(editingRfs.constraint?.max_budget || ""),
+        start_date: editingRfs.constraint?.start_date || "",
+        deadline: editingRfs.constraint?.deadline || "",
+        region: editingRfs.constraint?.region || "",
+        district: editingRfs.constraint?.district || ""
+      });
+      setOpenAfterCreate(false);
+    } else {
+      setRfsForm(prev => ({ ...prev, service_type_id: serviceTypes[0]?.id || "" }));
     }
-  }, [serviceTypes, rfsForm.service_type_id]);
+  }, [editingRfs, serviceTypes.length]);
 
   const toNumberOrNull = (value: string) => {
     if (!value.trim()) return null;
@@ -72,17 +88,20 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
         ...(hasConstraints ? { constraints } : {})
       };
 
-      const created = await apiRequest<{ id: string }>("/rfs", { method: "POST", token, body: payload });
+      const endpoint = editingRfs ? `/rfs/${editingRfs.id}` : "/rfs";
+      const method = editingRfs ? "PATCH" : "POST";
+      const result = await apiRequest<{ id: string }>(endpoint, { method, token, body: payload });
+      const rfsId = editingRfs ? editingRfs.id : result.id;
 
-      if (openAfterCreate) {
+      if (openAfterCreate && rfsId) {
         if (!hasConstraints) {
           setNotice("error", "Add at least one constraint to open the RFS immediately.");
         } else {
-          await apiRequest(`/rfs/${created.id}/open`, { method: "POST", token });
+          await apiRequest(`/rfs/${rfsId}/open`, { method: "POST", token });
         }
       }
 
-      setNotice("success", "RFS created successfully.");
+      setNotice("success", editingRfs ? "RFS updated successfully." : "RFS created successfully.");
       onCreated();
     } catch (err) {
       setNotice("error", "Failed to create RFS.");
@@ -93,7 +112,9 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
 
   return (
     <div className="card" style={{ padding: "2rem", maxWidth: "800px" }}>
-      <h2 style={{ margin: "0 0 1.5rem 0", fontSize: "1.25rem", color: "#0f172a" }}>Request a Service (RFS)</h2>
+      <h2 style={{ margin: "0 0 1.5rem 0", fontSize: "1.25rem", color: "#0f172a" }}>
+        {editingRfs ? "Edit Request (RFS)" : "Request a Service (RFS)"}
+      </h2>
       
       <div style={{ display: "grid", gap: "1.5rem" }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -177,7 +198,7 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
           onClick={handleCreateRfs} 
           disabled={loading}
         >
-          {loading ? "Publishing..." : "Publish RFS"}
+          {loading ? "Saving..." : (editingRfs ? "Save Changes" : "Publish RFS")}
         </button>
       </div>
     </div>

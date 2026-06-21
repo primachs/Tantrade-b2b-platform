@@ -9,6 +9,7 @@ final class MatchCandidate
     public function __construct(
         private readonly ?Uuid $id,
         private readonly Uuid $sellerId,
+        private readonly ?string $sellerName,
         private readonly float $score,
         private readonly int $rank
     ) {}
@@ -18,6 +19,7 @@ final class MatchCandidate
         return [
             'id' => $this->id?->value(),
             'seller_id' => $this->sellerId->value(),
+            'seller_name' => $this->sellerName,
             'score' => $this->score,
             'rank' => $this->rank,
         ];

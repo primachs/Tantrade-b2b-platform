@@ -26,7 +26,8 @@ class BusinessFactory
             $this->capabilitiesFromPayload($businessId, $payload['capabilities'] ?? []),
             $this->defaultTrustMetrics($businessId),
             null,
-            null
+            null,
+            isset($payload['user_id']) ? Uuid::fromString($payload['user_id']) : null
         );
     }
 
@@ -54,7 +55,8 @@ class BusinessFactory
             $capabilities,
             $trustMetrics,
             isset($state['created_at']) ? new \DateTimeImmutable($state['created_at']) : null,
-            isset($state['updated_at']) ? new \DateTimeImmutable($state['updated_at']) : null
+            isset($state['updated_at']) ? new \DateTimeImmutable($state['updated_at']) : null,
+            isset($state['user_id']) ? Uuid::fromString($state['user_id']) : null
         );
     }
 

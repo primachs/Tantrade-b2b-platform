@@ -22,6 +22,7 @@ class Rfs extends Model
 
     protected $fillable = [
         'id',
+        'short_id',
         'buyer_id',
         'title',
         'description',

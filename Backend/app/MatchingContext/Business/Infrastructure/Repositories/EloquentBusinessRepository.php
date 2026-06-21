@@ -28,6 +28,7 @@ class EloquentBusinessRepository implements BusinessRepository
 
             BusinessModel::create([
                 'id' => $data['id'],
+                'user_id' => $data['user_id'] ?? null,
                 'name' => $data['name'],
                 'contact_person' => $data['contact_person'],
                 'phone' => $data['phone'],
@@ -74,6 +75,19 @@ class EloquentBusinessRepository implements BusinessRepository
     {
         $model = BusinessModel::with(['verification', 'capabilities.capabilityAttributes', 'trustMetrics'])
             ->find($businessId->value());
+
+        if (! $model) {
+            return null;
+        }
+
+        return $this->factory->fromState($this->mapBusinessModel($model));
+    }
+
+    public function findByUserId(Uuid $userId): ?Business
+    {
+        $model = BusinessModel::with(['verification', 'capabilities.capabilityAttributes', 'trustMetrics'])
+            ->where('user_id', $userId->value())
+            ->first();
 
         if (! $model) {
             return null;
@@ -172,6 +186,7 @@ class EloquentBusinessRepository implements BusinessRepository
     {
         return [
             'id' => $model->id,
+            'user_id' => $model->user_id,
             'name' => $model->name,
             'contact_person' => $model->contact_person,
             'phone' => $model->phone,
