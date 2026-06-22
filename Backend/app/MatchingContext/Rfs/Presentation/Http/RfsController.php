@@ -2,6 +2,7 @@
 
 namespace App\MatchingContext\Rfs\Presentation\Http;
 
+use App\MatchingContext\Business\Application\BusinessService;
 use App\MatchingContext\Rfs\Application\RfsService;
 use App\MatchingContext\SharedKernel\Domain\Enums\ExpertiseLevel;
 use App\MatchingContext\SharedKernel\Domain\Enums\ProjectSize;
@@ -12,7 +13,7 @@ use Illuminate\Validation\Rule;
 
 class RfsController
 {
-    public function index(Request $request, RfsService $service, \App\MatchingContext\Business\Application\BusinessService $businessService): JsonResponse
+    public function index(Request $request, RfsService $service, BusinessService $businessService): JsonResponse
     {
         $userId = $request->user()?->id;
         $businessId = null;
@@ -24,7 +25,7 @@ class RfsController
             }
         }
 
-        if (!$businessId) {
+        if (! $businessId) {
             return response()->json([]);
         }
 

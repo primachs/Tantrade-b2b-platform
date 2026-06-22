@@ -4,6 +4,7 @@ namespace App\MatchingContext\Business\Tests\Feature;
 
 use App\AuthenticationContext\Auth\Application\AuthService;
 use App\AuthenticationContext\Auth\Application\RoleService;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as AuthUserModel;
 use App\MatchingContext\Business\Application\BusinessService;
 use App\MatchingContext\Business\Infrastructure\Models\Business;
@@ -11,6 +12,7 @@ use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceAttribute;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\Sanctum;
 use Tests\Support\TanzaniaTestData;
 use Tests\TestCase;
@@ -75,10 +77,10 @@ class BusinessApiTest extends TestCase
             ],
         ];
 
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create([
-            'id' => (string) \Illuminate\Support\Str::uuid(),
+        $user = AuthUser::create([
+            'id' => (string) Str::uuid(),
             'name' => 'Test User',
-            'email' => 'test.buyer@' . \Illuminate\Support\Str::uuid() . '.com',
+            'email' => 'test.buyer@'.Str::uuid().'.com',
             'password' => bcrypt('password'),
             'status' => 'ACTIVE',
         ]);

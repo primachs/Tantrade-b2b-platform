@@ -2,11 +2,14 @@
 
 namespace App\MatchingContext\Rfs\Tests\Feature;
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceAttribute;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class RfsApiTest extends TestCase
@@ -15,10 +18,10 @@ class RfsApiTest extends TestCase
 
     public function test_rfs_endpoints(): void
     {
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
 
         $business = Business::create([
-            'id' => \Illuminate\Support\Str::uuid(),
+            'id' => Str::uuid(),
             'name' => 'Buyer',
             'contact_person' => 'Owner',
             'phone' => '+255700000000',
@@ -26,7 +29,7 @@ class RfsApiTest extends TestCase
             'user_id' => $user->id,
         ]);
 
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+        Sanctum::actingAs($user);
 
         $category = ServiceCategory::create([
             'name' => 'Logistics',

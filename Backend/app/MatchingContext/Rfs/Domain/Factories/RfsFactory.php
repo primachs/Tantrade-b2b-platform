@@ -16,7 +16,7 @@ class RfsFactory
     public function create(array $payload): Rfs
     {
         $rfsId = Uuid::random();
-        $shortId = 'RFS-' . strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
+        $shortId = 'RFS-'.strtoupper(substr(bin2hex(random_bytes(3)), 0, 6));
 
         return new Rfs(
             $rfsId,
@@ -122,5 +122,4 @@ class RfsFactory
             PreferenceWeights::fromArray($state)
         );
     }
-
 }

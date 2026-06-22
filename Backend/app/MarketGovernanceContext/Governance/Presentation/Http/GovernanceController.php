@@ -25,17 +25,17 @@ class GovernanceController
     public function assignChairperson(Request $request, string $officeId, GovernanceService $service): JsonResponse
     {
         $payload = $request->validate([
-            'user_id'    => ['required', 'uuid', 'exists:auth_users,id'],
+            'user_id' => ['required', 'uuid', 'exists:auth_users,id'],
             'start_date' => ['required', 'date'],
-            'end_date'   => ['nullable', 'date', 'after_or_equal:start_date'],
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             // Optional profile fields — update AuthUser if provided
             'nida_number' => TanzaniaRules::nida(false),
-            'first_name'  => ['nullable', 'string', 'max:100'],
+            'first_name' => ['nullable', 'string', 'max:100'],
             'middle_name' => ['nullable', 'string', 'max:100'],
-            'surname'     => ['nullable', 'string', 'max:100'],
-            'gender'      => ['nullable', Rule::in(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY'])],
-            'mobile'      => TanzaniaRules::mobile(false),
-            'address'     => ['nullable', 'string'],
+            'surname' => ['nullable', 'string', 'max:100'],
+            'gender' => ['nullable', Rule::in(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY'])],
+            'mobile' => TanzaniaRules::mobile(false),
+            'address' => ['nullable', 'string'],
         ]);
 
         $term = $service->assignChairperson($officeId, $payload);

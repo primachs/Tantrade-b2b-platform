@@ -2,8 +2,8 @@
 
 namespace App\MarketGovernanceContext\Governance\Tests\Feature;
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\MarketGovernanceContext\Market\Infrastructure\Models\Market;
-use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -49,9 +49,9 @@ class GovernanceApiTest extends TestCase
             ]);
     }
 
-    private function createUser(): \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser
+    private function createUser(): AuthUser
     {
-        return \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create([
+        return AuthUser::create([
             'id' => Str::uuid()->toString(),
             'name' => 'Chairperson',
             'email' => 'chairperson@example.com',
@@ -59,8 +59,6 @@ class GovernanceApiTest extends TestCase
             'status' => 'ACTIVE',
         ]);
     }
-
-
 
     private function createMarket(): Market
     {

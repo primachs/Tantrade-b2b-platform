@@ -2,9 +2,11 @@
 
 namespace App\MatchingContext\Rfs\Tests\Unit;
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\MatchingContext\Rfs\Application\RfsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class RfsControllerTest extends TestCase
@@ -14,14 +16,14 @@ class RfsControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create([
-            'id' => (string) \Illuminate\Support\Str::uuid(),
+        $user = AuthUser::create([
+            'id' => (string) Str::uuid(),
             'name' => 'Test User',
-            'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com',
+            'email' => 'test@'.Str::uuid().'.com',
             'password' => bcrypt('password'),
             'status' => 'ACTIVE',
         ]);
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+        Sanctum::actingAs($user);
     }
 
     private function bindFakeService(string $rfsId): object

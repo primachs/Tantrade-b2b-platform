@@ -37,6 +37,7 @@ class MarketController
             'status' => ['nullable', Rule::in(MarketStatus::values())],
         ];
     }
+
     public function index(Request $request, MarketService $service): JsonResponse
     {
         return response()->json($service->list((string) $request->user()?->id));

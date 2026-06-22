@@ -18,17 +18,17 @@ class EloquentBrokerRepository implements BrokerRepository
         $data = $registration->toArray();
 
         BrokerRegistrationModel::create([
-            'id'          => $data['id'],
-            'user_id'     => $data['user_id'] ?? null,
-            'market_id'   => $data['market_id'],
+            'id' => $data['id'],
+            'user_id' => $data['user_id'] ?? null,
+            'market_id' => $data['market_id'],
             'broker_type' => $data['broker_type'],
-            'first_name'  => $data['first_name'],
+            'first_name' => $data['first_name'],
             'middle_name' => $data['middle_name'],
-            'surname'     => $data['surname'],
+            'surname' => $data['surname'],
             'nida_number' => $data['nida_number'],
-            'mobile'      => $data['mobile'],
-            'address'     => $data['address'],
-            'status'      => $data['status'],
+            'mobile' => $data['mobile'],
+            'address' => $data['address'],
+            'status' => $data['status'],
         ]);
 
         return $this->findById(Uuid::fromString($data['id'])) ?? $registration;
@@ -41,7 +41,7 @@ class EloquentBrokerRepository implements BrokerRepository
         BrokerRegistrationModel::query()
             ->where('id', $data['id'])
             ->update([
-                'status'     => $data['status'],
+                'status' => $data['status'],
                 'updated_at' => Carbon::now(),
             ]);
 

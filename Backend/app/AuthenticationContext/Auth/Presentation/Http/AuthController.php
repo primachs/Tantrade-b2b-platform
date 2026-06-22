@@ -6,6 +6,7 @@ use App\AuthenticationContext\Auth\Application\AuthService;
 use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController
@@ -72,7 +73,7 @@ class AuthController
             'middle_name' => ['nullable', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
             'nida_number' => ['required', 'string', 'max:50'],
-            'gender' => ['required', 'string', \Illuminate\Validation\Rule::in(['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY'])],
+            'gender' => ['required', 'string', Rule::in(['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY'])],
             'mobile' => ['required', 'string', 'max:20'],
             'address' => ['nullable', 'string', 'max:500'],
         ]);
@@ -84,7 +85,7 @@ class AuthController
         $user->gender = $payload['gender'];
         $user->mobile = $payload['mobile'];
         $user->address = $payload['address'] ?? null;
-        
+
         $user->save();
 
         $user->load('roles');
@@ -102,17 +103,17 @@ class AuthController
             ->get()
             ->map(function (AuthUser $user) {
                 return [
-                    'id'          => $user->id,
-                    'name'        => $user->name,
-                    'email'       => $user->email,
-                    'roles'       => $user->roles->pluck('name')->values()->all(),
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'roles' => $user->roles->pluck('name')->values()->all(),
                     'nida_number' => $user->nida_number,
-                    'first_name'  => $user->first_name,
+                    'first_name' => $user->first_name,
                     'middle_name' => $user->middle_name,
-                    'surname'     => $user->surname,
-                    'gender'      => $user->gender,
-                    'mobile'      => $user->mobile,
-                    'address'     => $user->address,
+                    'surname' => $user->surname,
+                    'gender' => $user->gender,
+                    'mobile' => $user->mobile,
+                    'address' => $user->address,
                 ];
             });
 

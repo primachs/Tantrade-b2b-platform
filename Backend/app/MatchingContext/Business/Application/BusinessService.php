@@ -42,6 +42,7 @@ class BusinessService
     public function findByUserId(string $userId): ?array
     {
         $business = $this->repository->findByUserId(Uuid::fromString($userId));
+
         return $business ? $business->toArray() : null;
     }
 

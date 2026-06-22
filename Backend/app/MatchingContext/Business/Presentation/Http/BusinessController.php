@@ -45,6 +45,7 @@ class BusinessController
                 : ['nullable', Rule::in(VerificationStatus::values())],
         ];
     }
+
     public function index(BusinessService $service): JsonResponse
     {
         return response()->json($service->list());
@@ -53,11 +54,12 @@ class BusinessController
     public function myBusiness(Request $request, BusinessService $service): JsonResponse
     {
         $userId = $request->user()?->id;
-        if (!$userId) {
+        if (! $userId) {
             return response()->json(null);
         }
 
         $business = $service->findByUserId($userId);
+
         return response()->json($business);
     }
 

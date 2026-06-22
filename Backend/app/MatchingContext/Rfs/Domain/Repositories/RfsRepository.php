@@ -23,5 +23,4 @@ interface RfsRepository
     public function upsertConstraint(RfsConstraint $constraint): void;
 
     public function upsertPreference(RfsPreference $preference): void;
-
 }

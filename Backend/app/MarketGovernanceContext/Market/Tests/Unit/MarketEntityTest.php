@@ -13,6 +13,7 @@ class MarketEntityTest extends TestCase
         $id = Uuid::random();
         $market = new Market(
             $id,
+            Uuid::random(),
             'Kariakoo',
             'Dar',
             'Ilala',

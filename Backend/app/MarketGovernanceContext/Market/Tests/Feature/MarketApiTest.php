@@ -2,7 +2,10 @@
 
 namespace App\MarketGovernanceContext\Market\Tests\Feature;
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
 use Tests\Support\TanzaniaTestData;
 use Tests\TestCase;
 
@@ -12,6 +15,17 @@ class MarketApiTest extends TestCase
 
     public function test_market_endpoints(): void
     {
+        $user = AuthUser::create([
+            'id' => Str::uuid(),
+            'name' => 'Test User',
+            'email' => 'test@test.com',
+            'password' => bcrypt('password'),
+            'first_name' => 'Test',
+            'surname' => 'User',
+            'status' => 'ACTIVE',
+        ]);
+        Sanctum::actingAs($user, ['*']);
+
         $payload = [
             'market_name' => 'Kariakoo Market',
             'region' => TanzaniaTestData::REGION,

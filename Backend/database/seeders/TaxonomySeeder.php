@@ -118,7 +118,7 @@ class TaxonomySeeder extends Seeder
             }
 
             foreach ($attributeNames as $attributeName) {
-                $key = $typeName . '::' . $attributeName;
+                $key = $typeName.'::'.$attributeName;
                 $attributeModels[$key] = ServiceAttribute::firstOrCreate(
                     ['name' => $attributeName, 'service_type_id' => $typeModel->id],
                     ['id' => (string) Str::uuid()]

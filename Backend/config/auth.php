@@ -1,5 +1,6 @@
 <?php
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 
 return [
 
@@ -63,7 +64,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::class,
+            'model' => AuthUser::class,
         ],
 
         // 'users' => [

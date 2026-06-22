@@ -2,11 +2,10 @@
 
 namespace App\MarketGovernanceContext\Broker\Tests\Unit;
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use App\MarketGovernanceContext\Broker\Domain\Factories\BrokerFactory;
 use App\MarketGovernanceContext\Broker\Domain\Repositories\BrokerRepository;
 use App\MarketGovernanceContext\Market\Infrastructure\Models\Market;
-use App\MarketGovernanceContext\SharedKernel\Domain\ValueObjects\Uuid;
-use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;

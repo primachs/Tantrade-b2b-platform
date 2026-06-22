@@ -2,6 +2,7 @@
 
 namespace App\MatchingContext\Matching\Tests\Feature;
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessCapability;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessCapabilityAttribute;
@@ -13,6 +14,8 @@ use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class RfsMatchingApiTest extends TestCase
@@ -22,11 +25,11 @@ class RfsMatchingApiTest extends TestCase
     public function test_rfs_matching_flow(): void
     {
         [$serviceType, $attribute] = $this->seedTaxonomy();
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
         $buyer = $this->createBusiness('Buyer Co', clone $user);
         $seller = $this->createBusiness('Seller Co');
-        
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+
+        Sanctum::actingAs($user);
 
         $capability = BusinessCapability::create([
             'business_id' => $seller->id,
@@ -107,9 +110,9 @@ class RfsMatchingApiTest extends TestCase
     public function test_matching_requires_open_rfs(): void
     {
         [$serviceType, $attribute] = $this->seedTaxonomy();
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
         $buyer = $this->createBusiness('Buyer Co', $user);
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+        Sanctum::actingAs($user);
 
         $rfs = Rfs::create([
             'buyer_id' => $buyer->id,
@@ -141,10 +144,10 @@ class RfsMatchingApiTest extends TestCase
             'is_active' => true,
         ]);
 
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
         $buyer = $this->createBusiness('Buyer Co', $user);
         $seller = $this->createBusiness('Seller Co');
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+        Sanctum::actingAs($user);
 
         BusinessCapability::create([
             'business_id' => $seller->id,
@@ -198,7 +201,7 @@ class RfsMatchingApiTest extends TestCase
     private function createBusiness(string $name, $user = null): Business
     {
         $business = Business::create([
-            'id' => (string)\Illuminate\Support\Str::uuid(),
+            'id' => (string) Str::uuid(),
             'name' => $name,
             'contact_person' => 'Owner',
             'phone' => '+255700000000',

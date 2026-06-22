@@ -6,7 +6,6 @@ use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
 
 final class Rfs
 {
-
     public function __construct(
         private readonly Uuid $id,
         private readonly Uuid $buyerId,

@@ -6,7 +6,6 @@ use App\MatchingContext\Business\Infrastructure\Models\Business as BusinessModel
 use App\MatchingContext\Rfs\Infrastructure\Models\Rfs;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsConstraint;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsPreference;
-use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceAttribute;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;

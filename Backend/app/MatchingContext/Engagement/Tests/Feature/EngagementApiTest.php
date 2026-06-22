@@ -2,6 +2,7 @@
 
 namespace App\MatchingContext\Engagement\Tests\Feature;
 
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessTrustMetrics;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessVerification;
@@ -12,6 +13,8 @@ use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class EngagementApiTest extends TestCase
@@ -21,10 +24,10 @@ class EngagementApiTest extends TestCase
     public function test_engagement_lifecycle_and_signals(): void
     {
         $serviceType = $this->seedTaxonomy();
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
         $buyer = $this->createBusiness('Buyer Co', clone $user);
         $seller = $this->createBusiness('Seller Co');
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+        Sanctum::actingAs($user);
 
         $rfs = Rfs::create([
             'buyer_id' => $buyer->id,
@@ -79,10 +82,10 @@ class EngagementApiTest extends TestCase
     public function test_deal_confirmed_requires_dual_confirmation(): void
     {
         $serviceType = $this->seedTaxonomy();
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
         $buyer = $this->createBusiness('Buyer Co', clone $user);
         $seller = $this->createBusiness('Seller Co');
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+        Sanctum::actingAs($user);
 
         $rfs = Rfs::create([
             'buyer_id' => $buyer->id,
@@ -117,10 +120,10 @@ class EngagementApiTest extends TestCase
     public function test_engagement_invalid_transitions_raise_errors(): void
     {
         $serviceType = $this->seedTaxonomy();
-        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
         $buyer = $this->createBusiness('Buyer Co', clone $user);
         $seller = $this->createBusiness('Seller Co');
-        \Laravel\Sanctum\Sanctum::actingAs($user);
+        Sanctum::actingAs($user);
 
         $rfs = Rfs::create([
             'buyer_id' => $buyer->id,
@@ -190,7 +193,7 @@ class EngagementApiTest extends TestCase
     private function createBusiness(string $name, $user = null): Business
     {
         $business = Business::create([
-            'id' => (string)\Illuminate\Support\Str::uuid(),
+            'id' => (string) Str::uuid(),
             'name' => $name,
             'contact_person' => 'Owner',
             'phone' => '+255700000000',

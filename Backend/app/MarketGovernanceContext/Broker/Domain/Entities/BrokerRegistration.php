@@ -49,19 +49,19 @@ final class BrokerRegistration
     public function toArray(): array
     {
         return [
-            'id'          => $this->id->value(),
-            'user_id'     => $this->userId?->value(),
-            'market_id'   => $this->marketId->value(),
+            'id' => $this->id->value(),
+            'user_id' => $this->userId?->value(),
+            'market_id' => $this->marketId->value(),
             'broker_type' => $this->brokerType,
-            'first_name'  => $this->firstName,
+            'first_name' => $this->firstName,
             'middle_name' => $this->middleName,
-            'surname'     => $this->surname,
+            'surname' => $this->surname,
             'nida_number' => $this->nidaNumber,
-            'mobile'      => $this->mobile,
-            'address'     => $this->address,
-            'status'      => $this->status,
-            'created_at'  => $this->createdAt?->format('c'),
-            'updated_at'  => $this->updatedAt?->format('c'),
+            'mobile' => $this->mobile,
+            'address' => $this->address,
+            'status' => $this->status,
+            'created_at' => $this->createdAt?->format('c'),
+            'updated_at' => $this->updatedAt?->format('c'),
         ];
     }
 }

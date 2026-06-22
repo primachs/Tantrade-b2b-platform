@@ -2,10 +2,9 @@
 
 namespace App\MarketGovernanceContext\Governance\Tests\Unit;
 
-use App\MarketGovernanceContext\Broker\Infrastructure\Models\BrokerRegistration;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use App\MarketGovernanceContext\Governance\Application\GovernanceService;
 use App\MarketGovernanceContext\Market\Infrastructure\Models\Market;
-use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -13,8 +12,6 @@ use Tests\TestCase;
 class GovernanceServiceTest extends TestCase
 {
     use RefreshDatabase;
-
-
 
     public function test_assign_chairperson_rejects_existing_active_term(): void
     {
