@@ -19,6 +19,7 @@ class EloquentBrokerRepository implements BrokerRepository
 
         BrokerRegistrationModel::create([
             'id'          => $data['id'],
+            'user_id'     => $data['user_id'] ?? null,
             'market_id'   => $data['market_id'],
             'broker_type' => $data['broker_type'],
             'first_name'  => $data['first_name'],
@@ -57,9 +58,13 @@ class EloquentBrokerRepository implements BrokerRepository
         return $this->factory->fromState($model->toArray());
     }
 
-    public function list(): array
+    public function list(?string $userId = null): array
     {
-        $models = BrokerRegistrationModel::query()->orderByDesc('created_at')->get();
+        $query = BrokerRegistrationModel::query();
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+        $models = $query->orderByDesc('created_at')->get();
 
         return $models->map(function (BrokerRegistrationModel $model) {
             return $this->factory->fromState($model->toArray());

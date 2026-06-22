@@ -35,10 +35,9 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
         await apiRequest(`/rfs/${rfsId}/open`, { method: "POST", token });
       }
       await apiRequest(`/rfs/${rfsId}/match`, { method: "POST", token });
-      const latest = await apiRequest<MatchShortlist>(`/rfs/${rfsId}/shortlist`, { token });
-      setShortlist(latest);
       setNotice("success", "Matching shortlist generated.");
       onRefresh();
+      await handleInspectRfs(rfsId);
     } catch (err) {
       setNotice("error", "Matching failed.");
     } finally {

@@ -15,12 +15,18 @@ class RfsApiTest extends TestCase
 
     public function test_rfs_endpoints(): void
     {
+        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+
         $business = Business::create([
+            'id' => \Illuminate\Support\Str::uuid(),
             'name' => 'Buyer',
             'contact_person' => 'Owner',
             'phone' => '+255700000000',
             'email' => 'buyer.rfs@example.com',
+            'user_id' => $user->id,
         ]);
+
+        \Laravel\Sanctum\Sanctum::actingAs($user);
 
         $category = ServiceCategory::create([
             'name' => 'Logistics',

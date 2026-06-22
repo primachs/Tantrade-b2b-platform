@@ -19,11 +19,16 @@ class TaxonomySeeder extends Seeder
             ['name' => 'Quality & Compliance', 'parent' => null, 'level' => 0],
             ['name' => 'Products', 'parent' => null, 'level' => 0],
             ['name' => 'Technology & IT', 'parent' => null, 'level' => 0],
+            ['name' => 'Financial Services', 'parent' => null, 'level' => 0],
+            ['name' => 'Marketing & PR', 'parent' => null, 'level' => 0],
+            ['name' => 'Legal & Consulting', 'parent' => null, 'level' => 0],
+            ['name' => 'Industrial Equipment', 'parent' => null, 'level' => 0],
             ['name' => 'Horticulture', 'parent' => 'Agriculture & Agro-processing', 'level' => 1],
             ['name' => 'Food Processing', 'parent' => 'Agriculture & Agro-processing', 'level' => 1],
             ['name' => 'Farm Produce', 'parent' => 'Products', 'level' => 1],
             ['name' => 'Software Products', 'parent' => 'Products', 'level' => 1],
             ['name' => 'Software Development', 'parent' => 'Technology & IT', 'level' => 1],
+            ['name' => 'Heavy Machinery', 'parent' => 'Industrial Equipment', 'level' => 1],
         ];
 
         $categoryModels = [];
@@ -63,6 +68,14 @@ class TaxonomySeeder extends Seeder
             ['name' => 'Web App Development', 'category' => 'Software Development'],
             ['name' => 'IT Consultation', 'category' => 'Technology & IT'],
             ['name' => 'Software Consultation', 'category' => 'Technology & IT'],
+            ['name' => 'Auditing', 'category' => 'Financial Services'],
+            ['name' => 'Tax Advisory', 'category' => 'Financial Services'],
+            ['name' => 'Digital Marketing', 'category' => 'Marketing & PR'],
+            ['name' => 'Corporate PR', 'category' => 'Marketing & PR'],
+            ['name' => 'Contract Drafting', 'category' => 'Legal & Consulting'],
+            ['name' => 'Business Incorporation', 'category' => 'Legal & Consulting'],
+            ['name' => 'Excavator Rental', 'category' => 'Heavy Machinery'],
+            ['name' => 'Forklift Leasing', 'category' => 'Heavy Machinery'],
         ];
 
         $typeModels = [];
@@ -88,6 +101,13 @@ class TaxonomySeeder extends Seeder
             'Packaging & Labeling' => ['Packaging Types', 'Daily Throughput'],
             'Quality Assurance' => ['Certifications', 'Inspection Turnaround'],
             'Export Documentation' => ['Supported Markets', 'Digital Filing'],
+            'Auditing' => ['Industry Experience', 'Certification'],
+            'Tax Advisory' => ['Tax Authority Liaison', 'International Tax Support'],
+            'Digital Marketing' => ['Channels Supported', 'Budget Range'],
+            'Corporate PR' => ['Media Networks', 'Crisis Management'],
+            'Contract Drafting' => ['Specialization', 'Drafting Language'],
+            'Excavator Rental' => ['Tonnage', 'Operator Included'],
+            'Forklift Leasing' => ['Load Capacity', 'Power Type'],
         ];
 
         $attributeModels = [];
@@ -119,6 +139,12 @@ class TaxonomySeeder extends Seeder
             'Quality Assurance::Inspection Turnaround' => ['48 Hours', '72 Hours'],
             'Export Documentation::Supported Markets' => ['EAC, COMESA', 'EU, GCC'],
             'Export Documentation::Digital Filing' => ['ePhyto Ready', 'Single Window Ready'],
+            'Auditing::Industry Experience' => ['Agriculture', 'Tech', 'Retail', 'General'],
+            'Tax Advisory::International Tax Support' => ['Yes', 'No'],
+            'Digital Marketing::Channels Supported' => ['Social Media', 'SEO & SEM', 'Email Marketing'],
+            'Excavator Rental::Tonnage' => ['20 Tons', '30 Tons', '50+ Tons'],
+            'Excavator Rental::Operator Included' => ['Yes', 'No'],
+            'Forklift Leasing::Power Type' => ['Diesel', 'Electric'],
         ];
 
         foreach ($values as $key => $valueList) {

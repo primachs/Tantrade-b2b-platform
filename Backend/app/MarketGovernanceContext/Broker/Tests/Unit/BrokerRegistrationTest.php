@@ -13,8 +13,13 @@ class BrokerRegistrationTest extends TestCase
         $registration = new BrokerRegistration(
             Uuid::random(),
             Uuid::random(),
-            Uuid::random(),
             'PRODUCE_BROKER',
+            'Juma',
+            null,
+            'Mwana',
+            null,
+            null,
+            null,
             'ACTIVE',
             null,
             null

@@ -30,6 +30,13 @@ class RoleApiTest extends TestCase
         ]);
 
         $userModel = AuthUserModel::query()->where('email', 'role.api.user@example.com')->first();
+        
+        $adminRole = $roleService->create([
+            'name' => 'ADMIN',
+            'description' => 'Admin role',
+        ]);
+        $roleService->assignRole((string) $userModel->id, $adminRole['id']);
+
         Sanctum::actingAs($userModel);
 
         $this->postJson("/api/auth/roles/{$role['id']}")

@@ -19,6 +19,7 @@ class EloquentMarketRepository implements MarketRepository
 
         MarketModel::create([
             'id' => $data['id'],
+            'user_id' => $data['user_id'] ?? null,
             'market_name' => $data['market_name'],
             'region' => $data['region'],
             'district' => $data['district'],
@@ -59,9 +60,13 @@ class EloquentMarketRepository implements MarketRepository
         return $this->factory->fromState($model->toArray());
     }
 
-    public function list(): array
+    public function list(?string $userId = null): array
     {
-        $models = MarketModel::query()->orderByDesc('created_at')->get();
+        $query = MarketModel::query();
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+        $models = $query->orderByDesc('created_at')->get();
 
         return $models->map(function (MarketModel $model) {
             return $this->factory->fromState($model->toArray());

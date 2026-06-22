@@ -74,11 +74,16 @@ class EloquentRfsRepository implements RfsRepository
         return $this->factory->fromState($this->mapRfsModel($model));
     }
 
-    public function list(): array
+    public function list(?string $buyerId = null): array
     {
-        $models = RfsModel::with(['constraints', 'preferences', 'buyer'])
-            ->orderByDesc('created_at')
-            ->get();
+        $query = RfsModel::with(['constraints', 'preferences', 'buyer'])
+            ->orderByDesc('created_at');
+
+        if ($buyerId) {
+            $query->where('buyer_id', $buyerId);
+        }
+
+        $models = $query->get();
 
         return $models->map(function (RfsModel $model) {
             return $this->factory->fromState($this->mapRfsModel($model));

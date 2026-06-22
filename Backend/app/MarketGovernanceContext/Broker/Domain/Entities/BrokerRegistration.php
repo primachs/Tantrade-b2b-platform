@@ -8,6 +8,7 @@ final class BrokerRegistration
 {
     public function __construct(
         private readonly Uuid $id,
+        private readonly ?Uuid $userId,
         private readonly Uuid $marketId,
         private readonly string $brokerType,
         private readonly string $firstName,
@@ -30,6 +31,7 @@ final class BrokerRegistration
     {
         return new self(
             $this->id,
+            $this->userId,
             $this->marketId,
             $this->brokerType,
             $this->firstName,
@@ -48,6 +50,7 @@ final class BrokerRegistration
     {
         return [
             'id'          => $this->id->value(),
+            'user_id'     => $this->userId?->value(),
             'market_id'   => $this->marketId->value(),
             'broker_type' => $this->brokerType,
             'first_name'  => $this->firstName,

@@ -75,6 +75,15 @@ class BusinessApiTest extends TestCase
             ],
         ];
 
+        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create([
+            'id' => (string) \Illuminate\Support\Str::uuid(),
+            'name' => 'Test User',
+            'email' => 'test.buyer@' . \Illuminate\Support\Str::uuid() . '.com',
+            'password' => bcrypt('password'),
+            'status' => 'ACTIVE',
+        ]);
+        Sanctum::actingAs($user);
+
         $response = $this->postJson('/api/businesses', $payload);
         $response->assertStatus(201);
 

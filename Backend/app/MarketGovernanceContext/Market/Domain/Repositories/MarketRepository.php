@@ -14,5 +14,5 @@ interface MarketRepository
     public function findById(Uuid $marketId): ?Market;
 
     /** @return Market[] */
-    public function list(): array;
+    public function list(?string $userId = null): array;
 }

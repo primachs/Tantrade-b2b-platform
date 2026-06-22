@@ -13,6 +13,7 @@ class BrokerRegistration extends Model
 
     protected $fillable = [
         'id',
+        'user_id',
         'market_id',
         'broker_type',
         'first_name',

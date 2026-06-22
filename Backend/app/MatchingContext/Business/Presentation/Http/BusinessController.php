@@ -30,18 +30,18 @@ class BusinessController
     private function verificationRules(bool $requireStatus = false): array
     {
         return [
-            'tin_number' => TanzaniaRules::tin(),
-            'brela_number' => TanzaniaRules::brela(),
+            'tin_number' => TanzaniaRules::tin(false),
+            'brela_number' => TanzaniaRules::brela(false),
             'business_size' => ['required', Rule::in(BusinessSize::values())],
             'is_owner' => ['required', 'boolean'],
             'owner_gender' => ['required', Rule::in(OwnerGender::values())],
             'employee_count' => ['required', 'integer', 'min:0'],
             'revenue_range' => ['required', Rule::in(RevenueRange::values())],
-            'region' => TanzaniaRules::region(),
-            'district' => TanzaniaRules::district(),
-            'address' => ['required', 'string', 'max:500'],
+            'region' => TanzaniaRules::region(false),
+            'district' => TanzaniaRules::district(false),
+            'address' => ['nullable', 'string', 'max:500'],
             'verification_status' => $requireStatus
-                ? ['required', Rule::in(VerificationStatus::values())]
+                ? ['nullable', Rule::in(VerificationStatus::values())] // allow missing from frontend, will default to UNVERIFIED
                 : ['nullable', Rule::in(VerificationStatus::values())],
         ];
     }

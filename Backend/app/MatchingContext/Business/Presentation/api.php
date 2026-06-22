@@ -11,13 +11,13 @@ Route::prefix('businesses')->group(function () {
         Route::get('/my-business', [BusinessController::class, 'myBusiness']);
         Route::patch('/{businessId}', [BusinessController::class, 'update']);
         Route::put('/{businessId}/capabilities', [BusinessController::class, 'syncCapabilities']);
+        Route::put('/{businessId}/verification', [BusinessController::class, 'upsertVerification']);
         Route::get('/{businessId}/trust-metrics', [BusinessController::class, 'trustMetrics']);
     });
 
     Route::get('/{businessId}', [BusinessController::class, 'show']);
 
     Route::middleware(['auth:sanctum', 'role:ADMIN'])->group(function () {
-        Route::put('/{businessId}/verification', [BusinessController::class, 'upsertVerification']);
         Route::patch('/{businessId}/verification/review', [BusinessController::class, 'reviewVerification']);
     });
 });

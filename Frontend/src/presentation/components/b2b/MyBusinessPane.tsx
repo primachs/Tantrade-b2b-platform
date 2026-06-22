@@ -30,12 +30,13 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
     is_owner: myBusiness.verification?.is_owner ?? true,
     owner_gender: myBusiness.verification?.owner_gender || "FEMALE",
     employee_count: String(myBusiness.verification?.employee_count || ""),
-    revenue_range: myBusiness.verification?.revenue_range || "BETWEEN_500M_5B",
+    revenue_range: myBusiness.verification?.revenue_range || "BETWEEN_50M_500M",
     region: myBusiness.verification?.region || "",
     district: myBusiness.verification?.district || "",
     address: myBusiness.verification?.address || "",
     verification_status: myBusiness.verification?.verification_status || "UNVERIFIED"
   });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [capabilitiesDraft, setCapabilitiesDraft] = useState(myBusiness.capabilities || []);
   const [capabilityForm, setCapabilityForm] = useState({
@@ -77,11 +78,25 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
   };
 
   const handleUpdateVerification = async () => {
+    setFieldErrors({});
+    const errors: Record<string, string> = {};
+    if (verificationForm.tin_number && !/^\d{9}$/.test(verificationForm.tin_number)) {
+      errors.tin_number = "TIN must be exactly 9 digits.";
+    }
+    if (verificationForm.brela_number && !/^[A-Za-z0-9]{6,12}$/.test(verificationForm.brela_number)) {
+      errors.brela_number = "BRELA number must be 6-12 alphanumeric characters.";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setNotice("error", "Please fix the validation errors.");
+      return;
+    }
+
     setLoading(true);
     try {
       const payload = {
         ...verificationForm,
-        employee_count: toIntOrNull(verificationForm.employee_count) ?? 0,
+        employee_count: toIntOrNull(verificationForm.employee_count) ?? 1,
       };
       await apiRequest(`/businesses/${myBusiness.id}/verification`, {
         method: "PUT",
@@ -91,7 +106,8 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
       setNotice("success", "Verification updated successfully.");
       onUpdate();
     } catch (err) {
-      setNotice("error", "Failed to update verification.");
+      const message = err instanceof ApiError ? err.firstFieldError() ?? err.message : "Failed to update verification.";
+      setNotice("error", message);
     } finally {
       setLoading(false);
     }
@@ -207,10 +223,12 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>TIN Number</label>
               <input className="form-control" value={verificationForm.tin_number} onChange={e => setVerificationForm({...verificationForm, tin_number: e.target.value.replace(/\D/g, "").slice(0, 9)})} maxLength={9} />
+              {fieldErrors.tin_number && <span style={{ color: "#ef4444", fontSize: "0.75rem" }}>{fieldErrors.tin_number}</span>}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>BRELA Number</label>
               <input className="form-control" value={verificationForm.brela_number} onChange={e => setVerificationForm({...verificationForm, brela_number: e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 12)})} maxLength={12} />
+              {fieldErrors.brela_number && <span style={{ color: "#ef4444", fontSize: "0.75rem" }}>{fieldErrors.brela_number}</span>}
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.5rem" }}>
@@ -227,8 +245,7 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
               <select className="form-control" value={verificationForm.revenue_range} onChange={e => setVerificationForm({...verificationForm, revenue_range: e.target.value})}>
                 <option value="BELOW_50M">Below 50M</option>
                 <option value="BETWEEN_50M_500M">50M - 500M</option>
-                <option value="BETWEEN_500M_5B">500M - 5B</option>
-                <option value="ABOVE_5B">Above 5B</option>
+                <option value="ABOVE_500M">Above 500M</option>
               </select>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -263,7 +280,7 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
                 <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Offering (Product or Service)</label>
                 <select className="form-control" value={capabilityForm.service_type_id} onChange={e => setCapabilityForm({...capabilityForm, service_type_id: e.target.value})}>
                   <option value="">Select Offering...</option>
-                  {Array.isArray(taxonomy?.categories) && taxonomy.categories.filter(c => c.level === 1).map(cat => {
+                  {Array.isArray(taxonomy?.categories) && taxonomy.categories.map(cat => {
                     const typesInCategory = serviceTypes.filter(t => t.category_id === cat.id);
                     if (typesInCategory.length === 0) return null;
                     
@@ -328,17 +345,34 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
                 {capabilitiesDraft.map((cap, i) => (
-                  <div key={i} style={{ padding: "1rem", border: "1px solid #e2e8f0", borderRadius: "6px", background: "#fff" }}>
-                    <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "0.875rem" }}>
-                      {serviceTypes.find(t => t.id === cap.service_type_id)?.name || cap.service_type_id}
-                    </h4>
-                    {cap.attributes.length > 0 && (
-                      <ul style={{ margin: 0, paddingLeft: "1.5rem", fontSize: "0.75rem", color: "#64748b" }}>
-                        {cap.attributes.map((a, j) => (
-                          <li key={j}>{serviceAttributes.find(sa => sa.id === a.attribute_id)?.name}: {a.value}</li>
-                        ))}
-                      </ul>
-                    )}
+                  <div key={i} style={{ padding: "1rem", border: "1px solid #e2e8f0", borderRadius: "6px", background: "#fff", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "0.875rem" }}>
+                        {serviceTypes.find(t => t.id === cap.service_type_id)?.name || cap.service_type_id}
+                      </h4>
+                      {cap.attributes.length > 0 && (
+                        <ul style={{ margin: 0, paddingLeft: "1.5rem", fontSize: "0.75rem", color: "#64748b" }}>
+                          {cap.attributes.map((a, j) => (
+                            <li key={j}>{serviceAttributes.find(sa => sa.id === a.attribute_id)?.name}: {a.value}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                      <button 
+                        onClick={() => {
+                          setCapabilityForm(cap);
+                          setCapabilitiesDraft(prev => prev.filter((_, index) => index !== i));
+                        }}
+                        style={{ padding: "0.25rem 0.75rem", background: "#eff6ff", color: "#2563eb", border: "none", borderRadius: "4px", fontSize: "0.75rem", cursor: "pointer", fontWeight: 500 }}>
+                        Edit
+                      </button>
+                      <button 
+                        onClick={() => setCapabilitiesDraft(prev => prev.filter((_, index) => index !== i))}
+                        style={{ padding: "0.25rem 0.75rem", background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: "4px", fontSize: "0.75rem", cursor: "pointer", fontWeight: 500 }}>
+                        Remove
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

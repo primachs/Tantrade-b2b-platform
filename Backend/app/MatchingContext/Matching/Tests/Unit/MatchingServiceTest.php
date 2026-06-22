@@ -9,7 +9,6 @@ use App\MatchingContext\Business\Infrastructure\Models\BusinessTrustMetrics;
 use App\MatchingContext\Business\Infrastructure\Models\BusinessVerification;
 use App\MatchingContext\Matching\Application\MatchingService;
 use App\MatchingContext\Rfs\Infrastructure\Models\Rfs;
-use App\MatchingContext\Rfs\Infrastructure\Models\RfsAttribute;
 use App\MatchingContext\Rfs\Infrastructure\Models\RfsConstraint;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
 use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceAttribute;
@@ -77,11 +76,7 @@ class MatchingServiceTest extends TestCase
             'district' => 'Ilala',
         ]);
 
-        RfsAttribute::create([
-            'rfs_id' => $rfs->id,
-            'attribute_id' => $attribute->id,
-            'value' => 'Trucks',
-        ]);
+        // RfsAttribute removed as it no longer exists
 
         $service = app(MatchingService::class);
         $shortlist = $service->generateShortlist($rfs->id);

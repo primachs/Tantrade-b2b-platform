@@ -5,12 +5,19 @@ namespace App\AuthenticationContext\Auth\Tests\Feature;
 use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
 use App\AuthenticationContext\Auth\Infrastructure\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class AuthApiTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->withoutMiddleware(\Illuminate\Routing\Middleware\ThrottleRequests::class);
+    }
 
     private function seedRole(string $name): Role
     {

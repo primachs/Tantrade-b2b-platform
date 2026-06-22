@@ -8,6 +8,7 @@ final class Market
 {
     public function __construct(
         private readonly Uuid $id,
+        private readonly ?Uuid $userId,
         private readonly string $marketName,
         private readonly string $region,
         private readonly string $district,
@@ -27,6 +28,7 @@ final class Market
     {
         return new self(
             $this->id,
+            $this->userId,
             $payload['market_name'] ?? $this->marketName,
             $payload['region'] ?? $this->region,
             $payload['district'] ?? $this->district,
@@ -42,6 +44,7 @@ final class Market
     {
         return new self(
             $this->id,
+            $this->userId,
             $this->marketName,
             $this->region,
             $this->district,
@@ -57,6 +60,7 @@ final class Market
     {
         return [
             'id' => $this->id->value(),
+            'user_id' => $this->userId?->value(),
             'market_name' => $this->marketName,
             'region' => $this->region,
             'district' => $this->district,

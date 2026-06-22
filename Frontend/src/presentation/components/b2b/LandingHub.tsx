@@ -19,11 +19,9 @@ type LandingHubProps = {
 };
 
 export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, onGoToDashboard }: LandingHubProps) => {
-  const [landingMode, setLandingMode] = useState<"menu" | "register" | "browse">("menu");
+  const [landingMode, setLandingMode] = useState<"menu" | "register">("menu");
   const [registrationStep, setRegistrationStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [rfsList, setRfsList] = useState<any[]>([]);
-  const [taxonomy, setTaxonomy] = useState<any>(null);
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [registrationForm, setRegistrationForm] = useState({
@@ -37,31 +35,15 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
     is_owner: true,
     owner_gender: "FEMALE",
     employee_count: "",
-    revenue_range: "BETWEEN_500M_5B",
+    revenue_range: "BETWEEN_50M_500M",
     region: "",
     district: "",
     address: "",
     verification_status: "UNVERIFIED",
   });
 
-  const loadBrowseData = async () => {
-    try {
-      const [rfs, tax] = await Promise.all([
-        apiRequest<any[]>("/rfs", { token }),
-        apiRequest<any>("/taxonomy", { token })
-      ]);
-      setRfsList(Array.isArray(rfs) ? rfs : []);
-      setTaxonomy(tax);
-    } catch (e) {
-      setNotice("error", "Failed to load opportunities");
-    }
-  };
-
-  const handleModeChange = (mode: "menu" | "register" | "browse") => {
+  const handleModeChange = (mode: "menu" | "register") => {
     setLandingMode(mode);
-    if (mode === "browse") {
-      loadBrowseData();
-    }
   };
 
   const toIntOrNull = (value: string) => {
@@ -101,7 +83,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
     try {
       const payload = {
         ...registrationForm,
-        employee_count: toIntOrNull(registrationForm.employee_count) ?? 0,
+        employee_count: toIntOrNull(registrationForm.employee_count) ?? 1,
         capabilities: [],
       };
       await apiRequest("/businesses", { method: "POST", token, body: payload });
@@ -119,10 +101,6 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
       setLoading(false);
     }
   };
-
-  const serviceTypeMap = new Map(
-    Array.isArray(taxonomy?.service_types) ? taxonomy.service_types.map((t: any) => [t.id, t.name]) : []
-  );
 
   if (landingMode === "register") {
     return (
@@ -203,61 +181,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
     );
   }
 
-  if (landingMode === "browse") {
-    return (
-      <section className="page-section" style={{ background: "#f8fafc", minHeight: "calc(100vh - 80px)", padding: "2rem" }}>
-         <div style={{ maxWidth: "1200px", margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
-           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-             <Radar style={{ color: "#2563eb", width: "32px", height: "32px" }} />
-             <div>
-               <h2 style={{ fontSize: "1.5rem", color: "#0f172a", margin: 0 }}>Market Demand</h2>
-               <p style={{ color: "#64748b", margin: 0, marginTop: "0.25rem" }}>Browse active requests for services (RFS) from verified buyers.</p>
-             </div>
-           </div>
-           <button style={{ padding: '0.625rem 1.25rem', border: '1px solid #cbd5e1', borderRadius: '6px', background: 'transparent', cursor: 'pointer' }} onClick={() => setLandingMode("menu")}>Back to Menu</button>
-         </div>
-         <div style={{ maxWidth: "1200px", margin: "0 auto", background: "#fff", borderRadius: "12px", border: "1px solid #e2e8f0", overflow: "hidden", boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.1)" }}>
-           {rfsList.length === 0 ? (
-             <div style={{ textAlign: "center", padding: "4rem", color: "#64748b" }}>
-               No active requests found at this time.
-             </div>
-           ) : (
-             <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-               <thead>
-                 <tr>
-                   <th style={{ padding: "1rem 1.5rem", background: "#f8fafc", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", borderBottom: "1px solid #e2e8f0" }}>Title</th>
-                   <th style={{ padding: "1rem 1.5rem", background: "#f8fafc", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", borderBottom: "1px solid #e2e8f0" }}>Service Category</th>
-                   <th style={{ padding: "1rem 1.5rem", background: "#f8fafc", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", borderBottom: "1px solid #e2e8f0" }}>Status</th>
-                   <th style={{ padding: "1rem 1.5rem", background: "#f8fafc", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", borderBottom: "1px solid #e2e8f0" }}>Budget Range</th>
-                 </tr>
-               </thead>
-               <tbody>
-                 {rfsList.map((rfs) => (
-                   <tr key={rfs.id}>
-                     <td style={{ padding: "1rem 1.5rem", borderBottom: "1px solid #e2e8f0", fontWeight: 500, color: "#334155" }}>{rfs.title}</td>
-                     <td style={{ padding: "1rem 1.5rem", borderBottom: "1px solid #e2e8f0", color: "#334155", fontSize: "0.875rem" }}>{serviceTypeMap.get(rfs.service_type_id) ?? rfs.service_type_id}</td>
-                     <td style={{ padding: "1rem 1.5rem", borderBottom: "1px solid #e2e8f0" }}>
-                       <span style={{ display: "inline-flex", padding: "0.25rem 0.625rem", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 500, background: "#eff6ff", color: "#2563eb" }}>{rfs.status}</span>
-                     </td>
-                     <td style={{ padding: "1rem 1.5rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.875rem" }}>
-                       {rfs.constraint?.min_budget || rfs.constraint?.max_budget ? (
-                         <span>
-                           {rfs.constraint?.min_budget ? `${rfs.constraint.min_budget.toLocaleString()}` : "0"} - 
-                           {rfs.constraint?.max_budget ? ` ${rfs.constraint.max_budget.toLocaleString()} TZS` : " No Limit"}
-                         </span>
-                       ) : (
-                         <span>Not specified</span>
-                       )}
-                     </td>
-                   </tr>
-                 ))}
-               </tbody>
-             </table>
-           )}
-         </div>
-      </section>
-    );
-  }
+
 
   return (
     <section style={{ padding: "0", background: "#f8fafc", minHeight: "calc(100vh - 80px)", borderRadius: "12px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
@@ -305,14 +229,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
           </div>
         )}
 
-        <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", cursor: "pointer", border: "1px solid #e2e8f0" }} onClick={() => handleModeChange("browse")}>
-          <div style={{ background: "rgba(16, 185, 129, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>
-            <Radar style={{ color: "#10b981", width: "32px", height: "32px" }} />
-          </div>
-          <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Browse Active RFSs</h3>
-          <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Explore current market demand and requests for services from verified buyers in read-only mode.</p>
-          <div style={{ color: "#10b981", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>View Opportunities &rarr;</div>
-        </div>
+
 
         <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", border: "1px solid #e2e8f0" }}>
           <div style={{ background: "rgba(245, 158, 11, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>

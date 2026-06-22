@@ -16,7 +16,7 @@ interface RfsRepository
     public function findById(Uuid $rfsId): ?Rfs;
 
     /** @return Rfs[] */
-    public function list(): array;
+    public function list(?string $buyerId = null): array;
 
     public function updateStatus(Uuid $rfsId, string $status): void;
 

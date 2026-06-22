@@ -38,6 +38,8 @@ class EngagementEntitiesTest extends TestCase
             $sessionId,
             'BUYER',
             'DEAL_CONFIRMED',
+            null,
+            null,
             new \DateTimeImmutable('2026-01-01')
         );
 

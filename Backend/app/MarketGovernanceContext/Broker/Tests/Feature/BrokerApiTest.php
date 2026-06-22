@@ -3,8 +3,7 @@
 namespace App\MarketGovernanceContext\Broker\Tests\Feature;
 
 use App\MarketGovernanceContext\Market\Infrastructure\Models\Market;
-use App\MarketGovernanceContext\Person\Infrastructure\Models\Person;
-use App\Models\User;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -15,23 +14,12 @@ class BrokerApiTest extends TestCase
 
     public function test_broker_endpoints(): void
     {
-        $user = User::create([
-            'name' => 'Broker User',
-            'email' => 'broker@example.com',
-            'password' => 'secret',
-        ]);
-
-        $person = Person::create([
-            'id' => Str::uuid()->toString(),
-            'user_id' => $user->id,
-            'nida_number' => 'NIDA-200',
-            'first_name' => 'Juma',
-            'middle_name' => null,
-            'surname' => 'Mwana',
-            'gender' => 'MALE',
-            'mobile' => '+255700000444',
-            'email' => 'juma@example.com',
-            'address' => 'Ward 3',
+        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create([
+            'id' => \Illuminate\Support\Str::uuid(),
+            'name' => 'Broker Test',
+            'email' => 'broker.' . \Illuminate\Support\Str::uuid() . '@example.com',
+            'password' => bcrypt('password'),
+            'status' => 'ACTIVE',
         ]);
 
         $market = Market::create([
@@ -45,7 +33,12 @@ class BrokerApiTest extends TestCase
         ]);
 
         $response = $this->postJson('/api/market-governance/brokers', [
-            'person_id' => $person->id,
+            'first_name' => 'Juma',
+            'middle_name' => null,
+            'surname' => 'Mwana',
+            'nida_number' => '12345678901234567890',
+            'mobile' => '+255700000444',
+            'address' => 'Ward 3',
             'market_id' => $market->id,
             'broker_type' => 'PRODUCE_BROKER',
         ]);

@@ -65,16 +65,16 @@ class BusinessFactory
         return new BusinessVerification(
             null,
             $businessId,
-            $payload['tin_number'],
-            $payload['brela_number'],
+            $payload['tin_number'] ?? null,
+            $payload['brela_number'] ?? null,
             $payload['business_size'],
             (bool) $payload['is_owner'],
             $payload['owner_gender'],
             (int) $payload['employee_count'],
             $payload['revenue_range'],
-            $payload['region'],
-            $payload['district'],
-            $payload['address'],
+            $payload['region'] ?? null,
+            $payload['district'] ?? null,
+            $payload['address'] ?? null,
             $payload['verification_status'] ?? 'UNVERIFIED'
         );
     }
@@ -84,16 +84,16 @@ class BusinessFactory
         return new BusinessVerification(
             isset($state['id']) ? Uuid::fromString($state['id']) : null,
             Uuid::fromString($state['business_id']),
-            $state['tin_number'],
-            $state['brela_number'],
+            $state['tin_number'] ?? null,
+            $state['brela_number'] ?? null,
             $state['business_size'],
             (bool) $state['is_owner'],
             $state['owner_gender'],
             (int) $state['employee_count'],
             $state['revenue_range'],
-            $state['region'],
-            $state['district'],
-            $state['address'],
+            $state['region'] ?? null,
+            $state['district'] ?? null,
+            $state['address'] ?? null,
             $state['verification_status']
         );
     }

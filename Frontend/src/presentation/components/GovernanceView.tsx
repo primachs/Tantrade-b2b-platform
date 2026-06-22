@@ -71,15 +71,36 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
     address: "",
   });
 
+  const nameParts = user.name.split(" ");
+  const derivedFirstName = user.first_name || nameParts[0] || "";
+  const derivedSurname = user.surname || (nameParts.length > 1 ? nameParts[nameParts.length - 1] : (nameParts[0] || ""));
+  const derivedMiddleName = user.middle_name || (nameParts.length > 2 ? nameParts.slice(1, -1).join(" ") : "");
+
   const [profileForm, setProfileForm] = useState({
-    first_name: user.first_name || "",
-    middle_name: user.middle_name || "",
-    surname: user.surname || "",
+    first_name: derivedFirstName,
+    middle_name: derivedMiddleName,
+    surname: derivedSurname,
     nida_number: user.nida_number || "",
     gender: user.gender || "PREFER_NOT_TO_SAY",
     mobile: user.mobile || "",
     address: user.address || "",
   });
+
+  const isProfileComplete = user.first_name && user.surname && user.nida_number && user.mobile && user.gender;
+
+  useEffect(() => {
+    if (!isProfileComplete) {
+      setActivePane("my-profile");
+    }
+  }, [isProfileComplete]);
+
+  const handleNavClick = (pane: PaneType) => {
+    if (!isProfileComplete && pane !== "my-profile") {
+      setNotice("error", "Please complete your profile before accessing other sections.");
+      return;
+    }
+    setActivePane(pane);
+  };
 
   useEffect(() => {
     fetchMarkets();
@@ -151,15 +172,23 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    const nidaErr = validateNida(profileForm.nida_number);
+    const mobileErr = validateMobile(profileForm.mobile, true);
+    if (nidaErr || mobileErr) {
+      setNotice("error", nidaErr || mobileErr || "Invalid profile details.");
+      return;
+    }
+
     setLoading(true);
     try {
-      // In a real app, there would be a dedicated endpoint for this in auth or governance.
-      // Assuming we need to assign the chairperson office term to update the profile here.
-      // Since we don't have the exact office creation flow mapped, we'll simulate a success notice.
-      // A proper chairperson registration endpoint should be hit.
+      await apiRequest("/auth/me", { method: "PATCH", token, body: profileForm });
       setNotice("success", "Profile updated successfully.");
+      // Reload to ensure user session is globally updated
+      setTimeout(() => window.location.reload(), 1500);
     } catch (err: any) {
-      setNotice("error", err.message || "Failed to update profile.");
+      const message = err instanceof ApiError ? err.firstFieldError() ?? err.message : err instanceof Error ? err.message : "Failed to update profile.";
+      setNotice("error", message);
     } finally {
       setLoading(false);
     }
@@ -469,13 +498,13 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
         <div className="nav-group">
           <button 
             className={`nav-item ${activePane === "dashboard" ? "active" : ""}`}
-            onClick={() => setActivePane("dashboard")}
+            onClick={() => handleNavClick("dashboard")}
           >
             <MapPin /> Overview
           </button>
           <button 
             className={`nav-item ${activePane === "my-profile" ? "active" : ""}`}
-            onClick={() => setActivePane("my-profile")}
+            onClick={() => handleNavClick("my-profile")}
           >
             <UserCircle /> My Profile
           </button>
@@ -485,13 +514,13 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
           <div className="nav-group-title">Markets</div>
           <button 
             className={`nav-item ${activePane === "create-market" ? "active" : ""}`}
-            onClick={() => setActivePane("create-market")}
+            onClick={() => handleNavClick("create-market")}
           >
             <Store /> Create Market
           </button>
           <button 
             className={`nav-item ${activePane === "markets" ? "active" : ""}`}
-            onClick={() => setActivePane("markets")}
+            onClick={() => handleNavClick("markets")}
           >
             <MapPin /> Market Registry
           </button>
@@ -501,13 +530,13 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
           <div className="nav-group-title">Brokers</div>
           <button 
             className={`nav-item ${activePane === "register-broker" ? "active" : ""}`}
-            onClick={() => setActivePane("register-broker")}
+            onClick={() => handleNavClick("register-broker")}
           >
             <UserCircle /> Register Broker
           </button>
           <button 
             className={`nav-item ${activePane === "brokers" ? "active" : ""}`}
-            onClick={() => setActivePane("brokers")}
+            onClick={() => handleNavClick("brokers")}
           >
             <Briefcase /> Broker Registry
           </button>
@@ -564,15 +593,15 @@ export const GovernanceView = ({ token, user, setNotice }: GovernanceViewProps) 
                   <div className="form-grid">
                     <div className="form-group">
                       <label>First Name</label>
-                      <input type="text" className="form-control" required value={profileForm.first_name} onChange={e => setProfileForm({...profileForm, first_name: e.target.value})} />
+                      <input type="text" className="form-control" required readOnly style={{backgroundColor: '#f1f5f9'}} value={profileForm.first_name} onChange={e => setProfileForm({...profileForm, first_name: e.target.value})} />
                     </div>
                     <div className="form-group">
                       <label>Middle Name</label>
-                      <input type="text" className="form-control" value={profileForm.middle_name} onChange={e => setProfileForm({...profileForm, middle_name: e.target.value})} />
+                      <input type="text" className="form-control" readOnly style={{backgroundColor: '#f1f5f9'}} value={profileForm.middle_name} onChange={e => setProfileForm({...profileForm, middle_name: e.target.value})} />
                     </div>
                     <div className="form-group">
                       <label>Surname</label>
-                      <input type="text" className="form-control" required value={profileForm.surname} onChange={e => setProfileForm({...profileForm, surname: e.target.value})} />
+                      <input type="text" className="form-control" required readOnly style={{backgroundColor: '#f1f5f9'}} value={profileForm.surname} onChange={e => setProfileForm({...profileForm, surname: e.target.value})} />
                     </div>
                     <div className="form-group">
                       <label>NIDA Number</label>

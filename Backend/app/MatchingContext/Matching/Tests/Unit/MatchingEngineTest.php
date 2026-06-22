@@ -53,8 +53,7 @@ class MatchingEngineTest extends TestCase
             'OPEN',
             new \DateTimeImmutable,
             $constraint,
-            $preference,
-            []
+            $preference
         );
 
         $sellerId = Uuid::random();
@@ -116,8 +115,7 @@ class MatchingEngineTest extends TestCase
             'OPEN',
             new \DateTimeImmutable,
             null,
-            $preference,
-            []
+            $preference
         );
 
         $sellerId = Uuid::random();

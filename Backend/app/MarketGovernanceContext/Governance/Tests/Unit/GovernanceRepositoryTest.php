@@ -5,9 +5,8 @@ namespace App\MarketGovernanceContext\Governance\Tests\Unit;
 use App\MarketGovernanceContext\Governance\Domain\Factories\GovernanceFactory;
 use App\MarketGovernanceContext\Governance\Domain\Repositories\GovernanceRepository;
 use App\MarketGovernanceContext\Market\Infrastructure\Models\Market;
-use App\MarketGovernanceContext\Person\Infrastructure\Models\Person;
 use App\MarketGovernanceContext\SharedKernel\Domain\ValueObjects\Uuid;
-use App\Models\User;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -19,22 +18,11 @@ class GovernanceRepositoryTest extends TestCase
     public function test_governance_repository_methods(): void
     {
         $user = User::create([
+            'id' => Str::uuid()->toString(),
             'name' => 'Chairperson',
             'email' => 'chair.repo@example.com',
             'password' => 'secret',
-        ]);
-
-        $person = Person::create([
-            'id' => Str::uuid()->toString(),
-            'user_id' => $user->id,
-            'nida_number' => 'NIDA-400',
-            'first_name' => 'Amina',
-            'middle_name' => null,
-            'surname' => 'Kama',
-            'gender' => 'FEMALE',
-            'mobile' => '+255700000000',
-            'email' => 'amina.repo@example.com',
-            'address' => 'Ward 1',
+            'status' => 'ACTIVE',
         ]);
 
         $market = Market::create([
@@ -63,7 +51,7 @@ class GovernanceRepositoryTest extends TestCase
 
         $term = $factory->createOfficeTerm([
             'office_id' => $savedOffice->toArray()['id'],
-            'person_id' => $person->id,
+            'user_id' => $user->id,
             'start_date' => '2026-01-01',
             'end_date' => '2026-12-31',
             'status' => 'ACTIVE',
@@ -72,7 +60,7 @@ class GovernanceRepositoryTest extends TestCase
         $savedTerm = $repository->createOfficeTerm($term);
         $this->assertNotNull($repository->findOfficeTermById(Uuid::fromString($savedTerm->toArray()['id'])));
 
-        $this->assertTrue($repository->hasActiveOfficeTermForPerson(Uuid::fromString($person->id)));
+        $this->assertTrue($repository->hasActiveOfficeTermForUser(Uuid::fromString($user->id)));
         $this->assertTrue($repository->hasActiveOfficeTermForOffice(Uuid::fromString($savedOffice->toArray()['id'])));
 
         $active = $repository->findActiveOfficeTermForOffice(Uuid::fromString($savedOffice->toArray()['id']));
@@ -81,6 +69,6 @@ class GovernanceRepositoryTest extends TestCase
         $ended = $savedTerm->withStatus('ENDED');
         $repository->updateOfficeTerm($ended);
 
-        $this->assertFalse($repository->hasActiveOfficeTermForPerson(Uuid::fromString($person->id)));
+        $this->assertFalse($repository->hasActiveOfficeTermForUser(Uuid::fromString($user->id)));
     }
 }

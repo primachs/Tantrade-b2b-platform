@@ -12,6 +12,7 @@ class BrokerFactory
     {
         return new BrokerRegistration(
             Uuid::random(),
+            isset($payload['user_id']) ? Uuid::fromString($payload['user_id']) : null,
             Uuid::fromString($payload['market_id']),
             $payload['broker_type'],
             $payload['first_name'],
@@ -30,6 +31,7 @@ class BrokerFactory
     {
         return new BrokerRegistration(
             Uuid::fromString($state['id']),
+            isset($state['user_id']) ? Uuid::fromString($state['user_id']) : null,
             Uuid::fromString($state['market_id']),
             $state['broker_type'],
             $state['first_name'],

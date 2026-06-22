@@ -9,16 +9,16 @@ final class BusinessVerification
     public function __construct(
         private readonly ?Uuid $id,
         private readonly Uuid $businessId,
-        private readonly string $tinNumber,
-        private readonly string $brelaNumber,
+        private readonly ?string $tinNumber,
+        private readonly ?string $brelaNumber,
         private readonly string $businessSize,
         private readonly bool $isOwner,
         private readonly string $ownerGender,
         private readonly int $employeeCount,
         private readonly string $revenueRange,
-        private readonly string $region,
-        private readonly string $district,
-        private readonly string $address,
+        private readonly ?string $region,
+        private readonly ?string $district,
+        private readonly ?string $address,
         private readonly string $verificationStatus
     ) {}
 

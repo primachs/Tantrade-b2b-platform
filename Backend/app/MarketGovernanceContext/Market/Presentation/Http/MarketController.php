@@ -37,9 +37,9 @@ class MarketController
             'status' => ['nullable', Rule::in(MarketStatus::values())],
         ];
     }
-    public function index(MarketService $service): JsonResponse
+    public function index(Request $request, MarketService $service): JsonResponse
     {
-        return response()->json($service->list());
+        return response()->json($service->list((string) $request->user()?->id));
     }
 
     public function store(Request $request, MarketService $service): JsonResponse
@@ -47,6 +47,7 @@ class MarketController
         $validator = validator($request->all(), $this->marketRules());
         $this->validateDistrictForRegion($validator);
         $payload = $validator->validate();
+        $payload['user_id'] = (string) $request->user()?->id;
 
         $market = $service->create($payload);
 

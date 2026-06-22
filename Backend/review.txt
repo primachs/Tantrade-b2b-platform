@@ -1,0 +1,4 @@
+Demo Meeting:
+1. Edit capabilities
+2. Fix registry to limit only user's rfs
+3. Admin verification of business

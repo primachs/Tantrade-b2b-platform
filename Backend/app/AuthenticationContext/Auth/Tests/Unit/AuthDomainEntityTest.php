@@ -24,13 +24,20 @@ class AuthDomainEntityTest extends TestCase
             AuthUserStatus::ACTIVE->value,
             2,
             new \DateTimeImmutable('2026-05-15T10:00:00+00:00'),
-            null,
-            null,
-            false,
-            null,
-            null,
-            null,
-            null
+            null, // lastLoginAt
+            null, // passwordChangedAt
+            false, // mfaEnabled
+            null, // mfaSecret
+            null, // mfaRecoveryCodes
+            null, // nidaNumber
+            null, // firstName
+            null, // middleName
+            null, // surname
+            null, // gender
+            null, // mobile
+            null, // address
+            null, // createdAt
+            null  // updatedAt
         );
 
         $this->assertSame('11111111-1111-1111-1111-111111111111', $user->id()->value());

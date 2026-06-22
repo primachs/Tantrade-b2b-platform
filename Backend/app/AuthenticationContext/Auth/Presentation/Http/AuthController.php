@@ -60,6 +60,40 @@ class AuthController
         return response()->json($payload);
     }
 
+    public function updateProfile(Request $request): JsonResponse
+    {
+        $user = clone $request->user();
+        if (! $user) {
+            return response()->json(null, 401);
+        }
+
+        $payload = $request->validate([
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['nullable', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
+            'nida_number' => ['required', 'string', 'max:50'],
+            'gender' => ['required', 'string', \Illuminate\Validation\Rule::in(['MALE', 'FEMALE', 'PREFER_NOT_TO_SAY'])],
+            'mobile' => ['required', 'string', 'max:20'],
+            'address' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $user->first_name = $payload['first_name'];
+        $user->middle_name = $payload['middle_name'] ?? null;
+        $user->surname = $payload['surname'];
+        $user->nida_number = $payload['nida_number'];
+        $user->gender = $payload['gender'];
+        $user->mobile = $payload['mobile'];
+        $user->address = $payload['address'] ?? null;
+        
+        $user->save();
+
+        $user->load('roles');
+        $responseData = $user->toArray();
+        $responseData['roles'] = $user->roles->pluck('name')->values()->all();
+
+        return response()->json($responseData);
+    }
+
     public function users(): JsonResponse
     {
         $users = AuthUser::query()

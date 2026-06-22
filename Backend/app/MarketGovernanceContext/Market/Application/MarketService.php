@@ -34,9 +34,9 @@ class MarketService
         return $this->requireMarket($marketId)->toArray();
     }
 
-    public function list(): array
+    public function list(?string $userId = null): array
     {
-        return array_map(static fn ($market) => $market->toArray(), $this->repository->list());
+        return array_map(static fn ($market) => $market->toArray(), $this->repository->list($userId));
     }
 
     private function requireMarket(string $marketId)

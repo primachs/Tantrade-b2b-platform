@@ -11,6 +11,19 @@ class RfsControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create([
+            'id' => (string) \Illuminate\Support\Str::uuid(),
+            'name' => 'Test User',
+            'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com',
+            'password' => bcrypt('password'),
+            'status' => 'ACTIVE',
+        ]);
+        \Laravel\Sanctum\Sanctum::actingAs($user);
+    }
+
     private function bindFakeService(string $rfsId): object
     {
         $fakeService = new class($rfsId) extends RfsService

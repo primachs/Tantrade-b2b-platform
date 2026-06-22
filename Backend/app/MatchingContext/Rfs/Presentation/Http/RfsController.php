@@ -12,9 +12,23 @@ use Illuminate\Validation\Rule;
 
 class RfsController
 {
-    public function index(RfsService $service): JsonResponse
+    public function index(Request $request, RfsService $service, \App\MatchingContext\Business\Application\BusinessService $businessService): JsonResponse
     {
-        return response()->json($service->list());
+        $userId = $request->user()?->id;
+        $businessId = null;
+
+        if ($userId) {
+            $business = $businessService->findByUserId($userId);
+            if ($business) {
+                $businessId = $business['id'] ?? null;
+            }
+        }
+
+        if (!$businessId) {
+            return response()->json([]);
+        }
+
+        return response()->json($service->list($businessId));
     }
 
     public function store(Request $request, RfsService $service): JsonResponse

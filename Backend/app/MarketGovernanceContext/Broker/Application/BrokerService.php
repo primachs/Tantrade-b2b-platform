@@ -35,9 +35,9 @@ class BrokerService
         return $this->requireRegistration($brokerId)->toArray();
     }
 
-    public function list(): array
+    public function list(?string $userId = null): array
     {
-        return array_map(static fn ($registration) => $registration->toArray(), $this->repository->list());
+        return array_map(static fn ($registration) => $registration->toArray(), $this->repository->list($userId));
     }
 
     private function requireRegistration(string $brokerId)

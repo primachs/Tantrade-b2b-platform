@@ -3,8 +3,7 @@
 namespace App\MarketGovernanceContext\Governance\Tests\Feature;
 
 use App\MarketGovernanceContext\Market\Infrastructure\Models\Market;
-use App\MarketGovernanceContext\Person\Infrastructure\Models\Person;
-use App\Models\User;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser as User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -17,7 +16,6 @@ class GovernanceApiTest extends TestCase
     public function test_governance_endpoints(): void
     {
         $user = $this->createUser();
-        $person = $this->createPerson($user->id);
         $market = $this->createMarket();
 
         $officeResponse = $this->postJson("/api/market-governance/markets/{$market->id}/offices", []);
@@ -30,7 +28,7 @@ class GovernanceApiTest extends TestCase
         $expectedEndDate = Carbon::parse($startDate)->addYears(5)->format('Y-m-d');
 
         $termResponse = $this->postJson("/api/market-governance/offices/{$officeId}/terms", [
-            'person_id' => $person->id,
+            'user_id' => $user->id,
             'start_date' => $startDate,
         ]);
         $termResponse->assertStatus(201)
@@ -51,30 +49,18 @@ class GovernanceApiTest extends TestCase
             ]);
     }
 
-    private function createUser(): User
+    private function createUser(): \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser
     {
-        return User::create([
+        return \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create([
+            'id' => Str::uuid()->toString(),
             'name' => 'Chairperson',
             'email' => 'chairperson@example.com',
             'password' => 'secret',
+            'status' => 'ACTIVE',
         ]);
     }
 
-    private function createPerson(int $userId): Person
-    {
-        return Person::create([
-            'id' => Str::uuid()->toString(),
-            'user_id' => $userId,
-            'nida_number' => 'NIDA-100',
-            'first_name' => 'Amina',
-            'middle_name' => null,
-            'surname' => 'Kama',
-            'gender' => 'FEMALE',
-            'mobile' => '+255700000222',
-            'email' => 'amina@example.com',
-            'address' => 'Ward 1',
-        ]);
-    }
+
 
     private function createMarket(): Market
     {

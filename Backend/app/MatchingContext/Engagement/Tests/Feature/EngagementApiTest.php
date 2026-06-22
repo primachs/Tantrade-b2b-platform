@@ -21,8 +21,10 @@ class EngagementApiTest extends TestCase
     public function test_engagement_lifecycle_and_signals(): void
     {
         $serviceType = $this->seedTaxonomy();
-        $buyer = $this->createBusiness('Buyer Co');
+        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', clone $user);
         $seller = $this->createBusiness('Seller Co');
+        \Laravel\Sanctum\Sanctum::actingAs($user);
 
         $rfs = Rfs::create([
             'buyer_id' => $buyer->id,
@@ -77,8 +79,10 @@ class EngagementApiTest extends TestCase
     public function test_deal_confirmed_requires_dual_confirmation(): void
     {
         $serviceType = $this->seedTaxonomy();
-        $buyer = $this->createBusiness('Buyer Co');
+        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', clone $user);
         $seller = $this->createBusiness('Seller Co');
+        \Laravel\Sanctum\Sanctum::actingAs($user);
 
         $rfs = Rfs::create([
             'buyer_id' => $buyer->id,
@@ -113,8 +117,10 @@ class EngagementApiTest extends TestCase
     public function test_engagement_invalid_transitions_raise_errors(): void
     {
         $serviceType = $this->seedTaxonomy();
-        $buyer = $this->createBusiness('Buyer Co');
+        $user = \App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser::create(['id' => (string) \Illuminate\Support\Str::uuid(), 'name' => 'Test', 'email' => 'test@' . \Illuminate\Support\Str::uuid() . '.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', clone $user);
         $seller = $this->createBusiness('Seller Co');
+        \Laravel\Sanctum\Sanctum::actingAs($user);
 
         $rfs = Rfs::create([
             'buyer_id' => $buyer->id,
@@ -135,13 +141,13 @@ class EngagementApiTest extends TestCase
             'created_at' => Carbon::now(),
         ]);
 
-        $this->postJson("/api/engagement-sessions/{$session->id}/stall")->assertStatus(500);
-        $this->postJson("/api/engagement-sessions/{$session->id}/activate")->assertStatus(500);
+        $this->postJson("/api/engagement-sessions/{$session->id}/stall")->assertStatus(422);
+        $this->postJson("/api/engagement-sessions/{$session->id}/activate")->assertStatus(422);
 
         $this->postJson("/api/engagement-sessions/{$session->id}/accept")->assertStatus(200);
-        $this->postJson("/api/engagement-sessions/{$session->id}/accept")->assertStatus(500);
+        $this->postJson("/api/engagement-sessions/{$session->id}/accept")->assertStatus(422);
 
-        $this->postJson("/api/engagement-sessions/{$session->id}/close")->assertStatus(500);
+        $this->postJson("/api/engagement-sessions/{$session->id}/close")->assertStatus(422);
 
         $this->postJson("/api/engagement-sessions/{$session->id}/outcomes", [
             'reported_by' => 'BUYER',
@@ -153,9 +159,9 @@ class EngagementApiTest extends TestCase
         $this->postJson("/api/engagement-sessions/{$session->id}/outcomes", [
             'reported_by' => 'SELLER',
             'outcome' => 'NO_AGREEMENT',
-        ])->assertStatus(500);
+        ])->assertStatus(422);
 
-        $this->postJson("/api/engagement-sessions/{$session->id}/close")->assertStatus(500);
+        $this->postJson("/api/engagement-sessions/{$session->id}/close")->assertStatus(422);
     }
 
     private function seedTaxonomy(): ServiceType
@@ -181,13 +187,15 @@ class EngagementApiTest extends TestCase
         ]);
     }
 
-    private function createBusiness(string $name): Business
+    private function createBusiness(string $name, $user = null): Business
     {
         $business = Business::create([
+            'id' => (string)\Illuminate\Support\Str::uuid(),
             'name' => $name,
             'contact_person' => 'Owner',
             'phone' => '+255700000000',
             'email' => strtolower(str_replace(' ', '.', $name)).'@example.com',
+            'user_id' => $user ? $user->id : null,
         ]);
 
         BusinessVerification::create([

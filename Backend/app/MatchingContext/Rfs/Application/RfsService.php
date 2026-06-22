@@ -55,9 +55,9 @@ class RfsService
         return $this->requireRfs($rfsId)->toArray();
     }
 
-    public function list(): array
+    public function list(?string $buyerId = null): array
     {
-        return array_map(static fn ($rfs) => $rfs->toArray(), $this->repository->list());
+        return array_map(static fn ($rfs) => $rfs->toArray(), $this->repository->list($buyerId));
     }
 
     public function show(string $rfsId): array

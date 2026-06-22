@@ -11,9 +11,9 @@ use Illuminate\Validation\Rule;
 
 class BrokerController
 {
-    public function index(BrokerService $service): JsonResponse
+    public function index(Request $request, BrokerService $service): JsonResponse
     {
-        return response()->json($service->list());
+        return response()->json($service->list((string) $request->user()?->id));
     }
 
     public function store(Request $request, BrokerService $service): JsonResponse
@@ -28,6 +28,8 @@ class BrokerController
             'mobile'      => TanzaniaRules::mobile(true),
             'address'     => ['nullable', 'string', 'max:500'],
         ]);
+
+        $payload['user_id'] = (string) $request->user()?->id;
 
         $registration = $service->register($payload);
 
