@@ -39,7 +39,7 @@ jobs:
           coverage: pcov
           extensions: pdo_sqlite, sqlite3, mbstring, dom, fileinfo
           tools: composer:v2
-          ini-values: pcov.directory=app/MatchingContext,app/MarketGovernanceContext,app/AuthenticationContext
+          ini-values: pcov.directory=app
 
       - name: Validate composer.json
         run: composer validate --strict
