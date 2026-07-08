@@ -34,34 +34,7 @@ graph TD
 
 ### Detailed PlantUML System Map
 
-```plantuml
-@startuml System_Overview
-skinparam componentStyle rectangle
-
-package "TanTrade B2B Platform (Modular Monolith)" {
-  
-  [Authentication Context] as AuthCtx
-  [Market Governance Context] as GovCtx
-  [Matching Context] as MatchCtx
-  
-  database "Shared Relational DB" as DB {
-    [Auth Schema]
-    [Governance Schema]
-    [Matching Schema]
-  }
-}
-
-AuthCtx ..> [Auth Schema] : Read/Write
-GovCtx ..> [Governance Schema] : Read/Write
-MatchCtx ..> [Matching Schema] : Read/Write
-
-note right of AuthCtx
-  Strict boundaries: No direct 
-  code dependencies between contexts.
-end note
-
-@enduml
-```
+![System_Overview](./diagrams/System_Overview.svg)
 
 ## Communication
 
