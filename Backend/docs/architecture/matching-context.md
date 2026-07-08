@@ -16,12 +16,12 @@ The context is divided into six functional modules and a `SharedKernel` for shar
 ## Context Boundary
 
 ```mermaid
-architecture-beta
-    group match(server)[Matching Context]
-
-    service core(database)[Matching Schema] in match
-    
-    match:R --> core:L
+graph TD
+    subgraph Matching Context
+        match[Matching Logic]
+        core[(Matching Schema)]
+        match --> core
+    end
 ```
 
 The modules within this context communicate with each other via internal domain events and strictly defined interfaces, operating within the same database transaction boundary when necessary.

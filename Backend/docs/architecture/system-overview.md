@@ -12,20 +12,24 @@ The application is divided into three primary bounded contexts:
 ## System Diagram
 
 ```mermaid
-architecture-beta
-    group api(cloud)[API Gateway / Router]
+graph TD
+    api[API Gateway / Router]
 
-    group auth(server)[Authentication Context]
-    group gov(server)[Market Governance Context]
-    group match(server)[Matching Context]
+    subgraph Authentication Context
+        auth_db[(Identity & Roles)]
+    end
 
-    service identity(database)[Identity & Roles] in auth
-    service admin(database)[Market & Broker Admin] in gov
-    service core(database)[B2B Matching Engine] in match
-    
-    api:R --> auth:L
-    api:R --> gov:L
-    api:R --> match:L
+    subgraph Market Governance Context
+        gov_db[(Market & Broker Admin)]
+    end
+
+    subgraph Matching Context
+        match_db[(B2B Matching Engine)]
+    end
+
+    api --> auth_db
+    api --> gov_db
+    api --> match_db
 ```
 
 ### Detailed PlantUML System Map

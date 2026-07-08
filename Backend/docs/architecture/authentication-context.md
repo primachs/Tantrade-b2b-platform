@@ -11,12 +11,12 @@ The context is primarily composed of the **Auth Module**, which encapsulates the
 ## Context Boundary
 
 ```mermaid
-architecture-beta
-    group auth(server)[Authentication Context]
-
-    service identity(database)[Auth Schema] in auth
-    
-    auth:R --> identity:L
+graph TD
+    subgraph Authentication Context
+        auth[Auth Logic]
+        identity[(Auth Schema)]
+        auth --> identity
+    end
 ```
 
 This bounded context does not rely on any other contexts. Other contexts rely on the claims (e.g. JWT tokens) issued by this context but do not query it directly, adhering to loose coupling principles.

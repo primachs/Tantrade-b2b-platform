@@ -13,12 +13,12 @@ The context is divided into three functional modules, plus a `SharedKernel` for 
 ## Context Boundary
 
 ```mermaid
-architecture-beta
-    group gov(server)[Market Governance Context]
-
-    service admin(database)[Governance Schema] in gov
-    
-    gov:R --> admin:L
+graph TD
+    subgraph Market Governance Context
+        gov[Governance Logic]
+        admin[(Governance Schema)]
+        gov --> admin
+    end
 ```
 
 Like all contexts in the system, Market Governance operates autonomously, encapsulating its own state and exposing capabilities through standard HTTP endpoints.
