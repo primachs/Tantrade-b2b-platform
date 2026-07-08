@@ -2,14 +2,35 @@
 
 A comprehensive B2B matchmaking platform designed for TanTrade to connect businesses, buyers, sellers, and market brokers.
 
-**NOTE: THIS IS A DEMO FOCUSING ON BUSINESS MATCH-MAKING. OTHER FEATURES ARE UPCOMING.**
+![Home Page](./Frontend/docs/architecture/screenshots/Home%20page.png)
+
+## Overview
+
+This platform facilitates the growth of the Tanzanian market ecosystem through two core pillars:
+1. **Business Matchmaking**: Allowing local sellers and buyers to connect, post Requests for Service (RFS), and view tailored matches.
+2. **Market Governance**: Equipping officials and administrators with the tools to manage physical/virtual markets and oversee certified brokers.
+
+## Platform Previews
+
+<div align="center">
+  <img src="./Frontend/docs/architecture/screenshots/Services.png" width="48%" alt="Service Selection" />
+  <img src="./Frontend/docs/architecture/screenshots/Matchmaking%20home%20page.png" width="48%" alt="Matchmaking Dashboard" />
+</div>
+
+<div align="center">
+  <img src="./Frontend/docs/architecture/screenshots/Business%20profile.png" width="48%" alt="Business Profile" />
+  <img src="./Frontend/docs/architecture/screenshots/Broker.png" width="48%" alt="Broker Registry" />
+</div>
+
+<div align="center">
+  <img src="./Frontend/docs/architecture/screenshots/Admin.png" width="80%" alt="Admin Governance Dashboard" />
+</div>
 
 ## Project Structure
 
 This project is separated into two main applications:
 - `Backend/`: A Laravel-based RESTful API using a Domain-Driven Design (DDD) architecture.
 - `Frontend/`: A React application built with Vite and TypeScript.
-- `Docs/`: Architecture and design documentation.
 
 ## Requirements
 
@@ -82,7 +103,7 @@ Copy the `.env.example` file to configure your frontend API connection:
 ```bash
 cp .env.example .env
 ```
-*(Ensure `VITE_API_URL` points to your running backend server, e.g., `http://localhost:8000/api` or as defined in the `.env.example`).*
+*(Ensure `VITE_API_URL` points to your running backend server, e.g., `http://localhost:8000/api/v1` or as defined in the `.env.example`).*
 
 **Start the Frontend Server:**
 ```bash
@@ -92,6 +113,9 @@ The frontend application will be accessible at `http://localhost:5173` (or the p
 
 ---
 
-## Architecture Docs
+## Architecture & Documentation
 
-For a deep dive into the system's architecture, matching algorithms, and Domain-Driven Design (DDD) contexts, please see the documents in the [Docs/](Docs/) folder.
+We have meticulously documented both the frontend and backend architectures utilizing PlantUML component trees and sequence diagrams:
+
+- **[Backend Architecture Docs](./Backend/docs/architecture/)** - Details on DDD Bounded Contexts, Repositories, and the AI Matchmaking algorithms.
+- **[Frontend Architecture Docs](./Frontend/docs/architecture/)** - Component hierarchies, React Router v7 setup, and Authentication state machines.
