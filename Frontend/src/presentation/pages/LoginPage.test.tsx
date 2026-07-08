@@ -21,12 +21,12 @@ describe('LoginPage', () => {
     expect(screen.getByPlaceholderText('Enter your password')).toBeInTheDocument();
   });
 
-  it('switches to register form', () => {
+  it('switches to register form', async () => {
     render(<LoginPage {...defaultProps} />);
     const registerTab = screen.getByRole('button', { name: /create account/i });
     fireEvent.click(registerTab);
     
-    expect(screen.getByRole('heading', { name: 'Create an account' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Create an account' })).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Asha Mwakalobo')).toBeInTheDocument();
   });
 
@@ -54,7 +54,7 @@ describe('LoginPage', () => {
     // Switch to register tab
     fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
-    const nameInput = screen.getByPlaceholderText('Asha Mwakalobo');
+    const nameInput = await screen.findByPlaceholderText('Asha Mwakalobo');
     const emailInput = screen.getAllByPlaceholderText('name@tantrade.go.tz')[1] || screen.getByPlaceholderText('name@tantrade.go.tz');
     const passInput = screen.getByPlaceholderText('Minimum 12 characters');
     const confirmInput = screen.getByPlaceholderText('Repeat the password');
@@ -84,7 +84,8 @@ describe('LoginPage', () => {
     
     fireEvent.click(screen.getByRole('button', { name: /create account/i }));
 
-    fireEvent.change(screen.getByPlaceholderText('Minimum 12 characters'), { target: { value: 'pass1' } });
+    const passInput = await screen.findByPlaceholderText('Minimum 12 characters');
+    fireEvent.change(passInput, { target: { value: 'pass1' } });
     fireEvent.change(screen.getByPlaceholderText('Repeat the password'), { target: { value: 'pass2' } });
     const form = screen.getByRole('button', { name: 'Create account & continue' }).closest('form');
     fireEvent.submit(form!);

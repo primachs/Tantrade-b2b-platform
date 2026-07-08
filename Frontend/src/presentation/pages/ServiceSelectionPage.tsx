@@ -11,6 +11,7 @@ import {
   Briefcase,
   AlertTriangle,
 } from "lucide-react";
+import { motion } from "motion/react";
 
 type ServiceSelectionPageProps = {
   onSelectService: (service: "matching" | "governance") => void;
@@ -25,7 +26,6 @@ type ServiceSelectionPageProps = {
 const matchingFeatures = [
   { icon: <Building2 className="w-4 h-4" />, text: "Register & verify your business" },
   { icon: <Zap className="w-4 h-4" />, text: "Publish Requests for Service (RFS)" },
-  { icon: <Radar className="w-4 h-4" />, text: "AI-ranked seller shortlists" },
   { icon: <Users className="w-4 h-4" />, text: "Manage buyer-seller engagements" },
   { icon: <TrendingUp className="w-4 h-4" />, text: "Trust scoring & outcome signals" },
 ];
@@ -58,7 +58,12 @@ export const ServiceSelectionPage = ({
         </div>
       )}
 
-      <div className="service-selection-header">
+      <motion.div 
+        className="service-selection-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
         <span className="service-selection-kicker">TanTrade B2B Platform</span>
         <h1 className="service-selection-headline">
           {setupMode ? "Complete your account setup" : "Choose your service"}
@@ -68,7 +73,7 @@ export const ServiceSelectionPage = ({
             ? "Your account is signed in but has no service role yet. Select the platform you need — your permissions will be assigned automatically."
             : "Select the platform context that matches your role. Your account will be configured with the right permissions automatically."}
         </p>
-      </div>
+      </motion.div>
 
       {error && (
         <div className="notice notice--error" role="alert">
@@ -83,7 +88,12 @@ export const ServiceSelectionPage = ({
       )}
 
       <div className="service-cards-grid">
-        <div className="service-card service-card--matching">
+        <motion.div 
+          className="service-card service-card--matching"
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <div className="service-card__glow service-card__glow--blue" />
           <div className="service-card__inner">
             <div className="service-card__icon-wrap service-card__icon-wrap--blue">
@@ -116,9 +126,14 @@ export const ServiceSelectionPage = ({
               {loading ? "Assigning…" : setupMode ? "Select Matchmaking" : "Get started with Matchmaking"}
             </button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="service-card service-card--governance">
+        <motion.div 
+          className="service-card service-card--governance"
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           <div className="service-card__glow service-card__glow--green" />
           <div className="service-card__inner">
             <div className="service-card__icon-wrap service-card__icon-wrap--green">
@@ -151,16 +166,21 @@ export const ServiceSelectionPage = ({
               {loading ? "Assigning…" : setupMode ? "Select Governance" : "Get started with Governance"}
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {!setupMode && onSignIn && (
-        <p className="service-selection-footer">
+        <motion.p 
+          className="service-selection-footer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
           Already have an account?{" "}
           <button type="button" className="service-link-btn" onClick={onSignIn}>
             Sign in instead
           </button>
-        </p>
+        </motion.p>
       )}
     </main>
   );

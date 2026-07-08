@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BadgeCheck, KeyRound, LockKeyhole, MapPin, Radar, ShieldCheck } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 type LoginPageProps = {
   token: string;
@@ -93,7 +94,12 @@ export const LoginPage = ({
 
   return (
     <main className="page auth-shell">
-      <section className="auth-branding">
+      <motion.section 
+        className="auth-branding"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
         <div className="auth-branding__seal" aria-hidden="true">
           <ShieldCheck className="auth-branding__secure-icon" />
         </div>
@@ -114,9 +120,14 @@ export const LoginPage = ({
           <span className="pill"><LockKeyhole className="icon" /> Password control</span>
           <span className="pill"><BadgeCheck className="icon" /> Verified onboarding</span>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="auth-card auth-card--focus">
+      <motion.section 
+        className="auth-card auth-card--focus"
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+      >
         <div className="auth-card__tabs" role="tablist" aria-label="Authentication options">
           <button
             type="button"
@@ -170,110 +181,128 @@ export const LoginPage = ({
         {notice && <div className="notice notice--success">{notice}</div>}
         {error && <div className="notice notice--error">{error}</div>}
 
-        {mode === "login" && (
-          <form onSubmit={handleLogin} className="form-grid auth-form-stack">
-            <label className="field">
-              <span>Email address</span>
-              <input
-                className="input"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="name@tantrade.go.tz"
-              />
-            </label>
-            <label className="field">
-              <span>Password</span>
-              <input
-                className="input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                placeholder="Enter your password"
-              />
-            </label>
-            <label className="field-inline auth-remember">
-              <input
-                type="checkbox"
-                checked={rememberSession}
-                onChange={(e) => setRememberSession(e.target.checked)}
-              />
-              Keep me signed in on this device
-            </label>
-            <button
-              className="button button--primary auth-submit"
-              type="submit"
-              disabled={loading}
+        <AnimatePresence mode="wait">
+          {mode === "login" && (
+            <motion.form 
+              key="login"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              onSubmit={handleLogin} 
+              className="form-grid auth-form-stack"
             >
-              {loading ? "Signing in…" : "Sign in"}
-            </button>
-          </form>
-        )}
+              <label className="field">
+                <span>Email address</span>
+                <input
+                  className="input"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="name@tantrade.go.tz"
+                />
+              </label>
+              <label className="field">
+                <span>Password</span>
+                <input
+                  className="input"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="Enter your password"
+                />
+              </label>
+              <label className="field-inline auth-remember">
+                <input
+                  type="checkbox"
+                  checked={rememberSession}
+                  onChange={(e) => setRememberSession(e.target.checked)}
+                />
+                Keep me signed in on this device
+              </label>
+              <button
+                className="button button--primary auth-submit"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? "Signing in…" : "Sign in"}
+              </button>
+            </motion.form>
+          )}
 
-        {mode === "register" && (
-          <form onSubmit={handleRegister} className="form-grid auth-form-stack">
-            <label className="field">
-              <span>Full name</span>
-              <input
-                className="input"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                placeholder="Asha Mwakalobo"
-              />
-            </label>
-            <label className="field">
-              <span>Email address</span>
-              <input
-                className="input"
-                type="email"
-                value={registerEmail}
-                onChange={(e) => setRegisterEmail(e.target.value)}
-                required
-                placeholder="name@tantrade.go.tz"
-              />
-            </label>
-            <label className="field">
-              <span>Password</span>
-              <input
-                className="input"
-                type="password"
-                value={registerPassword}
-                onChange={(e) => setRegisterPassword(e.target.value)}
-                required
-                placeholder="Minimum 12 characters"
-              />
-            </label>
-            <label className="field">
-              <span>Confirm password</span>
-              <input
-                className="input"
-                type="password"
-                value={registerConfirm}
-                onChange={(e) => setRegisterConfirm(e.target.value)}
-                required
-                placeholder="Repeat the password"
-              />
-            </label>
-            {serviceMeta && (
-              <div className={`service-badge service-badge--form ${serviceMeta.colorClass}`}>
-                {serviceMeta.icon}
-                <span>
-                  Registering as: <strong>{serviceMeta.label}</strong>
-                </span>
-              </div>
-            )}
-            <button
-              className="button button--primary auth-submit"
-              type="submit"
-              disabled={loading}
+          {mode === "register" && (
+            <motion.form 
+              key="register"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              onSubmit={handleRegister} 
+              className="form-grid auth-form-stack"
             >
-              {loading ? "Creating account…" : "Create account & continue"}
-            </button>
-          </form>
-        )}
+              <label className="field">
+                <span>Full name</span>
+                <input
+                  className="input"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  placeholder="Asha Mwakalobo"
+                />
+              </label>
+              <label className="field">
+                <span>Email address</span>
+                <input
+                  className="input"
+                  type="email"
+                  value={registerEmail}
+                  onChange={(e) => setRegisterEmail(e.target.value)}
+                  required
+                  placeholder="name@tantrade.go.tz"
+                />
+              </label>
+              <label className="field">
+                <span>Password</span>
+                <input
+                  className="input"
+                  type="password"
+                  value={registerPassword}
+                  onChange={(e) => setRegisterPassword(e.target.value)}
+                  required
+                  placeholder="Minimum 12 characters"
+                />
+              </label>
+              <label className="field">
+                <span>Confirm password</span>
+                <input
+                  className="input"
+                  type="password"
+                  value={registerConfirm}
+                  onChange={(e) => setRegisterConfirm(e.target.value)}
+                  required
+                  placeholder="Repeat the password"
+                />
+              </label>
+              {serviceMeta && (
+                <div className={`service-badge service-badge--form ${serviceMeta.colorClass}`}>
+                  {serviceMeta.icon}
+                  <span>
+                    Registering as: <strong>{serviceMeta.label}</strong>
+                  </span>
+                </div>
+              )}
+              <button
+                className="button button--primary auth-submit"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? "Creating account…" : "Create account & continue"}
+              </button>
+            </motion.form>
+          )}
+        </AnimatePresence>
 
         <div className="auth-card__footer">
           <span>TanTrade B2B Platform</span>
@@ -288,7 +317,7 @@ export const LoginPage = ({
             </button>
           )}
         </div>
-      </section>
+      </motion.section>
     </main>
   );
 };

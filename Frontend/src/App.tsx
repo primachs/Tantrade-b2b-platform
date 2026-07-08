@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
 import { BrandHeader } from "./presentation/components/BrandHeader";
 import { LandingPage } from "./presentation/pages/LandingPage";
 import { ServiceSelectionPage } from "./presentation/pages/ServiceSelectionPage";
@@ -6,7 +7,6 @@ import { LoginPage } from "./presentation/pages/LoginPage";
 import { DashboardPage } from "./presentation/pages/DashboardPage";
 import { useAuth } from "./modules/auth/useAuth";
 
-type AppRoute = "landing" | "service-select" | "auth" | "dashboard";
 type ServicePath = "matching" | "governance" | null;
 
 export default function App() {
@@ -23,66 +23,43 @@ export default function App() {
     selectService,
     needsServiceSelection,
   } = useAuth();
-  const [route, setRoute] = useState<AppRoute>("landing");
-  const [selectedService, setSelectedService] = useState<ServicePath>(null);
-  const [serviceSetupMode, setServiceSetupMode] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Redirect authenticated users: no roles → service selection; otherwise dashboard
   useEffect(() => {
-    if (!ready || !user) return;
+    if (!ready) return;
 
-    if (needsServiceSelection(user)) {
-      setServiceSetupMode(true);
-      if (route !== "service-select") {
-        setRoute("service-select");
+    if (user) {
+      if (needsServiceSelection(user)) {
+        if (location.pathname !== "/service-select") {
+          navigate("/service-select", { replace: true });
+        }
+      } else {
+        if (["/", "/login", "/service-select"].includes(location.pathname)) {
+          navigate("/dashboard", { replace: true });
+        }
       }
-      return;
-    }
-
-    setServiceSetupMode(false);
-    if (route === "landing" || route === "auth" || route === "service-select") {
-      setRoute("dashboard");
-    }
-  }, [ready, user, route, needsServiceSelection]);
-
-  const handleNavigate = (next: AppRoute) => {
-    if (next === "dashboard" && !user) {
-      setRoute("landing");
-      return;
-    }
-    if (next === "dashboard" && user && needsServiceSelection(user)) {
-      setServiceSetupMode(true);
-      setRoute("service-select");
-      return;
-    }
-    setRoute(next);
-  };
-
-  const handleServiceSelect = async (service: "matching" | "governance") => {
-    if (serviceSetupMode && user) {
-      const ok = await selectService(service);
-      if (ok) {
-        setSelectedService(service);
-        setServiceSetupMode(false);
-        setRoute("dashboard");
+    } else {
+      if (["/dashboard"].includes(location.pathname)) {
+        navigate("/", { replace: true });
       }
-      return;
     }
-    setSelectedService(service);
-    setRoute("auth");
-  };
-
-  const handleSignIn = () => {
-    setSelectedService(null);
-    setRoute("auth");
-  };
+  }, [ready, user, location.pathname, navigate, needsServiceSelection]);
 
   const handleLogout = async () => {
     await logout();
-    setSelectedService(null);
-    setServiceSetupMode(false);
-    setRoute("landing");
+    navigate("/", { replace: true });
   };
+
+  if (!ready) {
+    return <div className="app-shell flex items-center justify-center min-h-screen text-brand-blue">Loading...</div>;
+  }
+
+  // Extract selected service from query params if any
+  const searchParams = new URLSearchParams(location.search);
+  const selectedServiceFromUrl = searchParams.get("service") as ServicePath;
 
   return (
     <div className="app-shell">
@@ -91,43 +68,52 @@ export default function App() {
         userEmail={user?.email}
         userRoles={user?.roles}
         onLogout={handleLogout}
-        onLogoClick={() => handleNavigate("landing")}
-        onLoginClick={handleSignIn}
+        onLogoClick={() => navigate("/")}
+        onLoginClick={() => navigate("/login")}
       />
 
-      {route === "landing" && (
-        <LandingPage onGetStarted={() => handleNavigate("service-select")} />
-      )}
+      <Routes>
+        <Route path="/" element={<LandingPage onGetStarted={() => navigate("/service-select")} />} />
 
-      {route === "service-select" && (
-        <ServiceSelectionPage
-          setupMode={serviceSetupMode}
-          loading={loading}
-          error={error}
-          onClearError={() => setError(null)}
-          onSelectService={handleServiceSelect}
-          onSignIn={serviceSetupMode ? undefined : handleSignIn}
-          onBack={() => (serviceSetupMode ? undefined : handleNavigate("landing"))}
-        />
-      )}
+        <Route path="/service-select" element={
+          <ServiceSelectionPage
+            setupMode={!!user}
+            loading={loading}
+            error={error}
+            onClearError={() => setError(null)}
+            onSelectService={async (service) => {
+              if (user) {
+                const ok = await selectService(service);
+                if (ok) navigate("/dashboard");
+              } else {
+                navigate(`/login?service=${service}`);
+              }
+            }}
+            onSignIn={!user ? () => navigate("/login") : undefined}
+            onBack={() => navigate("/")}
+          />
+        } />
 
-      {route === "auth" && (
-        <LoginPage
-          token={token}
-          userName={user?.name}
-          selectedService={selectedService}
-          onLogin={login}
-          onRegister={register}
-          onContinueToDashboard={() => handleNavigate("dashboard")}
-          loading={loading}
-          error={error}
-          onClearError={() => setError(null)}
-        />
-      )}
+        <Route path="/login" element={
+          <LoginPage
+            token={token}
+            userName={user?.name}
+            selectedService={selectedServiceFromUrl}
+            onLogin={login}
+            onRegister={register}
+            onContinueToDashboard={() => navigate("/dashboard")}
+            loading={loading}
+            error={error}
+            onClearError={() => setError(null)}
+          />
+        } />
 
-      {route === "dashboard" && user && !needsServiceSelection(user) && (
-        <DashboardPage token={token} user={user} />
-      )}
+        <Route path="/dashboard" element={
+          user && !needsServiceSelection(user) ? <DashboardPage token={token} user={user} /> : <Navigate to="/" replace />
+        } />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { ShieldCheck, Building2, Zap, Phone, Mail, FileText, Users } from "lucide-react";
+import { motion } from "motion/react";
 
 type LandingPageProps = {
   onGetStarted: () => void;
@@ -30,7 +31,12 @@ export const LandingPage = (_props: LandingPageProps) => {
 
   return (
     <main className="page landing-home">
-      <section className="landing-hero">
+      <motion.section 
+        className="landing-hero"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="hero-wrapper">
           <h1 className="hero-headline">TanTrade B2B Platform</h1>
           <p className="hero-subheader">
@@ -49,9 +55,16 @@ export const LandingPage = (_props: LandingPageProps) => {
             <span className="pill"><Mail className="icon" /> Infrastructure Stability</span>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="service-matrix" id="service-matrix">
+      <motion.section 
+        className="service-matrix" 
+        id="service-matrix"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
+      >
         <h2>Platform Capabilities</h2>
         <div className="service-grid">
           {services.map((service) => (
@@ -62,9 +75,16 @@ export const LandingPage = (_props: LandingPageProps) => {
             </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
-      <section className="support-footer" id="support-footer">
+      <motion.section 
+        className="support-footer" 
+        id="support-footer"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="support-grid">
           <div className="support-block">
             <h3>Technical Support</h3>
@@ -88,7 +108,7 @@ export const LandingPage = (_props: LandingPageProps) => {
         <div className="footer-meta">
           <p>&copy; 2026 Tanzania Trade Development Authority. All rights reserved.</p>
         </div>
-      </section>
+      </motion.section>
     </main>
   );
 };
