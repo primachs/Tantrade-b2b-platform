@@ -53,7 +53,7 @@ export const UserManagementPane = ({ token, authUsers, onRefresh, setNotice }: U
       <div className="adm-section-head">
         <div className="adm-section-title-wrap">
           <div className="adm-section-icon">
-            <Shield />
+            <Shield style={{ width: 20, height: 20 }} />
           </div>
           <div>
             <h2>User Management</h2>
@@ -80,8 +80,8 @@ export const UserManagementPane = ({ token, authUsers, onRefresh, setNotice }: U
               const isEditing = editingUserId === user.id;
               return (
                 <tr key={user.id}>
-                  <td style={{ fontWeight: 600, color: "#0f172a" }}>{user.name}</td>
-                  <td style={{ color: "#64748b" }}>{user.email}</td>
+                  <td style={{ fontWeight: 600, color: "var(--adm-text-main)" }}>{user.name}</td>
+                  <td style={{ color: "var(--adm-text-muted)" }}>{user.email}</td>
                   <td>
                     {user.roles.length === 0
                       ? <span className="adm-tag adm-tag--warning">No roles</span>
@@ -90,31 +90,31 @@ export const UserManagementPane = ({ token, authUsers, onRefresh, setNotice }: U
                   </td>
                   <td style={{ textAlign: "right" }}>
                     {isEditing ? (
-                      <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap", alignItems: "center", justifyContent: "flex-end" }}>
+                      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", alignItems: "center", justifyContent: "flex-end" }}>
                         {allRoles.map((role) => {
                           const hasRole = user.roles.includes(role.name);
                           return (
                             <button
                               key={role.id}
                               type="button"
-                              className={`adm-btn-sm ${hasRole ? "adm-btn-primary" : "adm-btn-outline"}`}
+                              className={`adm-btn adm-btn-sm ${hasRole ? "adm-btn-primary" : "adm-btn-outline"}`}
                               onClick={() => toggleRole(user.id, role, hasRole)}
                               disabled={loading}
                             >
                               {hasRole
-                                ? <ShieldOff style={{ width: 11, height: 11 }} />
-                                : <Shield style={{ width: 11, height: 11 }} />
+                                ? <ShieldOff style={{ width: 14, height: 14 }} />
+                                : <Shield style={{ width: 14, height: 14 }} />
                               }
                               {role.name}
                             </button>
                           );
                         })}
-                        <button type="button" className="adm-btn-sm adm-btn-ghost" onClick={() => setEditingUserId(null)}>
+                        <button type="button" className="adm-btn adm-btn-sm adm-btn-ghost" onClick={() => setEditingUserId(null)}>
                           Done
                         </button>
                       </div>
                     ) : (
-                      <button type="button" className="adm-btn-sm adm-btn-outline" onClick={() => setEditingUserId(user.id)}>
+                      <button type="button" className="adm-btn adm-btn-sm adm-btn-outline" onClick={() => setEditingUserId(user.id)}>
                         Edit Roles
                       </button>
                     )}

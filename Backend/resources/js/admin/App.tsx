@@ -133,47 +133,66 @@ export const App = () => {
   };
 
   if (!ready) {
-    return <div className="page" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>Loading...</div>;
+    return (
+      <div className="adm-loading-screen">
+        <div className="adm-spinner"></div>
+      </div>
+    );
   }
 
   if (!user) {
     return (
-      <div className="page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--wash)' }}>
-        <div className="card" style={{ maxWidth: 400, width: '100%', padding: '2rem' }}>
-          <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: 'var(--brand-blue)' }}>TanTrade Admin</h2>
+      <div className="adm-login-shell">
+        <div className="adm-login-bg-shapes">
+          <div className="adm-shape adm-shape-1"></div>
+          <div className="adm-shape adm-shape-2"></div>
+          <div className="adm-shape adm-shape-3"></div>
+        </div>
+        <div className="adm-login-card">
+          <div className="adm-login-brand">
+            <div className="adm-login-icon-wrap">
+              <AlertCircle style={{ width: 24, height: 24 }} className="adm-icon" />
+            </div>
+            <h2>TanTrade Admin</h2>
+            <p>Access the administrative console</p>
+          </div>
+          
           {loginError && (
-            <div className="notice notice--error" style={{ marginBottom: '1rem' }}>
-              <AlertCircle className="icon" />
-              {loginError}
+            <div className="adm-notice adm-notice--error" style={{ marginBottom: '1.5rem' }}>
+              <AlertCircle style={{ width: 16, height: 16, flexShrink: 0 }} />
+              <span>{loginError}</span>
             </div>
           )}
-          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div className="field-group">
+          
+          <form onSubmit={handleLogin} className="adm-login-form">
+            <div className="adm-field">
               <label>Email Address</label>
               <input 
                 type="email" 
-                className="input" 
+                className="adm-input" 
                 required 
                 value={email} 
                 onChange={e => setEmail(e.target.value)} 
                 disabled={loading}
+                placeholder="admin@tantrade.go.tz"
               />
             </div>
-            <div className="field-group">
+            <div className="adm-field">
               <label>Password</label>
               <input 
                 type="password" 
-                className="input" 
+                className="adm-input" 
                 required 
                 value={password} 
                 onChange={e => setPassword(e.target.value)} 
                 disabled={loading}
+                placeholder="••••••••"
               />
             </div>
-            <button type="submit" className="button button--primary" disabled={loading} style={{ marginTop: '0.5rem' }}>
-              {loading ? "Signing in..." : (
+            <button type="submit" className="adm-btn adm-btn-primary adm-btn-block" disabled={loading}>
+              {loading ? "Authenticating..." : (
                 <>
-                  <LogIn className="w-4 h-4" /> Sign In
+                  <LogIn style={{ width: 18, height: 18 }} /> Sign In to Dashboard
                 </>
               )}
             </button>
@@ -186,7 +205,7 @@ export const App = () => {
   return (
     <div className="app-shell admin-app">
       {notice && (
-        <div className={`admin-toast notice notice--${notice.type}`} role="status">
+        <div className={`admin-toast adm-toast--${notice.type}`} role="status">
           {notice.msg}
         </div>
       )}

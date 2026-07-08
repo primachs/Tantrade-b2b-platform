@@ -92,9 +92,9 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
           </div>
 
           {!v ? (
-            <div className="adm-notice-error">
+            <div className="adm-notice adm-notice--error">
               <AlertTriangle style={{ width: 16, height: 16, flexShrink: 0 }} />
-              No verification details have been submitted for this business.
+              <span>No verification details have been submitted for this business.</span>
             </div>
           ) : (
             <div className="adm-review-grid">
@@ -114,15 +114,16 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
             <div className="adm-review-actions">
               <button
                 type="button"
-                className="adm-approve-btn"
+                className="adm-btn adm-btn-primary"
                 disabled={loading}
                 onClick={() => reviewVerification(selectedBiz, "VERIFIED")}
+                style={{ background: "var(--adm-success)", borderColor: "var(--adm-success)" }}
               >
                 <CheckCircle style={{ width: 16, height: 16 }} />
                 Approve &amp; Verify
               </button>
               <div className="adm-reject-block">
-                <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "#64748b" }}>
+                <label style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--adm-text-muted)" }}>
                   Rejection reason (optional)
                   <textarea
                     className="adm-reject-textarea"
@@ -135,9 +136,10 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
                 </label>
                 <button
                   type="button"
-                  className="adm-reject-btn"
+                  className="adm-btn adm-btn-outline"
                   disabled={loading}
                   onClick={() => reviewVerification(selectedBiz, "REJECTED")}
+                  style={{ color: "var(--adm-danger)", borderColor: "#fecaca" }}
                 >
                   <XCircle style={{ width: 15, height: 15 }} />
                   Reject
@@ -152,12 +154,12 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
 
   /* ── List view ── */
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       <div className="adm-section">
         <div className="adm-section-head">
           <div className="adm-section-title-wrap">
             <div className="adm-section-icon">
-              <Briefcase />
+              <Briefcase style={{ width: 20, height: 20 }} />
             </div>
             <div>
               <h2>Business Verification</h2>
@@ -168,8 +170,8 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
         </div>
 
         {/* Pending */}
-        <div style={{ padding: "1rem 1.5rem 0.5rem", borderBottom: "1px solid #f1f5f9" }}>
-          <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "#94a3b8" }}>
+        <div style={{ padding: "16px 24px 8px", borderBottom: "1px solid var(--adm-border)" }}>
+          <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--adm-text-muted)" }}>
             Pending Review ({pendingBusinesses.length})
           </span>
         </div>
@@ -192,12 +194,12 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
                 const v = getVerification(biz);
                 return (
                   <tr key={biz.id}>
-                    <td style={{ fontWeight: 600, color: "#0f172a" }}>{biz.name}</td>
-                    <td style={{ color: "#64748b" }}>{biz.email}</td>
+                    <td style={{ fontWeight: 600, color: "var(--adm-text-main)" }}>{biz.name}</td>
+                    <td style={{ color: "var(--adm-text-muted)" }}>{biz.email}</td>
                     <td>{v?.region ?? "—"}</td>
                     <td><span className={statusTagClass(v?.verification_status ?? "UNVERIFIED")}>{v?.verification_status ?? "UNVERIFIED"}</span></td>
                     <td style={{ textAlign: "right" }}>
-                      <button type="button" className="adm-btn-sm adm-btn-outline" onClick={() => setSelectedBiz(biz)}>
+                      <button type="button" className="adm-btn adm-btn-sm adm-btn-outline" onClick={() => setSelectedBiz(biz)}>
                         Review
                       </button>
                     </td>
@@ -211,8 +213,8 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
 
       {reviewedBusinesses.length > 0 && (
         <div className="adm-section">
-          <div style={{ padding: "1rem 1.5rem 0.5rem", borderBottom: "1px solid #f1f5f9" }}>
-            <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "#94a3b8" }}>
+          <div style={{ padding: "16px 24px 8px", borderBottom: "1px solid var(--adm-border)" }}>
+            <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--adm-text-muted)" }}>
               Recently Reviewed ({reviewedBusinesses.length})
             </span>
           </div>
@@ -232,7 +234,7 @@ export const BusinessVerificationPane = ({ token, businesses, onRefresh, setNoti
                     <td style={{ fontWeight: 600 }}>{biz.name}</td>
                     <td><span className={statusTagClass(v?.verification_status ?? "UNVERIFIED")}>{v?.verification_status ?? "UNVERIFIED"}</span></td>
                     <td style={{ textAlign: "right" }}>
-                      <button type="button" className="adm-panel-row-btn" onClick={() => setSelectedBiz(biz)}>
+                      <button type="button" className="adm-btn adm-btn-sm adm-btn-ghost" onClick={() => setSelectedBiz(biz)}>
                         View
                       </button>
                     </td>

@@ -142,5 +142,13 @@ class BusinessApiTest extends TestCase
 
         $business = Business::findOrFail($businessId);
         app(BusinessService::class)->touchActivity($business);
+
+        $this->getJson('/api/businesses/my-business')->assertStatus(200);
+        $this->getJson('/api/businesses')->assertStatus(200);
+
+        $this->patchJson("/api/businesses/{$businessId}/verification/review", [
+            'verification_status' => 'VERIFIED',
+            'notes' => 'Looking good',
+        ])->assertStatus(200);
     }
 }

@@ -151,6 +151,18 @@ class ReliabilityCalculatorTest extends TestCase
         ]);
     }
 
+    public function test_clamp_bounds(): void
+    {
+        $calculator = app(ReliabilityCalculator::class);
+        $reflection = new \ReflectionClass(ReliabilityCalculator::class);
+        $clamp = $reflection->getMethod('clamp');
+        $clamp->setAccessible(true);
+
+        $this->assertSame(0.0, $clamp->invoke($calculator, -0.5));
+        $this->assertSame(1.0, $clamp->invoke($calculator, 1.5));
+        $this->assertSame(0.5, $clamp->invoke($calculator, 0.5));
+    }
+
     private function createBusiness(string $name): Business
     {
         $business = Business::create([

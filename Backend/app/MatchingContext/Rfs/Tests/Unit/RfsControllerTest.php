@@ -3,6 +3,7 @@
 namespace App\MatchingContext\Rfs\Tests\Unit;
 
 use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
+use App\MatchingContext\Business\Infrastructure\Models\Business;
 use App\MatchingContext\Rfs\Application\RfsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
@@ -56,6 +57,11 @@ class RfsControllerTest extends TestCase
             public function open(string $rfsId): array
             {
                 return ['id' => $rfsId, 'status' => 'OPEN'];
+            }
+
+            public function list(?string $buyerId = null): array
+            {
+                return [['id' => $this->rfsId, 'status' => 'DRAFT']];
             }
         };
 
@@ -169,5 +175,22 @@ class RfsControllerTest extends TestCase
                 'deadline' => 'also-not-a-date',
             ],
         ])->assertStatus(422);
+    }
+
+    public function test_index_calls_list_on_service(): void
+    {
+        $rfsId = Str::uuid()->toString();
+        $this->bindFakeService($rfsId);
+
+        $business = Business::create([
+            'name' => 'Buyer',
+            'contact_person' => 'Owner',
+            'phone' => '+255700000000',
+            'email' => 'buyer.test@example.com',
+            'user_id' => auth()->id(),
+        ]);
+
+        $this->getJson('/api/rfs')
+            ->assertStatus(200);
     }
 }

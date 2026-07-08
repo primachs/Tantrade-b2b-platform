@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/admin/{path?}', function () {
+Route::get('/{path?}', function () {
     return view('admin');
-})->where('path', '.*');
+})->where('path', '^(?!api/).*');

@@ -59,6 +59,9 @@ class RfsServiceCoverageTest extends TestCase
         $rfsId = $created['id'];
         $this->assertNotEmpty($service->show($rfsId));
 
+        $list = $service->list($business->id);
+        $this->assertNotEmpty($list);
+
         $service->update($rfsId, [
             'title' => 'Need service updated',
             'constraints' => [

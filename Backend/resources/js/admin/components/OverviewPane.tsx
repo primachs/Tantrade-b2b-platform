@@ -175,6 +175,20 @@ export const OverviewPane = ({ user, authUsers, businesses, rfsList, serviceType
         })}
       </div>
 
+      {/* Expanded Detail */}
+      {activeCard && (
+        <div className="adm-detail-panel" style={{ marginBottom: "1.5rem" }}>
+          <div className="adm-detail-panel__head">
+            <h3 className="adm-detail-panel__title">{detailLabel}</h3>
+            <button className="adm-detail-close" type="button" onClick={() => setActiveCard(null)}>
+              <XCircle style={{ width: 13, height: 13, display: "inline", marginRight: "0.25rem" }} />
+              Close
+            </button>
+          </div>
+          <div>{renderDetail()}</div>
+        </div>
+      )}
+
       {/* Domain Cards */}
       <div className="adm-domain-grid">
         {domains.map((d) => {
@@ -210,20 +224,6 @@ export const OverviewPane = ({ user, authUsers, businesses, rfsList, serviceType
           );
         })}
       </div>
-
-      {/* Expanded Detail */}
-      {activeCard && (
-        <div className="adm-detail-panel">
-          <div className="adm-detail-panel__head">
-            <h3 className="adm-detail-panel__title">{detailLabel}</h3>
-            <button className="adm-detail-close" type="button" onClick={() => setActiveCard(null)}>
-              <XCircle style={{ width: 13, height: 13, display: "inline", marginRight: "0.25rem" }} />
-              Close
-            </button>
-          </div>
-          <div>{renderDetail()}</div>
-        </div>
-      )}
     </div>
   );
 };
