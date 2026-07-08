@@ -1,0 +1,57 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - 'Backend/**'
+      - '.github/workflows/backend-ci.yml'
+  pull_request:
+    branches:
+      - development
+    paths:
+      - 'Backend/**'
+      - '.github/workflows/backend-ci.yml'
+
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Backend
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.2', '8.3']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: pcov
+          extensions: pdo_sqlite, sqlite3, mbstring, dom, fileinfo
+          tools: composer:v2
+          ini-values: pcov.directory=app
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress --ansi
+
+      - name: Check code style
+        run: vendor/bin/pint --test
+
+      - name: Run tests with coverage
+        run: php -d pcov.enabled=1 vendor/bin/phpunit --coverage-clover=coverage.xml --coverage-text
+
+      - name: Enforce coverage threshold
+        run: php tools/coverage-check.php coverage.xml 90 90 "app/MatchingContext,app/MarketGovernanceContext,app/AuthenticationContext"

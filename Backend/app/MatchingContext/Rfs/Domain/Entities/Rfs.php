@@ -1,0 +1,154 @@
+<?php
+
+namespace App\MatchingContext\Rfs\Domain\Entities;
+
+use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
+
+final class Rfs
+{
+    public function __construct(
+        private readonly Uuid $id,
+        private readonly Uuid $buyerId,
+        private readonly string $title,
+        private readonly string $description,
+        private readonly Uuid $serviceTypeId,
+        private readonly string $projectSize,
+        private readonly string $expertiseLevel,
+        private readonly string $status,
+        private readonly ?\DateTimeImmutable $createdAt,
+        private readonly ?RfsConstraint $constraint,
+        private readonly ?RfsPreference $preference,
+        private readonly ?string $shortId = null,
+        private readonly ?string $buyerName = null
+    ) {}
+
+    public function id(): Uuid
+    {
+        return $this->id;
+    }
+
+    public function shortId(): ?string
+    {
+        return $this->shortId;
+    }
+
+    public function buyerName(): ?string
+    {
+        return $this->buyerName;
+    }
+
+    public function status(): string
+    {
+        return $this->status;
+    }
+
+    public function serviceTypeId(): Uuid
+    {
+        return $this->serviceTypeId;
+    }
+
+    public function constraint(): ?RfsConstraint
+    {
+        return $this->constraint;
+    }
+
+    public function preference(): ?RfsPreference
+    {
+        return $this->preference;
+    }
+
+    public function withStatus(string $status): self
+    {
+        return new self(
+            $this->id,
+            $this->buyerId,
+            $this->title,
+            $this->description,
+            $this->serviceTypeId,
+            $this->projectSize,
+            $this->expertiseLevel,
+            $status,
+            $this->createdAt,
+            $this->constraint,
+            $this->preference,
+            $this->shortId,
+            $this->buyerName
+        );
+    }
+
+    public function withUpdates(array $payload): self
+    {
+        return new self(
+            $this->id,
+            $this->buyerId,
+            $payload['title'] ?? $this->title,
+            $payload['description'] ?? $this->description,
+            $this->serviceTypeId,
+            $payload['project_size'] ?? $this->projectSize,
+            $payload['expertise_level'] ?? $this->expertiseLevel,
+            $this->status,
+            $this->createdAt,
+            $this->constraint,
+            $this->preference,
+            $this->shortId,
+            $this->buyerName
+        );
+    }
+
+    public function withConstraint(?RfsConstraint $constraint): self
+    {
+        return new self(
+            $this->id,
+            $this->buyerId,
+            $this->title,
+            $this->description,
+            $this->serviceTypeId,
+            $this->projectSize,
+            $this->expertiseLevel,
+            $this->status,
+            $this->createdAt,
+            $constraint,
+            $this->preference,
+            $this->shortId,
+            $this->buyerName
+        );
+    }
+
+    public function withPreference(?RfsPreference $preference): self
+    {
+        return new self(
+            $this->id,
+            $this->buyerId,
+            $this->title,
+            $this->description,
+            $this->serviceTypeId,
+            $this->projectSize,
+            $this->expertiseLevel,
+            $this->status,
+            $this->createdAt,
+            $this->constraint,
+            $preference,
+            $this->shortId,
+            $this->buyerName
+        );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id->value(),
+            'short_id' => $this->shortId,
+            'buyer_id' => $this->buyerId->value(),
+            'buyer_name' => $this->buyerName,
+            'title' => $this->title,
+            'description' => $this->description,
+            'service_type_id' => $this->serviceTypeId->value(),
+            'project_size' => $this->projectSize,
+            'expertise_level' => $this->expertiseLevel,
+            'status' => $this->status,
+            'created_at' => $this->createdAt?->format('c'),
+            'constraint' => $this->constraint?->toArray(),
+            'preference' => $this->preference?->toArray(),
+        ];
+    }
+}

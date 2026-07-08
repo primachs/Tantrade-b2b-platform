@@ -1,5 +1,20 @@
 <?php
 
+use App\AuthenticationContext\Auth\Infrastructure\AuthServiceProvider as AuthenticationAuthServiceProvider;
+use App\MarketGovernanceContext\Broker\Infrastructure\BrokerServiceProvider;
+use App\MarketGovernanceContext\Governance\Infrastructure\GovernanceServiceProvider;
+use App\MarketGovernanceContext\Market\Infrastructure\MarketServiceProvider;
+use App\MatchingContext\Business\Infrastructure\BusinessServiceProvider;
+use App\MatchingContext\Engagement\Infrastructure\EngagementServiceProvider;
+use App\MatchingContext\Matching\Infrastructure\MatchingServiceProvider;
+use App\MatchingContext\Rfs\Infrastructure\RfsServiceProvider;
+use App\MatchingContext\SharedKernel\Infrastructure\SharedKernelServiceProvider;
+use App\MatchingContext\Signal\Infrastructure\SignalServiceProvider;
+use App\MatchingContext\Taxonomy\Infrastructure\TaxonomyServiceProvider;
+use App\Providers\AppServiceProvider;
+use App\Providers\AuthServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
@@ -163,11 +178,23 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
+        AppServiceProvider::class,
+        AuthenticationAuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        EventServiceProvider::class,
+        RouteServiceProvider::class,
+        AuthServiceProvider::class,
+        SharedKernelServiceProvider::class,
+        BusinessServiceProvider::class,
+        TaxonomyServiceProvider::class,
+        RfsServiceProvider::class,
+        MatchingServiceProvider::class,
+        EngagementServiceProvider::class,
+        SignalServiceProvider::class,
+
+        MarketServiceProvider::class,
+        GovernanceServiceProvider::class,
+        BrokerServiceProvider::class,
     ])->toArray(),
 
     /*
