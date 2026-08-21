@@ -2,3 +2,9 @@
 /Docs/v1
 /Docs/v3
 /Docs/v4
+Frontend/node_modules/
+Backend/vendor/
+Frontend/.env
+Backend/.env
+Frontend/dist/
+

@@ -3,6 +3,8 @@ import path from "path";
 import react from "@vitejs/plugin-react";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import { createServer as createViteServer } from "vite";
+import dotenv from "dotenv";
+dotenv.config();
 
 const resolveBackendUrl = () => {
   const raw = (process.env.BACKEND_URL || process.env.VITE_BACKEND_URL || "http://localhost:8000").trim();
