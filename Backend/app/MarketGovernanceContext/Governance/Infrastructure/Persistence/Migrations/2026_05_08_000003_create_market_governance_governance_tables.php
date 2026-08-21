@@ -29,10 +29,9 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
-            $table->foreign('office_id')->references('id')->on('market_offices')->cascadeOnDelete();
-            $table->foreign('user_id')->references('id')->on('auth_users')->cascadeOnDelete();
-            $table->index(['office_id', 'status']);
-            $table->index(['user_id', 'status']);
+           $table->foreign('office_id')->references('id')->on('market_offices')->cascadeOnDelete();
+           $table->index(['office_id', 'status']);
+           $table->index(['user_id', 'status']);
         });
     }
 
