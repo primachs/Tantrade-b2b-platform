@@ -1,5 +1,6 @@
 import { Layers, Radar } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiRequest, ApiError } from "../../../api/client";
 import { RegionDistrictSelect } from "../RegionDistrictSelect";
 import {
@@ -19,6 +20,7 @@ type LandingHubProps = {
 };
 
 export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, onGoToDashboard }: LandingHubProps) => {
+  const navigate = useNavigate();
   const [landingMode, setLandingMode] = useState<"menu" | "register">("menu");
   const [registrationStep, setRegistrationStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -237,7 +239,12 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
           </div>
           <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Matchmaking Guide</h3>
           <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Learn how our platform works, how to optimize your profile, and best practices for securing deals.</p>
-          <button style={{ padding: "0.625rem", width: "100%", background: "transparent", border: "1px solid #f59e0b", color: "#f59e0b", borderRadius: "6px", fontWeight: 500, cursor: "pointer" }}>Read Guide</button>
+          <button
+            onClick={() => navigate("/matchmaking-guide")}
+            style={{ padding: "0.625rem", width: "100%", background: "transparent", border: "1px solid #f59e0b", color: "#f59e0b", borderRadius: "6px", fontWeight: 500, cursor: "pointer" }}
+          >
+            Read Guide
+          </button>
         </div>
       </div>
     </section>

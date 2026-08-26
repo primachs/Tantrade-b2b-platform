@@ -5,6 +5,7 @@ import { LandingPage } from "./presentation/pages/LandingPage";
 import { ServiceSelectionPage } from "./presentation/pages/ServiceSelectionPage";
 import { LoginPage } from "./presentation/pages/LoginPage";
 import { DashboardPage } from "./presentation/pages/DashboardPage";
+import { MatchmakingGuidePage } from "./presentation/pages/MatchmakingGuidePage";
 import { useAuth } from "./modules/auth/useAuth";
 
 type ServicePath = "matching" | "governance" | null;
@@ -110,6 +111,10 @@ export default function App() {
 
         <Route path="/dashboard" element={
           user && !needsServiceSelection(user) ? <DashboardPage token={token} user={user} /> : <Navigate to="/" replace />
+        } />
+
+        <Route path="/matchmaking-guide" element={
+          <MatchmakingGuidePage onBack={() => navigate(-1)} />
         } />
 
         <Route path="*" element={<Navigate to="/" replace />} />
