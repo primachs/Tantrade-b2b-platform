@@ -13,7 +13,11 @@ class BrokerController
 {
     public function index(Request $request, BrokerService $service): JsonResponse
     {
-        return response()->json($service->list((string) $request->user()?->id));
+        $user = $request->user();
+        $user?->loadMissing('roles');
+        $isAdmin = $user && $user->roles->pluck('name')->contains('ADMIN');
+
+        return response()->json($service->list($isAdmin ? null : (string) $user?->id));
     }
 
     public function store(Request $request, BrokerService $service): JsonResponse
