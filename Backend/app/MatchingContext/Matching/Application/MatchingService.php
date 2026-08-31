@@ -25,8 +25,8 @@ class MatchingService
     public function generateShortlist(string $rfsId): array
     {
         $rfs = $this->getRfs($rfsId);
-        if ($rfs->status() !== 'OPEN') {
-            throw new \RuntimeException('Only OPEN RFS can be matched.');
+        if (! in_array($rfs->status(), ['OPEN', 'MATCHED'], true)) {
+        throw new \RuntimeException('Only OPEN or already-matched RFS can be (re-)matched.');
         }
 
         $serviceType = $this->taxonomyRepository->findServiceTypeById($rfs->serviceTypeId());

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { apiRequest } from "../../../api/client";
+import { apiRequest, ApiError } from "../../../api/client";
 import { Rfs, MatchShortlist, TaxonomyResponse, Business } from "./types";
 import { Search, Eye, PlayCircle, Briefcase } from "lucide-react";
 import { BusinessProfileModal } from "./BusinessProfileModal";
@@ -39,7 +39,9 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
       onRefresh();
       await handleInspectRfs(rfsId);
     } catch (err) {
-      setNotice("error", "Matching failed.");
+      const message =
+        err instanceof ApiError ? err.firstFieldError() ?? err.message : err instanceof Error ? err.message : "Matching failed.";
+      setNotice("error", message);
     } finally {
       setLoading(false);
     }
@@ -159,14 +161,14 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
                             </button>
                           )}
                           
-                          {isMine && (rfs.status === "DRAFT" || rfs.status === "OPEN") && (
+                          {isMine && (rfs.status === "DRAFT" || rfs.status === "OPEN" || rfs.status === "MATCHED") && (
                             <button 
                               onClick={() => handleOpenMatch(rfs.id, rfs.status)}
                               disabled={loading}
                               style={{ padding: "0.375rem 0.75rem", background: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.875rem" }}
-                              title={rfs.status === "DRAFT" ? "Open this RFS to the market and run matching" : "Run matching engine"}
+                              title={rfs.status === "DRAFT" ? "Open this RFS to the market and run matching" : rfs.status === "MATCHED" ? "Re-run matching to pick up newly added sellers" : "Run matching engine"}
                             >
-                              <PlayCircle style={{ width: "14px", height: "14px" }} /> {loading ? "..." : (rfs.status === "DRAFT" ? "Publish & Match" : "Run Match")}
+                              <PlayCircle style={{ width: "14px", height: "14px" }} /> {loading ? "..." : (rfs.status === "DRAFT" ? "Publish & Match" : rfs.status === "MATCHED" ? "Re-match" : "Run Match")}
                             </button>
                           )}
                         </div>
