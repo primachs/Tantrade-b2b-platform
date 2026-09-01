@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { apiRequest } from "./client";
 import { AdminDashboard } from "./components/AdminDashboard";
 import { AuthUser, Business, Rfs, TaxonomyResponse, Market, Broker } from "./components/types";
-import { LogIn, AlertCircle } from "lucide-react";
+import { LogIn, AlertCircle, Eye, EyeOff } from "lucide-react";
 
 export const App = () => {
   const [token, setToken] = useState(() => localStorage.getItem("admin_token") ?? "");
@@ -11,6 +11,7 @@ export const App = () => {
   const [ready, setReady] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
 
   // Admin Data
@@ -179,15 +180,38 @@ export const App = () => {
             </div>
             <div className="adm-field">
               <label>Password</label>
-              <input 
-                type="password" 
-                className="adm-input" 
-                required 
-                value={password} 
-                onChange={e => setPassword(e.target.value)} 
-                disabled={loading}
-                placeholder="••••••••"
-              />
+              <div style={{ position: "relative" }}>
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  className="adm-input" 
+                  required 
+                  value={password} 
+                  onChange={e => setPassword(e.target.value)} 
+                  disabled={loading}
+                  placeholder="••••••••"
+                  style={{ paddingRight: "2.5rem", width: "100%", boxSizing: "border-box" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  style={{
+                    position: "absolute",
+                    right: "0.75rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    color: "#64748b",
+                    padding: 0,
+                  }}
+                >
+                  {showPassword ? <EyeOff style={{ width: 16, height: 16 }} /> : <Eye style={{ width: 16, height: 16 }} />}
+                </button>
+              </div>
             </div>
             <button type="submit" className="adm-btn adm-btn-primary adm-btn-block" disabled={loading}>
               {loading ? "Authenticating..." : (

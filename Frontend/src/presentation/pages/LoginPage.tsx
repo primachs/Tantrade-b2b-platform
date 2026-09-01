@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { BadgeCheck, KeyRound, LockKeyhole, MapPin, Radar, ShieldCheck } from "lucide-react";
+import { BadgeCheck, Eye, EyeOff, KeyRound, LockKeyhole, MapPin, Radar, ShieldCheck } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 type LoginPageProps = {
@@ -54,6 +54,9 @@ export const LoginPage = ({
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerConfirm, setRegisterConfirm] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showRegisterConfirm, setShowRegisterConfirm] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
   const serviceMeta = selectedService ? SERVICE_META[selectedService] : null;
@@ -205,14 +208,37 @@ export const LoginPage = ({
               </label>
               <label className="field">
                 <span>Password</span>
-                <input
-                  className="input"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="Enter your password"
-                />
+                <div style={{ position: "relative" }}>
+                  <input
+                    className="input"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="Enter your password"
+                    style={{ paddingRight: "2.5rem" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    style={{
+                      position: "absolute",
+                      right: "0.75rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "#64748b",
+                      padding: 0,
+                    }}
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </label>
               <label className="field-inline auth-remember">
                 <input
@@ -265,25 +291,71 @@ export const LoginPage = ({
               </label>
               <label className="field">
                 <span>Password</span>
-                <input
-                  className="input"
-                  type="password"
-                  value={registerPassword}
-                  onChange={(e) => setRegisterPassword(e.target.value)}
-                  required
-                  placeholder="Minimum 12 characters"
-                />
+                <div style={{ position: "relative" }}>
+                  <input
+                    className="input"
+                    type={showRegisterPassword ? "text" : "password"}
+                    value={registerPassword}
+                    onChange={(e) => setRegisterPassword(e.target.value)}
+                    required
+                    placeholder="Minimum 12 characters"
+                    style={{ paddingRight: "2.5rem" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowRegisterPassword((v) => !v)}
+                    aria-label={showRegisterPassword ? "Hide password" : "Show password"}
+                    style={{
+                      position: "absolute",
+                      right: "0.75rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "#64748b",
+                      padding: 0,
+                    }}
+                  >
+                    {showRegisterPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </label>
               <label className="field">
                 <span>Confirm password</span>
-                <input
-                  className="input"
-                  type="password"
-                  value={registerConfirm}
-                  onChange={(e) => setRegisterConfirm(e.target.value)}
-                  required
-                  placeholder="Repeat the password"
-                />
+                <div style={{ position: "relative" }}>
+                  <input
+                    className="input"
+                    type={showRegisterConfirm ? "text" : "password"}
+                    value={registerConfirm}
+                    onChange={(e) => setRegisterConfirm(e.target.value)}
+                    required
+                    placeholder="Repeat the password"
+                    style={{ paddingRight: "2.5rem" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowRegisterConfirm((v) => !v)}
+                    aria-label={showRegisterConfirm ? "Hide password" : "Show password"}
+                    style={{
+                      position: "absolute",
+                      right: "0.75rem",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      color: "#64748b",
+                      padding: 0,
+                    }}
+                  >
+                    {showRegisterConfirm ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
               </label>
               {serviceMeta && (
                 <div className={`service-badge service-badge--form ${serviceMeta.colorClass}`}>
