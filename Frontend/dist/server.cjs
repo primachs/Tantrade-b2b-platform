@@ -26,6 +26,8 @@ var import_path = __toESM(require("path"), 1);
 var import_plugin_react = __toESM(require("@vitejs/plugin-react"), 1);
 var import_http_proxy_middleware = require("http-proxy-middleware");
 var import_vite = require("vite");
+var import_dotenv = __toESM(require("dotenv"), 1);
+import_dotenv.default.config();
 var resolveBackendUrl = () => {
   const raw = (process.env.BACKEND_URL || process.env.VITE_BACKEND_URL || "http://localhost:8000").trim();
   return raw.replace(/\/$/, "");

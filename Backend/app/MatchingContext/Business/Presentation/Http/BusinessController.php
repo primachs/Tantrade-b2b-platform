@@ -4,6 +4,7 @@ namespace App\MatchingContext\Business\Presentation\Http;
 
 use App\MatchingContext\Business\Application\BusinessService;
 use App\MatchingContext\SharedKernel\Domain\Enums\BusinessSize;
+use App\MatchingContext\SharedKernel\Domain\Enums\IndustryType;
 use App\MatchingContext\SharedKernel\Domain\Enums\OwnerGender;
 use App\MatchingContext\SharedKernel\Domain\Enums\RevenueRange;
 use App\MatchingContext\SharedKernel\Domain\Enums\VerificationStatus;
@@ -40,6 +41,7 @@ class BusinessController
             'region' => TanzaniaRules::region(false),
             'district' => TanzaniaRules::district(false),
             'address' => ['nullable', 'string', 'max:500'],
+            'industry_type' => ['nullable', Rule::in(IndustryType::values())],
             'verification_status' => $requireStatus
                 ? ['nullable', Rule::in(VerificationStatus::values())] // allow missing from frontend, will default to UNVERIFIED
                 : ['nullable', Rule::in(VerificationStatus::values())],

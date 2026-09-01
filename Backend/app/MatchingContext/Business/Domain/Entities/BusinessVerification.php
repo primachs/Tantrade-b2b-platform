@@ -19,12 +19,18 @@ final class BusinessVerification
         private readonly ?string $region,
         private readonly ?string $district,
         private readonly ?string $address,
-        private readonly string $verificationStatus
+        private readonly string $verificationStatus,
+        private readonly string $industryType = 'OTHER'
     ) {}
 
     public function businessId(): Uuid
     {
         return $this->businessId;
+    }
+
+    public function industryType(): string
+    {
+        return $this->industryType;
     }
 
     public function toArray(): array
@@ -43,6 +49,7 @@ final class BusinessVerification
             'district' => $this->district,
             'address' => $this->address,
             'verification_status' => $this->verificationStatus,
+            'industry_type' => $this->industryType,
         ];
     }
 }

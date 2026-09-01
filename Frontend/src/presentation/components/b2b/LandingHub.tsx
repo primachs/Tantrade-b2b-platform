@@ -42,6 +42,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
     district: "",
     address: "",
     verification_status: "UNVERIFIED",
+    industry_type: "OTHER",
   });
 
   const handleModeChange = (mode: "menu" | "register") => {
@@ -155,6 +156,46 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
                    <input style={{ padding: '0.625rem 0.875rem', border: '1px solid #cbd5e1', borderRadius: '6px' }} value={registrationForm.brela_number} onChange={e => setRegistrationForm({...registrationForm, brela_number: e.target.value.replace(/[^A-Za-z0-9]/g, "").slice(0, 12)})} placeholder="6–12 alphanumeric characters" maxLength={12} />
                    {fieldErrors.brela_number && <small style={{ color: '#9b1c1c' }}>{fieldErrors.brela_number}</small>}
                  </div>
+               </div>
+               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                 <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Industry</label>
+                 <div style={{ display: 'flex', gap: '0.75rem' }}>
+                   <button
+                     type="button"
+                     onClick={() => setRegistrationForm({ ...registrationForm, industry_type: "TECHNOLOGY" })}
+                     style={{
+                       flex: 1,
+                       padding: '0.625rem 0.875rem',
+                       borderRadius: '6px',
+                       cursor: 'pointer',
+                       fontWeight: 500,
+                       border: registrationForm.industry_type === "TECHNOLOGY" ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                       background: registrationForm.industry_type === "TECHNOLOGY" ? 'rgba(37, 99, 235, 0.08)' : '#fff',
+                       color: registrationForm.industry_type === "TECHNOLOGY" ? '#2563eb' : '#334155',
+                     }}
+                   >
+                     Technology / Software
+                   </button>
+                   <button
+                     type="button"
+                     onClick={() => setRegistrationForm({ ...registrationForm, industry_type: "OTHER" })}
+                     style={{
+                       flex: 1,
+                       padding: '0.625rem 0.875rem',
+                       borderRadius: '6px',
+                       cursor: 'pointer',
+                       fontWeight: 500,
+                       border: registrationForm.industry_type === "OTHER" ? '2px solid #2563eb' : '1px solid #cbd5e1',
+                       background: registrationForm.industry_type === "OTHER" ? 'rgba(37, 99, 235, 0.08)' : '#fff',
+                       color: registrationForm.industry_type === "OTHER" ? '#2563eb' : '#334155',
+                     }}
+                   >
+                     Other industries
+                   </button>
+                 </div>
+                 <small style={{ color: '#64748b' }}>
+                   This determines which service categories appear when you create a Request for Supply.
+                 </small>
                </div>
                <RegionDistrictSelect
                  region={registrationForm.region}

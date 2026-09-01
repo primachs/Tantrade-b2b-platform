@@ -16,6 +16,7 @@ export type BusinessVerification = {
   district: string;
   address: string;
   verification_status: string;
+  industry_type?: string;
 };
 
 export type BusinessCapabilityAttribute = {

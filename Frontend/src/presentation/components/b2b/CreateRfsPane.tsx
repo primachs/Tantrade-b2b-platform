@@ -17,6 +17,20 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
   const [openAfterCreate, setOpenAfterCreate] = useState(true);
 
   const serviceTypes = Array.isArray(taxonomy?.service_types) ? taxonomy.service_types : [];
+  const categories = Array.isArray(taxonomy?.categories) ? taxonomy.categories : [];
+
+  // Categories that count as "technology" for the purposes of RFS filtering.
+  // A business registered under the TECHNOLOGY industry only sees these when
+  // creating an RFS, instead of every category on the platform.
+  const TECH_CATEGORY_NAMES = ["Technology & IT", "Software Development", "Software Products"];
+  const techCategoryIds = new Set(
+    categories.filter((c) => TECH_CATEGORY_NAMES.includes(c.name)).map((c) => c.id)
+  );
+  const isTechBusiness = myBusiness.verification?.industry_type === "TECHNOLOGY";
+  const visibleServiceTypes =
+    isTechBusiness && techCategoryIds.size > 0
+      ? serviceTypes.filter((t) => techCategoryIds.has(t.category_id))
+      : serviceTypes;
 
   const [rfsForm, setRfsForm] = useState({
     title: "",
@@ -49,9 +63,9 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
       });
       setOpenAfterCreate(false);
     } else {
-      setRfsForm(prev => ({ ...prev, service_type_id: serviceTypes[0]?.id || "" }));
+      setRfsForm(prev => ({ ...prev, service_type_id: visibleServiceTypes[0]?.id || "" }));
     }
-  }, [editingRfs, serviceTypes.length]);
+  }, [editingRfs, visibleServiceTypes.length]);
 
   const toNumberOrNull = (value: string) => {
     if (!value.trim()) return null;
@@ -129,10 +143,17 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Service Category</label>
+            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>
+              Service Category
+              {isTechBusiness && (
+                <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', fontWeight: 400, color: '#2563eb' }}>
+                  (showing Technology categories only)
+                </span>
+              )}
+            </label>
             <select className="form-control" value={rfsForm.service_type_id} onChange={e => setRfsForm({...rfsForm, service_type_id: e.target.value})}>
               <option value="">Select Category...</option>
-              {serviceTypes.map(t => (
+              {visibleServiceTypes.map(t => (
                 <option key={t.id} value={t.id}>{t.name}</option>
               ))}
             </select>

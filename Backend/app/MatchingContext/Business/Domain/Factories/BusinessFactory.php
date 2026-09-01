@@ -75,7 +75,8 @@ class BusinessFactory
             $payload['region'] ?? null,
             $payload['district'] ?? null,
             $payload['address'] ?? null,
-            $payload['verification_status'] ?? 'UNVERIFIED'
+            $payload['verification_status'] ?? 'UNVERIFIED',
+            $payload['industry_type'] ?? 'OTHER'
         );
     }
 
@@ -94,7 +95,8 @@ class BusinessFactory
             $state['region'] ?? null,
             $state['district'] ?? null,
             $state['address'] ?? null,
-            $state['verification_status']
+            $state['verification_status'],
+            $state['industry_type'] ?? 'OTHER'
         );
     }
 

@@ -28,6 +28,7 @@ class BusinessVerification extends Model
         'district',
         'address',
         'verification_status',
+        'industry_type',
     ];
 
     public function business(): BelongsTo
