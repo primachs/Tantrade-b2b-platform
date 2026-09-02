@@ -55,6 +55,21 @@ class EloquentEngagementRepository implements EngagementRepository
         return $this->factory->fromState($this->mapSessionModel($model));
     }
 
+    public function findByRfsBuyerSeller(Uuid $rfsId, Uuid $buyerId, Uuid $sellerId): ?EngagementSession
+    {
+        $model = EngagementSessionModel::with(['reports', 'buyer', 'seller', 'rfs'])
+            ->where('rfs_id', $rfsId->value())
+            ->where('buyer_id', $buyerId->value())
+            ->where('seller_id', $sellerId->value())
+            ->first();
+
+        if (! $model) {
+            return null;
+        }
+
+        return $this->factory->fromState($this->mapSessionModel($model));
+    }
+
     public function upsertReport(SessionReport $report): SessionReport
     {
         $data = $report->toArray();

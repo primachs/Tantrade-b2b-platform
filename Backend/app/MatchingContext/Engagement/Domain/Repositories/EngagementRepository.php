@@ -14,6 +14,8 @@ interface EngagementRepository
 
     public function findById(Uuid $sessionId): ?EngagementSession;
 
+    public function findByRfsBuyerSeller(Uuid $rfsId, Uuid $buyerId, Uuid $sellerId): ?EngagementSession;
+
     public function upsertReport(SessionReport $report): SessionReport;
 
     /** @return SessionReport[] */

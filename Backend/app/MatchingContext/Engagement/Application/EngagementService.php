@@ -21,6 +21,15 @@ class EngagementService
 
     public function createSession(array $payload): array
     {
+        $existing = $this->repository->findByRfsBuyerSeller(
+            Uuid::fromString($payload['rfs_id']),
+            Uuid::fromString($payload['buyer_id']),
+            Uuid::fromString($payload['seller_id'])
+        );
+        if ($existing) {
+            return $existing->toArray();
+        }
+
         $session = $this->factory->createSession($payload);
         $this->repository->create($session);
 
