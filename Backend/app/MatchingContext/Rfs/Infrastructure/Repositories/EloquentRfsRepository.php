@@ -81,12 +81,14 @@ class EloquentRfsRepository implements RfsRepository
 
         if ($buyerId) {
             // Show the caller's own RFS regardless of status (including their
-            // private DRAFTs), plus every other business's RFS once it has
-            // been published (OPEN or later) - buyers post requests that
-            // sellers need to be able to discover and engage with.
+            // private DRAFTs), plus any other business's RFS where the caller
+            // actually appears as a shortlisted seller candidate - not every
+            // open RFS on the platform, only genuine matches.
             $query->where(function ($q) use ($buyerId) {
                 $q->where('buyer_id', $buyerId)
-                    ->orWhere('status', '!=', 'DRAFT');
+                    ->orWhereHas('shortlists.candidates', function ($candidateQuery) use ($buyerId) {
+                        $candidateQuery->where('seller_id', $buyerId);
+                    });
             });
         }
 
