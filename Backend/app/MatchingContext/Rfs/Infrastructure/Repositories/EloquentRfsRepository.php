@@ -80,7 +80,14 @@ class EloquentRfsRepository implements RfsRepository
             ->orderByDesc('created_at');
 
         if ($buyerId) {
-            $query->where('buyer_id', $buyerId);
+            // Show the caller's own RFS regardless of status (including their
+            // private DRAFTs), plus every other business's RFS once it has
+            // been published (OPEN or later) - buyers post requests that
+            // sellers need to be able to discover and engage with.
+            $query->where(function ($q) use ($buyerId) {
+                $q->where('buyer_id', $buyerId)
+                    ->orWhere('status', '!=', 'DRAFT');
+            });
         }
 
         $models = $query->get();
