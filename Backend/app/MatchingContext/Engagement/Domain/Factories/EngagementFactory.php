@@ -2,6 +2,7 @@
 
 namespace App\MatchingContext\Engagement\Domain\Factories;
 
+use App\MatchingContext\Engagement\Domain\Entities\EngagementMessage;
 use App\MatchingContext\Engagement\Domain\Entities\EngagementSession;
 use App\MatchingContext\Engagement\Domain\Entities\SessionReport;
 use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
@@ -74,6 +75,29 @@ class EngagementFactory
             $state['reason'] ?? null,
             $state['notes'] ?? null,
             new \DateTimeImmutable($state['created_at'])
+        );
+    }
+
+    public function messageFromPayload(Uuid $sessionId, array $payload): EngagementMessage
+    {
+        return new EngagementMessage(
+            Uuid::random(),
+            $sessionId,
+            Uuid::fromString($payload['sender_business_id']),
+            $payload['body'],
+            new \DateTimeImmutable
+        );
+    }
+
+    public function messageFromState(array $state): EngagementMessage
+    {
+        return new EngagementMessage(
+            Uuid::fromString($state['id']),
+            Uuid::fromString($state['session_id']),
+            Uuid::fromString($state['sender_business_id']),
+            $state['body'],
+            new \DateTimeImmutable($state['created_at']),
+            $state['sender_business_name'] ?? null
         );
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\MatchingContext\Engagement\Presentation\Http\EngagementController;
+use App\MatchingContext\Engagement\Presentation\Http\EngagementMessageController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('engagement-sessions')->group(function () {
@@ -13,4 +14,6 @@ Route::prefix('engagement-sessions')->group(function () {
     Route::post('/{sessionId}/stall', [EngagementController::class, 'stall']);
     Route::post('/{sessionId}/outcomes', [EngagementController::class, 'reportOutcome']);
     Route::post('/{sessionId}/close', [EngagementController::class, 'close']);
+    Route::get('/{sessionId}/messages', [EngagementMessageController::class, 'index']);
+    Route::post('/{sessionId}/messages', [EngagementMessageController::class, 'store']);
 });

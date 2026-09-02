@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { apiRequest } from "../../../api/client";
 import { EngagementSession, Business, TaxonomyResponse } from "./types";
 import { MessageSquare, CheckCircle, XCircle } from "lucide-react";
+import { ChatModal } from "./ChatModal";
 
 type EngagementsPaneProps = {
   token: string;
@@ -28,6 +29,15 @@ export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy }: Enga
   const [selectedProfileId, setSelectedProfileId] = useState<string | null>(null);
   const [selectedProfileStatus, setSelectedProfileStatus] = useState<string>("");
   const [selectedRfsId, setSelectedRfsId] = useState<string | null>(null);
+  const [chatSessionId, setChatSessionId] = useState<string | null>(null);
+  const [chatOtherPartyName, setChatOtherPartyName] = useState<string>("");
+  const [chatDisabled, setChatDisabled] = useState(false);
+
+  const openChat = (sessionId: string, otherPartyName: string, status: string) => {
+    setChatSessionId(sessionId);
+    setChatOtherPartyName(otherPartyName || "Conversation");
+    setChatDisabled(status === "REJECTED");
+  };
 
   const loadEngagements = async () => {
     setLoading(true);
@@ -177,6 +187,13 @@ export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy }: Enga
                 </td>
                 <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", textAlign: "right" }}>
                   <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+                    <button
+                      onClick={() => openChat(session.id, isBuyer ? (session.seller_name || "Seller") : (session.buyer_name || "Buyer"), session.status)}
+                      style={{ padding: "0.375rem 0.75rem", background: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "0.875rem", fontWeight: 500 }}
+                      title="Open chat"
+                    >
+                      <MessageSquare style={{ width: "14px", height: "14px" }} /> Message
+                    </button>
                     {!isBuyer && session.status === "INITIATED" && (
                       <>
                         <button 
@@ -328,6 +345,16 @@ export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy }: Enga
         isOpen={!!selectedRfsId}
         onClose={() => setSelectedRfsId(null)}
         taxonomy={taxonomy}
+      />
+
+      <ChatModal
+        token={token}
+        sessionId={chatSessionId || ""}
+        myBusinessId={myBusiness.id}
+        otherPartyName={chatOtherPartyName}
+        isOpen={!!chatSessionId}
+        onClose={() => setChatSessionId(null)}
+        disabled={chatDisabled}
       />
     </div>
   );

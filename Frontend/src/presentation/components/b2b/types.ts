@@ -131,3 +131,12 @@ export type EngagementSession = {
   created_at: string;
   reports?: SessionReport[];
 };
+
+export type EngagementMessage = {
+  id: string;
+  session_id: string;
+  sender_business_id: string;
+  sender_business_name?: string | null;
+  body: string;
+  created_at: string;
+};

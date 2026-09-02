@@ -2,7 +2,9 @@
 
 namespace App\MatchingContext\Engagement\Infrastructure;
 
+use App\MatchingContext\Engagement\Domain\Repositories\EngagementMessageRepository;
 use App\MatchingContext\Engagement\Domain\Repositories\EngagementRepository;
+use App\MatchingContext\Engagement\Infrastructure\Repositories\EloquentEngagementMessageRepository;
 use App\MatchingContext\Engagement\Infrastructure\Repositories\EloquentEngagementRepository;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -12,6 +14,7 @@ class EngagementServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(EngagementRepository::class, EloquentEngagementRepository::class);
+        $this->app->bind(EngagementMessageRepository::class, EloquentEngagementMessageRepository::class);
     }
 
     public function boot(): void
