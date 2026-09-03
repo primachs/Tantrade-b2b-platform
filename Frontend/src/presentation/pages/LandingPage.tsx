@@ -46,7 +46,6 @@ export const LandingPage = (_props: LandingPageProps) => {
             <button type="button" className="button button--primary" onClick={_props.onGetStarted}>
               Get started free
             </button>
-            <a className="button button--secondary" href="#service-matrix">See how it works</a>
           </div>
           <div className="hero-pills">
             <span className="pill"><ShieldCheck className="icon" /> Verified business profiles</span>
