@@ -21,6 +21,10 @@ class EngagementMessage extends Model
         'sender_business_id',
         'body',
         'created_at',
+        'attachment_path',
+        'attachment_original_name',
+        'attachment_mime',
+        'attachment_size',
     ];
 
     protected $casts = [

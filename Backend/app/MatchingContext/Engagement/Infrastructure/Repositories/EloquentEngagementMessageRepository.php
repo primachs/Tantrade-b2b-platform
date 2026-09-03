@@ -14,14 +14,16 @@ class EloquentEngagementMessageRepository implements EngagementMessageRepository
 
     public function create(EngagementMessage $message): EngagementMessage
     {
-        $data = $message->toArray();
-
         EngagementMessageModel::create([
-            'id' => $data['id'],
-            'session_id' => $data['session_id'],
-            'sender_business_id' => $data['sender_business_id'],
-            'body' => $data['body'],
-            'created_at' => $data['created_at'],
+            'id' => $message->id()->value(),
+            'session_id' => $message->sessionId()->value(),
+            'sender_business_id' => $message->senderBusinessId()->value(),
+            'body' => $message->body(),
+            'created_at' => $message->createdAt()->format('c'),
+            'attachment_path' => $message->attachmentPath(),
+            'attachment_original_name' => $message->attachmentOriginalName(),
+            'attachment_mime' => $message->attachmentMime(),
+            'attachment_size' => $message->attachmentSize(),
         ]);
 
         return $message;
@@ -42,6 +44,10 @@ class EloquentEngagementMessageRepository implements EngagementMessageRepository
                 'sender_business_name' => $model->senderBusiness?->name,
                 'body' => $model->body,
                 'created_at' => $model->created_at->toAtomString(),
+                'attachment_path' => $model->attachment_path,
+                'attachment_original_name' => $model->attachment_original_name,
+                'attachment_mime' => $model->attachment_mime,
+                'attachment_size' => $model->attachment_size,
             ]);
         })->all();
     }

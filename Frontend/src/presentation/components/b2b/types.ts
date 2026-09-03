@@ -139,4 +139,9 @@ export type EngagementMessage = {
   sender_business_name?: string | null;
   body: string;
   created_at: string;
+  attachment?: {
+    original_name: string;
+    mime: string;
+    size: number;
+  } | null;
 };

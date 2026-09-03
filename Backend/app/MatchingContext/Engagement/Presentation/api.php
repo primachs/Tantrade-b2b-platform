@@ -16,4 +16,5 @@ Route::prefix('engagement-sessions')->group(function () {
     Route::post('/{sessionId}/close', [EngagementController::class, 'close']);
     Route::get('/{sessionId}/messages', [EngagementMessageController::class, 'index']);
     Route::post('/{sessionId}/messages', [EngagementMessageController::class, 'store']);
+    Route::get('/{sessionId}/messages/{messageId}/attachment', [EngagementMessageController::class, 'downloadAttachment']);
 });

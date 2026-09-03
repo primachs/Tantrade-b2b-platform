@@ -84,8 +84,13 @@ class EngagementFactory
             Uuid::random(),
             $sessionId,
             Uuid::fromString($payload['sender_business_id']),
-            $payload['body'],
-            new \DateTimeImmutable
+            $payload['body'] ?? '',
+            new \DateTimeImmutable,
+            null,
+            $payload['attachment_path'] ?? null,
+            $payload['attachment_original_name'] ?? null,
+            $payload['attachment_mime'] ?? null,
+            $payload['attachment_size'] ?? null
         );
     }
 
@@ -97,7 +102,11 @@ class EngagementFactory
             Uuid::fromString($state['sender_business_id']),
             $state['body'],
             new \DateTimeImmutable($state['created_at']),
-            $state['sender_business_name'] ?? null
+            $state['sender_business_name'] ?? null,
+            $state['attachment_path'] ?? null,
+            $state['attachment_original_name'] ?? null,
+            $state['attachment_mime'] ?? null,
+            isset($state['attachment_size']) ? (int) $state['attachment_size'] : null
         );
     }
 }

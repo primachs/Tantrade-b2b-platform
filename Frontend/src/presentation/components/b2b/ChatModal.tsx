@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { apiRequest } from "../../../api/client";
+import { apiRequest, apiUpload } from "../../../api/client";
 import { EngagementMessage } from "./types";
-import { Send, X, MessageSquare } from "lucide-react";
+import { Send, X, MessageSquare, Paperclip, FileText, Download } from "lucide-react";
 
 type ChatModalProps = {
   token: string;
@@ -13,13 +13,24 @@ type ChatModalProps = {
   disabled?: boolean;
 };
 
+const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024; // 10MB, matches backend limit
+const ALLOWED_EXTENSIONS = ".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.png,.jpg,.jpeg,.webp";
+
+const formatFileSize = (bytes: number) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
 export const ChatModal = ({ token, sessionId, myBusinessId, otherPartyName, isOpen, onClose, disabled }: ChatModalProps) => {
   const [messages, setMessages] = useState<EngagementMessage[]>([]);
   const [draft, setDraft] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadMessages = async () => {
     setLoading(true);
@@ -48,25 +59,61 @@ export const ChatModal = ({ token, sessionId, myBusinessId, otherPartyName, isOp
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_ATTACHMENT_BYTES) {
+      setError(`"${file.name}" is too large. Maximum attachment size is 10 MB.`);
+      e.target.value = "";
+      return;
+    }
+
+    setError(null);
+    setSelectedFile(file);
+    e.target.value = ""; // allow re-selecting the same file later
+  };
+
   const handleSend = async () => {
     const body = draft.trim();
-    if (!body || sending) return;
+    if ((!body && !selectedFile) || sending) return;
 
     setSending(true);
     setError(null);
     try {
-      const message = await apiRequest<EngagementMessage>(`/engagement-sessions/${sessionId}/messages`, {
-        method: "POST",
-        token,
-        body: { sender_business_id: myBusinessId, body },
-      });
+      let message: EngagementMessage;
+
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("sender_business_id", myBusinessId);
+        if (body) formData.append("body", body);
+        formData.append("attachment", selectedFile);
+
+        message = await apiUpload<EngagementMessage>(`/engagement-sessions/${sessionId}/messages`, {
+          token,
+          formData,
+        });
+      } else {
+        message = await apiRequest<EngagementMessage>(`/engagement-sessions/${sessionId}/messages`, {
+          method: "POST",
+          token,
+          body: { sender_business_id: myBusinessId, body },
+        });
+      }
+
       setMessages((prev) => [...prev, message]);
       setDraft("");
+      setSelectedFile(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send message.");
     } finally {
       setSending(false);
     }
+  };
+
+  const handleDownload = (messageId: string) => {
+    const url = `${(import.meta.env.VITE_API_BASE ?? "/api").toString().replace(/\/$/, "")}/engagement-sessions/${sessionId}/messages/${messageId}/attachment?business_id=${myBusinessId}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -161,9 +208,37 @@ export const ChatModal = ({ token, sessionId, myBusinessId, otherPartyName, isOp
                         fontSize: "0.875rem",
                         lineHeight: 1.5,
                         wordBreak: "break-word",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.4rem",
                       }}
                     >
-                      {msg.body}
+                      {msg.body && <span>{msg.body}</span>}
+                      {msg.attachment && (
+                        <button
+                          onClick={() => handleDownload(msg.id)}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.4rem",
+                            padding: "0.4rem 0.6rem",
+                            borderRadius: "8px",
+                            background: isMine ? "rgba(255,255,255,0.15)" : "#f1f5f9",
+                            border: "none",
+                            cursor: "pointer",
+                            textAlign: "left",
+                            color: isMine ? "#fff" : "#0f172a",
+                            fontSize: "0.8rem",
+                          }}
+                          title={`Download ${msg.attachment.original_name}`}
+                        >
+                          <FileText style={{ width: "16px", height: "16px", flexShrink: 0 }} />
+                          <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {msg.attachment.original_name}
+                          </span>
+                          <Download style={{ width: "14px", height: "14px", flexShrink: 0 }} />
+                        </button>
+                      )}
                     </div>
                     <span style={{ fontSize: "0.7rem", color: "#94a3b8", marginTop: "0.25rem" }}>
                       {new Date(msg.created_at).toLocaleString()}
@@ -182,7 +257,57 @@ export const ChatModal = ({ token, sessionId, myBusinessId, otherPartyName, isOp
           </div>
         )}
 
-        <div style={{ padding: "0.75rem", borderTop: "1px solid #e2e8f0", display: "flex", gap: "0.5rem" }}>
+        {selectedFile && (
+          <div
+            style={{
+              margin: "0 0.75rem",
+              padding: "0.5rem 0.75rem",
+              background: "#eff6ff",
+              border: "1px solid #bfdbfe",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "0.8rem",
+            }}
+          >
+            <FileText style={{ width: "16px", height: "16px", color: "#2563eb", flexShrink: 0 }} />
+            <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#1e40af" }}>
+              {selectedFile.name} ({formatFileSize(selectedFile.size)})
+            </span>
+            <button
+              onClick={() => setSelectedFile(null)}
+              style={{ background: "transparent", border: "none", cursor: "pointer", color: "#64748b", display: "flex" }}
+            >
+              <X style={{ width: "14px", height: "14px" }} />
+            </button>
+          </div>
+        )}
+
+        <div style={{ padding: "0.75rem", borderTop: "1px solid #e2e8f0", display: "flex", gap: "0.5rem", alignItems: "flex-end" }}>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={ALLOWED_EXTENSIONS}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={disabled || sending}
+            title="Attach a document"
+            style={{
+              padding: "0.5rem",
+              background: "transparent",
+              border: "1px solid #cbd5e1",
+              borderRadius: "8px",
+              cursor: disabled ? "default" : "pointer",
+              display: "flex",
+              color: "#64748b",
+            }}
+          >
+            <Paperclip style={{ width: "16px", height: "16px" }} />
+          </button>
           <textarea
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
@@ -202,14 +327,14 @@ export const ChatModal = ({ token, sessionId, myBusinessId, otherPartyName, isOp
           />
           <button
             onClick={handleSend}
-            disabled={disabled || sending || !draft.trim()}
+            disabled={disabled || sending || (!draft.trim() && !selectedFile)}
             style={{
               padding: "0.5rem 0.875rem",
-              background: disabled || !draft.trim() ? "#cbd5e1" : "#2563eb",
+              background: disabled || (!draft.trim() && !selectedFile) ? "#cbd5e1" : "#2563eb",
               color: "#fff",
               border: "none",
               borderRadius: "8px",
-              cursor: disabled || !draft.trim() ? "default" : "pointer",
+              cursor: disabled || (!draft.trim() && !selectedFile) ? "default" : "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

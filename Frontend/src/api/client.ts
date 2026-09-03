@@ -42,6 +42,29 @@ function parseFieldErrors(payload: unknown): Record<string, string[]> {
   );
 }
 
+async function handleResponse<T>(response: Response): Promise<T> {
+  const contentType = response.headers.get("content-type") ?? "";
+  const payload = contentType.includes("application/json")
+    ? await response.json()
+    : await response.text();
+
+  if (!response.ok) {
+    const fieldErrors = parseFieldErrors(payload);
+    const message =
+      (typeof payload === "object" && payload && "message" in payload
+        ? String((payload as { message?: string }).message)
+        : typeof payload === "object" && payload && "error" in payload
+        ? String((payload as { error?: string }).error)
+        : `Request failed (${response.status})`) ||
+      fieldErrors[Object.keys(fieldErrors)[0]]?.[0] ||
+      `Request failed (${response.status})`;
+
+    throw new ApiError(message, response.status, fieldErrors);
+  }
+
+  return payload as T;
+}
+
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const url = `${apiBase}${path.startsWith("/") ? path : `/${path}`}`;
   const headers: Record<string, string> = {
@@ -64,24 +87,32 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     body,
   });
 
-  const contentType = response.headers.get("content-type") ?? "";
-  const payload = contentType.includes("application/json")
-    ? await response.json()
-    : await response.text();
+  return handleResponse<T>(response);
+}
 
-  if (!response.ok) {
-    const fieldErrors = parseFieldErrors(payload);
-    const message =
-      (typeof payload === "object" && payload && "message" in payload
-        ? String((payload as { message?: string }).message)
-        : typeof payload === "object" && payload && "error" in payload
-        ? String((payload as { error?: string }).error)
-        : `Request failed (${response.status})`) ||
-      fieldErrors[Object.keys(fieldErrors)[0]]?.[0] ||
-      `Request failed (${response.status})`;
+/**
+ * For requests that need to send a file (multipart/form-data). Do NOT set
+ * Content-Type manually - the browser sets it (including the boundary)
+ * automatically when the body is a FormData instance.
+ */
+export async function apiUpload<T>(
+  path: string,
+  options: { token?: string; formData: FormData; method?: "POST" | "PUT" | "PATCH" }
+): Promise<T> {
+  const url = `${apiBase}${path.startsWith("/") ? path : `/${path}`}`;
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+  };
 
-    throw new ApiError(message, response.status, fieldErrors);
+  if (options.token) {
+    headers.Authorization = `Bearer ${options.token}`;
   }
 
-  return payload as T;
+  const response = await fetch(url, {
+    method: options.method ?? "POST",
+    headers,
+    body: options.formData,
+  });
+
+  return handleResponse<T>(response);
 }
