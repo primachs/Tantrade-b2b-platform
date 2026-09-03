@@ -1,4 +1,4 @@
-import { ShieldCheck, Building2, Zap, Phone, Mail, FileText, Users } from "lucide-react";
+import { ShieldCheck, Building2, Zap, Phone, Mail, FileText, Users, MessageSquare, Search } from "lucide-react";
 import { motion } from "motion/react";
 
 type LandingPageProps = {
@@ -9,23 +9,23 @@ export const LandingPage = (_props: LandingPageProps) => {
   const services = [
     {
       icon: <Building2 className="w-8 h-8" />,
-      title: "Primary Entity Management",
-      desc: "Create and maintain business profiles across the lifecycle.",
+      title: "Register your business",
+      desc: "Get verified and listed as a trusted buyer or seller in your industry.",
+    },
+    {
+      icon: <Search className="w-8 h-8" />,
+      title: "Post a request for supply",
+      desc: "Describe what you need and get matched with qualified sellers automatically.",
+    },
+    {
+      icon: <MessageSquare className="w-8 h-8" />,
+      title: "Engage and close deals",
+      desc: "Message trade partners directly and confirm outcomes on the platform.",
     },
     {
       icon: <Users className="w-8 h-8" />,
-      title: "Secondary Entity Tracking",
-      desc: "Register and update subsidiaries, branches, and related identities.",
-    },
-    {
-      icon: <ShieldCheck className="w-8 h-8" />,
-      title: "Asset & Property Protection",
-      desc: "Manage sensitive assets and safeguard ownership records.",
-    },
-    {
-      icon: <FileText className="w-8 h-8" />,
-      title: "Information Retrieval",
-      desc: "Look up official records and exchange validated data safely.",
+      title: "Market governance",
+      desc: "Register brokers and manage market offices under official oversight.",
     },
   ];
 
@@ -38,22 +38,43 @@ export const LandingPage = (_props: LandingPageProps) => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="hero-wrapper">
-          <h1 className="hero-headline">TanTrade B2B Platform</h1>
+          <span className="hero-kicker">Tanzania Trade Development Authority</span>
+          <h1 className="hero-headline">Find verified buyers and sellers, faster.</h1>
           <p className="hero-subheader">
-            A secure, comprehensive digital hub for verified trade operations, business records, and trusted public access.
+            TanTrade matches your business with the right trade partners across Tanzania, backed by verification, smart matching, and secure deal-making.
           </p>
           <div className="hero-cta">
             <button type="button" className="button button--primary" onClick={_props.onGetStarted}>
-              Get Started
+              Get started free
             </button>
-            <a className="button button--secondary" href="#support-footer">Learn More</a>
+            <a className="button button--secondary" href="#service-matrix">See how it works</a>
           </div>
           <div className="hero-pills">
-            <span className="pill"><ShieldCheck className="icon" /> Transaction Security</span>
-            <span className="pill"><Zap className="icon" /> Continuous Availability</span>
-            <span className="pill"><Phone className="icon" /> Dedicated Support</span>
-            <span className="pill"><Mail className="icon" /> Infrastructure Stability</span>
+            <span className="pill"><ShieldCheck className="icon" /> Verified business profiles</span>
+            <span className="pill"><Zap className="icon" /> Smart RFS matching</span>
+            <span className="pill"><MessageSquare className="icon" /> Secure deal chat</span>
           </div>
+        </div>
+      </motion.section>
+
+      <motion.section
+        className="stats-row"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="stat-item">
+          <p className="landing-stat-value landing-stat-value--blue">Verified</p>
+          <p className="landing-stat-label">business profiles</p>
+        </div>
+        <div className="stat-item">
+          <p className="landing-stat-value landing-stat-value--green">Smart</p>
+          <p className="landing-stat-label">RFS matching engine</p>
+        </div>
+        <div className="stat-item">
+          <p className="landing-stat-value landing-stat-value--blue">Secure</p>
+          <p className="landing-stat-label">in-app deal chat</p>
         </div>
       </motion.section>
 
@@ -65,7 +86,7 @@ export const LandingPage = (_props: LandingPageProps) => {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
       >
-        <h2>Platform Capabilities</h2>
+        <h2>What you can do on TanTrade</h2>
         <div className="service-grid">
           {services.map((service) => (
             <div key={service.title} className="service-card">
@@ -75,6 +96,19 @@ export const LandingPage = (_props: LandingPageProps) => {
             </div>
           ))}
         </div>
+      </motion.section>
+
+      <motion.section
+        className="closing-cta"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <p className="closing-cta__title">Ready to grow your trade network?</p>
+        <button type="button" className="button button--primary" onClick={_props.onGetStarted}>
+          Create your free account
+        </button>
       </motion.section>
 
       <motion.section 
