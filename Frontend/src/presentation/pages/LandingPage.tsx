@@ -85,7 +85,7 @@ export const LandingPage = (_props: LandingPageProps) => {
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
       >
-        <h2>What you can do on TanTrade</h2>
+        <h2>What you can do on this B2B platform</h2>
         <div className="service-grid">
           {services.map((service) => (
             <div key={service.title} className="service-card">
