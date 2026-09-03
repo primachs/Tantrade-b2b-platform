@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { apiRequest, ApiError } from "../../../api/client";
 import { Rfs, MatchShortlist, TaxonomyResponse, Business } from "./types";
-import { Search, Eye, PlayCircle, Briefcase } from "lucide-react";
+import { Search, Briefcase, ChevronRight } from "lucide-react";
 import { BusinessProfileModal } from "./BusinessProfileModal";
 
 type RfsRegistryPaneProps = {
@@ -92,159 +92,138 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
     }
   };
 
+  const getStatusMeta = (status: string) => {
+    switch (status) {
+      case "OPEN": return { label: "Open", dot: "#00835e" };
+      case "MATCHED": return { label: "Matched", dot: "#f59e0b" };
+      case "DRAFT": return { label: "Draft", dot: "#94a3b8" };
+      case "CLOSED": return { label: "Closed", dot: "#94a3b8" };
+      default: return { label: status.charAt(0) + status.slice(1).toLowerCase(), dot: "#94a3b8" };
+    }
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-      <div className="card" style={{ padding: "1.5rem" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-          <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#0f172a" }}>RFS Registry</h2>
-          <div style={{ fontSize: "0.875rem", color: "#64748b", display: "flex", gap: "1rem" }}>
-            <span><span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#94a3b8", marginRight: 4 }}></span><strong>DRAFT:</strong> Private, editable</span>
-            <span><span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#22c55e", marginRight: 4 }}></span><strong>OPEN:</strong> Visible to market, ready for matching</span>
-          </div>
-        </div>
-        
+      <div>
+        <h1 style={{ fontSize: "1.9rem", fontWeight: 700, color: "#1d1d1f", margin: "0 0 0.35rem", letterSpacing: "-0.025em" }}>RFS Registry</h1>
+        <p style={{ color: "#86868b", fontSize: "0.95rem", margin: "0 0 1.5rem" }}>Browse requests you've created and ones you're matched to.</p>
+
         {rfsList.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "3rem", background: "#f8fafc", borderRadius: "8px", border: "1px dashed #cbd5e1" }}>
-            <Briefcase style={{ width: "32px", height: "32px", color: "#94a3b8", margin: "0 auto 1rem" }} />
-            <p style={{ margin: 0, color: "#64748b" }}>No requests found in the registry.</p>
+          <div style={{ textAlign: "center", padding: "3.5rem 1.5rem", color: "#86868b", background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)" }}>
+            <Briefcase style={{ width: "28px", height: "28px", color: "#d2d2d7", margin: "0 auto 0.75rem" }} />
+            <p style={{ margin: 0, fontSize: "0.9rem" }}>No requests found in the registry.</p>
           </div>
         ) : (
-          <div style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-              <thead>
-                <tr>
-                  <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>Title</th>
-                  <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>Category</th>
-                  <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>Status</th>
-                  <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>Role</th>
-                  <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", textAlign: "right" }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rfsList.map((rfs) => {
-                  const isMine = isMyRfs(rfs);
-                  return (
-                    <tr key={rfs.id} style={{ background: selectedRfs?.id === rfs.id ? "#f1f5f9" : "transparent" }}>
-                      <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", fontWeight: 500 }}>{rfs.title}</td>
-                      <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", fontSize: "0.875rem", color: "#475569" }}>{serviceTypeMap.get(rfs.service_type_id) ?? rfs.service_type_id}</td>
-                      <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0" }}>
-                        <span style={{ 
-                          padding: "0.25rem 0.625rem", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 500,
-                          background: rfs.status === "OPEN" ? "#dcfce7" : rfs.status === "MATCHED" ? "#fef3c7" : "#f1f5f9",
-                          color: rfs.status === "OPEN" ? "#166534" : rfs.status === "MATCHED" ? "#92400e" : "#475569"
-                        }}>
-                          {rfs.status}
-                        </span>
-                      </td>
-                      <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0" }}>
-                        {isMine ? (
-                          <span style={{ color: "#2563eb", fontSize: "0.875rem", fontWeight: 500 }}>Buyer</span>
-                        ) : (
-                          <span style={{ color: "#10b981", fontSize: "0.875rem", fontWeight: 500 }}>Seller Candidate</span>
-                        )}
-                      </td>
-                      <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", textAlign: "right" }}>
-                        <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
-                          <button 
-                            onClick={() => handleInspectRfs(rfs.id)}
-                            style={{ padding: "0.375rem 0.75rem", background: "#fff", border: "1px solid #cbd5e1", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.875rem" }}
-                          >
-                            <Eye style={{ width: "14px", height: "14px" }} /> Inspect
-                          </button>
-                          
-                          {isMine && rfs.status === "DRAFT" && (
-                            <button 
-                              onClick={() => onEdit(rfs)}
-                              style={{ padding: "0.375rem 0.75rem", background: "#fff", border: "1px solid #cbd5e1", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.875rem" }}
-                            >
-                              <Briefcase style={{ width: "14px", height: "14px" }} /> Edit
-                            </button>
-                          )}
-                          
-                          {isMine && (rfs.status === "DRAFT" || rfs.status === "OPEN" || rfs.status === "MATCHED") && (
-                            <button 
-                              onClick={() => handleOpenMatch(rfs.id, rfs.status)}
-                              disabled={loading}
-                              style={{ padding: "0.375rem 0.75rem", background: "#2563eb", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.25rem", fontSize: "0.875rem" }}
-                              title={rfs.status === "DRAFT" ? "Open this RFS to the market and run matching" : rfs.status === "MATCHED" ? "Re-run matching to pick up newly added sellers" : "Run matching engine"}
-                            >
-                              <PlayCircle style={{ width: "14px", height: "14px" }} /> {loading ? "..." : (rfs.status === "DRAFT" ? "Publish & Match" : rfs.status === "MATCHED" ? "Re-match" : "Run Match")}
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+          <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", overflow: "hidden" }}>
+            {rfsList.map((rfs, index) => {
+              const isMine = isMyRfs(rfs);
+              const statusMeta = getStatusMeta(rfs.status);
+              const isSelected = selectedRfs?.id === rfs.id;
+              const canRunMatch = isMine && (rfs.status === "DRAFT" || rfs.status === "OPEN" || rfs.status === "MATCHED");
+              const matchLabel = rfs.status === "DRAFT" ? "Publish" : rfs.status === "MATCHED" ? "Re-match" : "Run Match";
+
+              return (
+                <div
+                  key={rfs.id}
+                  onClick={() => handleInspectRfs(rfs.id)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "1.15rem 1.5rem",
+                    gap: "1rem",
+                    borderBottom: index === rfsList.length - 1 ? "none" : "1px solid #f2f2f2",
+                    background: isSelected ? "#fafbfc" : "transparent",
+                    cursor: "pointer",
+                  }}
+                >
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.98rem", marginBottom: "0.2rem" }}>{rfs.title}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                      <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: statusMeta.dot, display: "inline-block", flexShrink: 0 }}></span>
+                      <span style={{ color: "#86868b", fontSize: "0.82rem" }}>
+                        {statusMeta.label} · {serviceTypeMap.get(rfs.service_type_id) ?? rfs.service_type_id}
+                      </span>
+                    </div>
+                  </div>
+
+                  {canRunMatch ? (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleOpenMatch(rfs.id, rfs.status); }}
+                      disabled={loading}
+                      style={{ padding: "0.5rem 1.1rem", borderRadius: "20px", border: "none", background: "#3c5eab", color: "#fff", fontWeight: 600, fontSize: "0.82rem", cursor: "pointer", flexShrink: 0 }}
+                      title={rfs.status === "DRAFT" ? "Open this RFS to the market and run matching" : rfs.status === "MATCHED" ? "Re-run matching to pick up newly added sellers" : "Run matching engine"}
+                    >
+                      {loading ? "..." : matchLabel}
+                    </button>
+                  ) : (
+                    <ChevronRight style={{ width: "16px", height: "16px", color: "#c7c7cc", flexShrink: 0 }} />
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
 
       {selectedRfs && (
-        <div className="card" style={{ padding: "1.5rem", borderTop: "4px solid #2563eb" }}>
-          <h3 style={{ margin: "0 0 1rem 0", fontSize: "1.125rem" }}>Details: {selectedRfs.title}</h3>
-          <p style={{ color: "#475569", lineHeight: 1.6, margin: "0 0 1.5rem 0" }}>{selectedRfs.description}</p>
+        <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", padding: "1.75rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "0.5rem" }}>
+            <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#1d1d1f", letterSpacing: "-0.01em" }}>{selectedRfs.title}</h3>
+            {isMyRfs(selectedRfs) && selectedRfs.status === "DRAFT" && (
+              <button
+                onClick={() => onEdit(selectedRfs)}
+                style={{ padding: "0.4rem 1rem", borderRadius: "20px", border: "1px solid #d2d2d7", background: "#fff", color: "#1d1d1f", fontWeight: 500, fontSize: "0.8rem", cursor: "pointer", flexShrink: 0 }}
+              >
+                Edit
+              </button>
+            )}
+          </div>
+          <p style={{ color: "#6e6e73", lineHeight: 1.6, margin: "0 0 1.5rem 0", fontSize: "0.92rem" }}>{selectedRfs.description}</p>
           
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", background: "#f8fafc", padding: "1rem", borderRadius: "8px", marginBottom: "1.5rem" }}>
-            <div><span style={{ display: "block", fontSize: "0.75rem", color: "#64748b", textTransform: "uppercase" }}>Project Size</span><span style={{ fontWeight: 500 }}>{selectedRfs.project_size}</span></div>
-            <div><span style={{ display: "block", fontSize: "0.75rem", color: "#64748b", textTransform: "uppercase" }}>Expertise</span><span style={{ fontWeight: 500 }}>{selectedRfs.expertise_level}</span></div>
-            <div><span style={{ display: "block", fontSize: "0.75rem", color: "#64748b", textTransform: "uppercase" }}>Budget</span><span style={{ fontWeight: 500 }}>{selectedRfs.constraint?.min_budget} - {selectedRfs.constraint?.max_budget}</span></div>
-            <div><span style={{ display: "block", fontSize: "0.75rem", color: "#64748b", textTransform: "uppercase" }}>Location</span><span style={{ fontWeight: 500 }}>{selectedRfs.constraint?.region}, {selectedRfs.constraint?.district}</span></div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", background: "#fafbfc", padding: "1.1rem 1.25rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
+            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Project Size</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.project_size}</span></div>
+            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Expertise</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.expertise_level}</span></div>
+            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Budget</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.constraint?.min_budget} - {selectedRfs.constraint?.max_budget}</span></div>
+            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Location</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.constraint?.region}, {selectedRfs.constraint?.district}</span></div>
           </div>
 
           {isMyRfs(selectedRfs) && shortlist && (
-            <div style={{ borderTop: "1px solid #e2e8f0", paddingTop: "1.5rem" }}>
-              <h4 style={{ margin: "0 0 1rem 0", display: "flex", alignItems: "center", gap: "0.5rem" }}><Search style={{ width: "18px", height: "18px", color: "#10b981" }} /> Matching Shortlist</h4>
+            <div style={{ borderTop: "1px solid #f2f2f2", paddingTop: "1.5rem" }}>
+              <h4 style={{ margin: "0 0 1rem 0", display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.95rem", fontWeight: 700, color: "#1d1d1f" }}><Search style={{ width: "16px", height: "16px", color: "#00835e" }} /> Matching Shortlist</h4>
               
               {(!shortlist.candidates || shortlist.candidates.length === 0) ? (
-                <p style={{ color: "#64748b", background: "#f8fafc", padding: "1rem", borderRadius: "6px" }}>No matching sellers found for these criteria.</p>
+                <p style={{ color: "#86868b", background: "#fafbfc", padding: "1rem", borderRadius: "10px", fontSize: "0.88rem", margin: 0 }}>No matching sellers found for these criteria.</p>
               ) : (
-                <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-                  <thead>
-                    <tr>
-                      <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>Rank</th>
-                      <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>Candidate Name</th>
-                      <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0" }}>Score</th>
-                      <th style={{ padding: "0.5rem", borderBottom: "1px solid #e2e8f0", textAlign: "right" }}>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {shortlist.candidates.map(candidate => (
-                      <tr key={candidate.seller_id}>
-                        <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0", fontWeight: 600, color: "#0f172a" }}>#{candidate.rank}</td>
-                        <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0", color: "#475569" }}>
-                          <button 
-                            onClick={() => setSelectedProfileId(candidate.seller_id)}
-                            style={{ background: "none", border: "none", color: "#2563eb", cursor: "pointer", textDecoration: "underline", padding: 0, textAlign: "left", fontSize: "0.875rem" }}
-                          >
-                            {candidate.seller_name || <span style={{fontFamily: "monospace"}}>{candidate.seller_id}</span>}
-                          </button>
-                        </td>
-                        <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0" }}>
-                          <span style={{ background: "#dcfce7", color: "#166534", padding: "0.25rem 0.5rem", borderRadius: "4px", fontSize: "0.875rem", fontWeight: 600 }}>{Math.round(candidate.score * 100)}%</span>
-                        </td>
-                        <td style={{ padding: "0.75rem 0.5rem", borderBottom: "1px solid #e2e8f0", textAlign: "right" }}>
-                          <button 
-                            onClick={() => handleInitiateEngagement(candidate.seller_id)}
-                            disabled={engagedSellers.has(candidate.seller_id) || loading}
-                            style={{ 
-                              padding: "0.375rem 0.75rem", 
-                              background: engagedSellers.has(candidate.seller_id) ? "#f1f5f9" : "#10b981", 
-                              color: engagedSellers.has(candidate.seller_id) ? "#475569" : "white", 
-                              border: engagedSellers.has(candidate.seller_id) ? "1px solid #cbd5e1" : "none", 
-                              borderRadius: "6px", cursor: engagedSellers.has(candidate.seller_id) ? "default" : "pointer", 
-                              fontSize: "0.875rem", fontWeight: 500 
-                            }}
-                          >
-                            {engagedSellers.has(candidate.seller_id) ? "Engaged ✓" : "Engage"}
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  {shortlist.candidates.map(candidate => (
+                    <div key={candidate.seller_id} style={{ display: "flex", alignItems: "center", gap: "1rem", padding: "0.75rem 1rem", background: "#fafbfc", borderRadius: "10px" }}>
+                      <span style={{ fontWeight: 700, color: "#1d1d1f", fontSize: "0.85rem", width: "28px" }}>#{candidate.rank}</span>
+                      <button
+                        onClick={() => setSelectedProfileId(candidate.seller_id)}
+                        style={{ background: "none", border: "none", color: "#3c5eab", cursor: "pointer", padding: 0, textAlign: "left", fontSize: "0.88rem", fontWeight: 500, flex: 1 }}
+                      >
+                        {candidate.seller_name || <span style={{ fontFamily: "monospace" }}>{candidate.seller_id}</span>}
+                      </button>
+                      <span style={{ background: "#e8f5ee", color: "#00835e", padding: "0.25rem 0.6rem", borderRadius: "999px", fontSize: "0.8rem", fontWeight: 700 }}>{Math.round(candidate.score * 100)}%</span>
+                      <button
+                        onClick={() => handleInitiateEngagement(candidate.seller_id)}
+                        disabled={engagedSellers.has(candidate.seller_id) || loading}
+                        style={{
+                          padding: "0.45rem 1rem",
+                          borderRadius: "20px",
+                          background: engagedSellers.has(candidate.seller_id) ? "#f0f0f2" : "#00835e",
+                          color: engagedSellers.has(candidate.seller_id) ? "#6e6e73" : "#fff",
+                          border: "none",
+                          cursor: engagedSellers.has(candidate.seller_id) ? "default" : "pointer",
+                          fontSize: "0.82rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {engagedSellers.has(candidate.seller_id) ? "Engaged ✓" : "Engage"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           )}
