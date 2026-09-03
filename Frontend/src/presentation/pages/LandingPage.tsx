@@ -38,7 +38,6 @@ export const LandingPage = (_props: LandingPageProps) => {
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
         <div className="hero-wrapper">
-          <span className="hero-kicker">Tanzania Trade Development Authority</span>
           <h1 className="hero-headline">Find verified buyers and sellers, faster.</h1>
           <p className="hero-subheader">
             TanTrade matches your business with the right trade partners across Tanzania, backed by verification, smart matching, and secure deal-making.
