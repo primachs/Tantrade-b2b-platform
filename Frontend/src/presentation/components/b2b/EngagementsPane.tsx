@@ -122,147 +122,168 @@ export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy }: Enga
     }
   };
 
-  const getStatusColor = (status: string) => {
+  const getStatusDotColor = (status: string) => {
     switch (status) {
-      case "ACCEPTED": return { bg: "#dcfce7", text: "#166534" };
-      case "REJECTED": return { bg: "#fee2e2", text: "#991b1b" };
-      case "CLOSED": return { bg: "#f3e8ff", text: "#6b21a8" };
-      case "INITIATED": return { bg: "#eff6ff", text: "#1e40af" };
-      default: return { bg: "#f1f5f9", text: "#475569" };
+      case "ACCEPTED": return "#00835e";
+      case "REJECTED": return "#dc2626";
+      case "CLOSED": return "#94a3b8";
+      case "INITIATED": return "#3c5eab";
+      default: return "#94a3b8";
     }
   };
 
-  const renderTable = (engagements: EngagementSession[], isBuyer: boolean) => {
+  const getInitial = (name: string) => (name?.trim()?.[0] ?? "?").toUpperCase();
+
+  const renderList = (engagements: EngagementSession[], isBuyer: boolean) => {
     if (engagements.length === 0) {
       return (
-        <div style={{ textAlign: "center", padding: "3rem", background: "#f8fafc", borderRadius: "8px", border: "1px dashed #cbd5e1" }}>
-          <MessageSquare style={{ width: "32px", height: "32px", color: "#94a3b8", margin: "0 auto 1rem" }} />
-          <p style={{ margin: 0, color: "#64748b" }}>No engagements found in this category.</p>
+        <div style={{ textAlign: "center", padding: "3.5rem 1.5rem", color: "#86868b" }}>
+          <MessageSquare style={{ width: "28px", height: "28px", color: "#d2d2d7", margin: "0 auto 0.75rem" }} />
+          <p style={{ margin: 0, fontSize: "0.9rem" }}>No engagements found in this category.</p>
         </div>
       );
     }
 
     return (
-      <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
-        <thead>
-          <tr>
-            <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>RFS</th>
-            <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>{isBuyer ? "Seller" : "Buyer"}</th>
-            <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>Started On</th>
-            <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase" }}>Status</th>
-            <th style={{ padding: "0.75rem 1rem", borderBottom: "1px solid #e2e8f0", color: "#64748b", fontSize: "0.75rem", textTransform: "uppercase", textAlign: "right" }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {engagements.map((session) => {
-            const colors = getStatusColor(session.status);
-            return (
-              <tr key={session.id}>
-                <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", fontSize: "0.875rem", fontWeight: 500 }}>
-                  <button 
+      <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", overflow: "hidden" }}>
+        {engagements.map((session, index) => {
+          const otherPartyName = isBuyer ? (session.seller_name || "Unknown Seller") : (session.buyer_name || "Unknown Buyer");
+          return (
+            <div
+              key={session.id}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                padding: "1.1rem 1.5rem",
+                gap: "1rem",
+                borderBottom: index === engagements.length - 1 ? "none" : "1px solid #f2f2f2",
+                flexWrap: "wrap",
+              }}
+            >
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "linear-gradient(135deg, #3c5eab, #00835e)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                }}
+              >
+                <span style={{ color: "#fff", fontWeight: 600, fontSize: "0.95rem" }}>{getInitial(otherPartyName)}</span>
+              </div>
+
+              <div style={{ flex: "1 1 200px", minWidth: 0 }}>
+                <button
+                  onClick={() => {
+                    setSelectedProfileId(isBuyer ? session.seller_id : session.buyer_id);
+                    setSelectedProfileStatus(session.status);
+                  }}
+                  style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "block", fontWeight: 600, color: "#1d1d1f", fontSize: "0.98rem", marginBottom: "0.1rem", textAlign: "left" }}
+                >
+                  {otherPartyName}
+                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                  <button
                     onClick={() => setSelectedRfsId(session.rfs_id)}
-                    style={{ background: "none", border: "none", color: "#2563eb", cursor: "pointer", textDecoration: "underline", padding: 0, textAlign: "left", fontWeight: 500 }}
+                    style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#3c5eab", fontSize: "0.82rem", fontWeight: 500 }}
                   >
                     {session.rfs_short_id || "RFS-Unknown"}
                   </button>
-                </td>
-                <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", fontSize: "0.875rem" }}>
-                  <button 
-                    onClick={() => {
-                      setSelectedProfileId(isBuyer ? session.seller_id : session.buyer_id);
-                      setSelectedProfileStatus(session.status);
-                    }}
-                    style={{ background: "none", border: "none", color: "#2563eb", cursor: "pointer", textDecoration: "underline", padding: 0, textAlign: "left" }}
-                  >
-                    {isBuyer ? (session.seller_name || "Unknown Seller") : (session.buyer_name || "Unknown Buyer")}
-                  </button>
-                </td>
-                <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", fontSize: "0.875rem", color: "#475569" }}>
-                  {new Date(session.created_at).toLocaleDateString()}
-                </td>
-                <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0" }}>
-                  <span style={{ padding: "0.25rem 0.625rem", borderRadius: "9999px", fontSize: "0.75rem", fontWeight: 600, background: colors.bg, color: colors.text }}>
-                    {session.status}
-                  </span>
-                </td>
-                <td style={{ padding: "1rem", borderBottom: "1px solid #e2e8f0", textAlign: "right" }}>
-                  <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end" }}>
+                  <span style={{ color: "#d2d2d7" }}>·</span>
+                  <span style={{ color: "#86868b", fontSize: "0.82rem" }}>{new Date(session.created_at).toLocaleDateString()}</span>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", padding: "0.3rem 0.75rem", background: "#f0f0f2", borderRadius: "999px" }}>
+                <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: getStatusDotColor(session.status) }}></span>
+                <span style={{ fontSize: "0.8rem", color: "#6e6e73", fontWeight: 500 }}>{session.status.charAt(0) + session.status.slice(1).toLowerCase()}</span>
+              </div>
+
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+                <button
+                  onClick={() => openChat(session.id, otherPartyName, session.status)}
+                  style={{ padding: "0.55rem 1.2rem", borderRadius: "20px", border: "none", background: "#3c5eab", color: "#fff", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.35rem" }}
+                >
+                  <MessageSquare style={{ width: "14px", height: "14px" }} /> Message
+                </button>
+                {!isBuyer && session.status === "INITIATED" && (
+                  <>
                     <button
-                      onClick={() => openChat(session.id, isBuyer ? (session.seller_name || "Seller") : (session.buyer_name || "Buyer"), session.status)}
-                      style={{ padding: "0.375rem 0.75rem", background: "#eff6ff", color: "#2563eb", border: "1px solid #bfdbfe", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "0.875rem", fontWeight: 500 }}
-                      title="Open chat"
+                      onClick={() => handleAccept(session.id)}
+                      title="Accept Engagement"
+                      style={{ width: "36px", height: "36px", borderRadius: "50%", border: "1px solid #d2d2d7", background: "#fff", color: "#00835e", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
                     >
-                      <MessageSquare style={{ width: "14px", height: "14px" }} /> Message
+                      <CheckCircle style={{ width: "16px", height: "16px" }} />
                     </button>
-                    {!isBuyer && session.status === "INITIATED" && (
-                      <>
-                        <button 
-                          onClick={() => handleAccept(session.id)}
-                          style={{ padding: "0.375rem", background: "#dcfce7", color: "#166534", border: "1px solid #bbf7d0", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          title="Accept Engagement"
-                        >
-                          <CheckCircle style={{ width: "16px", height: "16px" }} />
-                        </button>
-                        <button 
-                          onClick={() => handleReject(session.id)}
-                          style={{ padding: "0.375rem", background: "#fee2e2", color: "#991b1b", border: "1px solid #fecaca", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center" }}
-                          title="Reject Engagement"
-                        >
-                          <XCircle style={{ width: "16px", height: "16px" }} />
-                        </button>
-                      </>
-                    )}
-                    {session.status === "ACCEPTED" && (
-                      <button 
-                        onClick={() => openReportModal(session.id)}
-                        style={{ padding: "0.375rem 0.75rem", background: "#f3e8ff", color: "#6b21a8", border: "1px solid #e9d5ff", borderRadius: "6px", cursor: "pointer", display: "inline-flex", alignItems: "center", fontSize: "0.875rem", fontWeight: 500 }}
-                        title="Report Deal Outcome"
-                      >
-                        <CheckCircle style={{ width: "14px", height: "14px", marginRight: "4px" }} /> Report Deal
-                      </button>
-                    )}
-                  </div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                    <button
+                      onClick={() => handleReject(session.id)}
+                      title="Reject Engagement"
+                      style={{ width: "36px", height: "36px", borderRadius: "50%", border: "1px solid #d2d2d7", background: "#fff", color: "#dc2626", cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+                    >
+                      <XCircle style={{ width: "16px", height: "16px" }} />
+                    </button>
+                  </>
+                )}
+                {session.status === "ACCEPTED" && (
+                  <button
+                    onClick={() => openReportModal(session.id)}
+                    style={{ padding: "0.55rem 1.1rem", borderRadius: "20px", border: "1px solid #3c5eab", background: "#fff", color: "#3c5eab", fontWeight: 600, fontSize: "0.85rem", cursor: "pointer" }}
+                  >
+                    Report Deal
+                  </button>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     );
   };
 
   return (
-    <div className="card" style={{ padding: "2rem", position: "relative" }}>
-      <h2 style={{ margin: "0 0 1.5rem 0", fontSize: "1.25rem", color: "#0f172a", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-        <MessageSquare style={{ color: "#2563eb" }} /> Active Engagements
-      </h2>
+    <div style={{ position: "relative" }}>
+      <h1 style={{ fontSize: "1.9rem", fontWeight: 700, color: "#1d1d1f", margin: "0 0 0.35rem", letterSpacing: "-0.025em" }}>Engagements</h1>
+      <p style={{ color: "#86868b", fontSize: "0.95rem", margin: "0 0 2rem" }}>Track requests you've received and sent.</p>
 
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem", borderBottom: "1px solid #e2e8f0", paddingBottom: "0" }}>
-        <button 
+      <div style={{ display: "flex", gap: "0.4rem", marginBottom: "1.75rem", background: "#f0f0f2", borderRadius: "12px", padding: "0.3rem", width: "fit-content" }}>
+        <button
           onClick={() => setActiveTab("buyer")}
-          style={{ 
-            background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "buyer" ? "#2563eb" : "#64748b",
-            borderBottom: activeTab === "buyer" ? "2px solid #2563eb" : "2px solid transparent",
-            paddingBottom: "0.75rem"
-          }}>
-          Requests I Initiated ({buyerEngagements.length})
+          style={{
+            padding: "0.5rem 1.1rem",
+            borderRadius: "9px",
+            border: "none",
+            background: activeTab === "buyer" ? "#fff" : "transparent",
+            color: activeTab === "buyer" ? "#1d1d1f" : "#6e6e73",
+            fontWeight: activeTab === "buyer" ? 600 : 500,
+            fontSize: "0.88rem",
+            cursor: "pointer",
+            boxShadow: activeTab === "buyer" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+          }}
+        >
+          Requests I Initiated {buyerEngagements.length > 0 && <span style={{ color: "#3c5eab" }}>{buyerEngagements.length}</span>}
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab("seller")}
-          style={{ 
-            background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "seller" ? "#2563eb" : "#64748b",
-            borderBottom: activeTab === "seller" ? "2px solid #2563eb" : "2px solid transparent",
-            paddingBottom: "0.75rem"
-          }}>
-          Requests From Buyers ({sellerEngagements.length})
+          style={{
+            padding: "0.5rem 1.1rem",
+            borderRadius: "9px",
+            border: "none",
+            background: activeTab === "seller" ? "#fff" : "transparent",
+            color: activeTab === "seller" ? "#1d1d1f" : "#6e6e73",
+            fontWeight: activeTab === "seller" ? 600 : 500,
+            fontSize: "0.88rem",
+            cursor: "pointer",
+            boxShadow: activeTab === "seller" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+          }}
+        >
+          Requests From Buyers {sellerEngagements.length > 0 && <span style={{ color: "#3c5eab" }}>{sellerEngagements.length}</span>}
         </button>
       </div>
 
-      <div style={{ overflowX: "auto" }}>
-        {activeTab === "buyer" ? renderTable(buyerEngagements, true) : renderTable(sellerEngagements, false)}
-      </div>
+      {activeTab === "buyer" ? renderList(buyerEngagements, true) : renderList(sellerEngagements, false)}
 
       {reportModalOpen && (
         <div style={{
