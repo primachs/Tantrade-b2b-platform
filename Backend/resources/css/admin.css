@@ -2669,7 +2669,7 @@ pre {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: #0f172a;
+  background: #ffffff;
   position: relative;
   overflow: hidden;
 }
@@ -3424,4 +3424,3 @@ pre {
   color: #991b1b;
   border-left: 4px solid var(--adm-danger);
 }
-
