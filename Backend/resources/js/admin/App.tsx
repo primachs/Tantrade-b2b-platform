@@ -144,18 +144,10 @@ export const App = () => {
   if (!user) {
     return (
       <div className="adm-login-shell">
-        <div className="adm-login-bg-shapes">
-          <div className="adm-shape adm-shape-1"></div>
-          <div className="adm-shape adm-shape-2"></div>
-          <div className="adm-shape adm-shape-3"></div>
-        </div>
         <div className="adm-login-card">
           <div className="adm-login-brand">
-            <div className="adm-login-icon-wrap">
-              <AlertCircle style={{ width: 24, height: 24 }} className="adm-icon" />
-            </div>
-            <h2>TanTrade Admin</h2>
-            <p>Access the administrative console</p>
+            <h2 style={{ color: "#3c5eab" }}>B2B Admin Console</h2>
+            <p>Sign in to continue</p>
           </div>
           
           {loginError && (
@@ -167,7 +159,7 @@ export const App = () => {
           
           <form onSubmit={handleLogin} className="adm-login-form">
             <div className="adm-field">
-              <label>Email Address</label>
+              <label>Email</label>
               <input 
                 type="email" 
                 className="adm-input" 
@@ -175,11 +167,10 @@ export const App = () => {
                 value={email} 
                 onChange={e => setEmail(e.target.value)} 
                 disabled={loading}
-                placeholder="admin@tantrade.go.tz"
               />
             </div>
             <div className="adm-field">
-              <label>Password</label>
+              <label>Secret Key</label>
               <div style={{ position: "relative" }}>
                 <input 
                   type={showPassword ? "text" : "password"} 
@@ -188,7 +179,6 @@ export const App = () => {
                   value={password} 
                   onChange={e => setPassword(e.target.value)} 
                   disabled={loading}
-                  placeholder="••••••••"
                   style={{ paddingRight: "2.5rem", width: "100%", boxSizing: "border-box" }}
                 />
                 <button
@@ -213,10 +203,10 @@ export const App = () => {
                 </button>
               </div>
             </div>
-            <button type="submit" className="adm-btn adm-btn-primary adm-btn-block" disabled={loading}>
+            <button type="submit" className="adm-btn adm-btn-primary adm-btn-block" style={{ background: "#00835e", borderColor: "#00835e" }} disabled={loading}>
               {loading ? "Authenticating..." : (
                 <>
-                  <LogIn style={{ width: 18, height: 18 }} /> Sign In to Dashboard
+                  <LogIn style={{ width: 18, height: 18 }} /> Sign In
                 </>
               )}
             </button>
