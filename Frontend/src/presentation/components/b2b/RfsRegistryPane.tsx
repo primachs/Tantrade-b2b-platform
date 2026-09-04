@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { apiRequest, ApiError } from "../../../api/client";
 import { Rfs, MatchShortlist, TaxonomyResponse, Business } from "./types";
-import { Search, Briefcase, ChevronRight } from "lucide-react";
+import { Search, Briefcase, ChevronRight, Calendar, CheckCircle2, Clock } from "lucide-react";
 import { BusinessProfileModal } from "./BusinessProfileModal";
 
 type RfsRegistryPaneProps = {
@@ -13,6 +13,43 @@ type RfsRegistryPaneProps = {
   setNotice: (type: "success" | "error", msg: string) => void;
   onEdit: (rfs: Rfs) => void;
   onNavigate?: (pane: string) => void;
+};
+
+const formatCurrency = (value: number | null | undefined) => {
+  if (value === null || value === undefined) return null;
+  return `TSH${value.toLocaleString("en-US")}/=`;
+};
+
+const formatBudgetRange = (min: number | null | undefined, max: number | null | undefined) => {
+  const minStr = formatCurrency(min);
+  const maxStr = formatCurrency(max);
+  if (minStr && maxStr) return `${minStr} to ${maxStr}`;
+  if (minStr) return `From ${minStr}`;
+  if (maxStr) return `Up to ${maxStr}`;
+  return "Not specified";
+};
+
+const formatDate = (value: string | null | undefined) => {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+};
+
+const formatDurationWeeks = (start: string | null | undefined, end: string | null | undefined) => {
+  if (!start || !end) return null;
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  if (Number.isNaN(startDate.getTime()) || Number.isNaN(endDate.getTime())) return null;
+  const days = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  if (days <= 0) return null;
+  const weeks = Math.round(days / 7);
+  return weeks <= 0 ? "less than a week" : `${weeks} week${weeks === 1 ? "" : "s"}`;
+};
+
+const toTitleCase = (value: string | null | undefined) => {
+  if (!value) return "-";
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 };
 
 export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefresh, setNotice, onEdit, onNavigate }: RfsRegistryPaneProps) => {
@@ -94,12 +131,20 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
 
   const getStatusMeta = (status: string) => {
     switch (status) {
-      case "OPEN": return { label: "Open", dot: "#00835e" };
-      case "MATCHED": return { label: "Matched", dot: "#f59e0b" };
-      case "DRAFT": return { label: "Draft", dot: "#94a3b8" };
-      case "CLOSED": return { label: "Closed", dot: "#94a3b8" };
-      default: return { label: status.charAt(0) + status.slice(1).toLowerCase(), dot: "#94a3b8" };
+      case "OPEN": return { label: "Open", color: "#00835e", bg: "#e8f5ee", icon: "check" as const };
+      case "MATCHED": return { label: "Matched", color: "#92400e", bg: "#fef3c7", icon: "check" as const };
+      case "DRAFT": return { label: "Draft", color: "#6e6e73", bg: "#f0f0f2", icon: "clock" as const };
+      case "CLOSED": return { label: "Closed", color: "#6e6e73", bg: "#f0f0f2", icon: "check" as const };
+      default: return { label: toTitleCase(status), color: "#6e6e73", bg: "#f0f0f2", icon: "clock" as const };
     }
+  };
+
+  const StatusIcon = ({ status, size = 13 }: { status: string; size?: number }) => {
+    const meta = getStatusMeta(status);
+    if (meta.icon === "check") {
+      return <CheckCircle2 style={{ width: size, height: size, color: meta.color, flexShrink: 0 }} />;
+    }
+    return <Clock style={{ width: size, height: size, color: meta.color, flexShrink: 0 }} />;
   };
 
   return (
@@ -139,7 +184,7 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.98rem", marginBottom: "0.2rem" }}>{rfs.title}</div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                      <span style={{ width: "5px", height: "5px", borderRadius: "50%", background: statusMeta.dot, display: "inline-block", flexShrink: 0 }}></span>
+                      <StatusIcon status={rfs.status} />
                       <span style={{ color: "#86868b", fontSize: "0.82rem" }}>
                         {statusMeta.label} · {serviceTypeMap.get(rfs.service_type_id) ?? rfs.service_type_id}
                       </span>
@@ -167,25 +212,80 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
 
       {selectedRfs && (
         <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", padding: "1.75rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "0.5rem" }}>
-            <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#1d1d1f", letterSpacing: "-0.01em" }}>{selectedRfs.title}</h3>
-            {isMyRfs(selectedRfs) && selectedRfs.status === "DRAFT" && (
-              <button
-                onClick={() => onEdit(selectedRfs)}
-                style={{ padding: "0.4rem 1rem", borderRadius: "20px", border: "1px solid #d2d2d7", background: "#fff", color: "#1d1d1f", fontWeight: 500, fontSize: "0.8rem", cursor: "pointer", flexShrink: 0 }}
-              >
-                Edit
-              </button>
-            )}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem", marginBottom: "1.25rem" }}>
+            <div>
+              <span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", marginBottom: "0.2rem" }}>Title</span>
+              <h3 style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, color: "#1d1d1f", letterSpacing: "-0.01em" }}>{selectedRfs.title}</h3>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexShrink: 0 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", padding: "0.3rem 0.7rem", background: getStatusMeta(selectedRfs.status).bg, borderRadius: "999px" }}>
+                <StatusIcon status={selectedRfs.status} size={12} />
+                <span style={{ fontSize: "0.78rem", color: getStatusMeta(selectedRfs.status).color, fontWeight: 600 }}>{getStatusMeta(selectedRfs.status).label}</span>
+              </div>
+              {isMyRfs(selectedRfs) && selectedRfs.status === "DRAFT" && (
+                <button
+                  onClick={() => onEdit(selectedRfs)}
+                  style={{ padding: "0.4rem 1rem", borderRadius: "20px", border: "1px solid #d2d2d7", background: "#fff", color: "#1d1d1f", fontWeight: 500, fontSize: "0.8rem", cursor: "pointer" }}
+                >
+                  Edit
+                </button>
+              )}
+            </div>
           </div>
-          <p style={{ color: "#6e6e73", lineHeight: 1.6, margin: "0 0 1.5rem 0", fontSize: "0.92rem" }}>{selectedRfs.description}</p>
-          
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", background: "#fafbfc", padding: "1.1rem 1.25rem", borderRadius: "12px", marginBottom: "1.5rem" }}>
-            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Project Size</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.project_size}</span></div>
-            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Expertise</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.expertise_level}</span></div>
-            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Budget</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.constraint?.min_budget} - {selectedRfs.constraint?.max_budget}</span></div>
-            <div><span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: "0.2rem" }}>Location</span><span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{selectedRfs.constraint?.region}, {selectedRfs.constraint?.district}</span></div>
+
+          <div style={{ marginBottom: "1.5rem" }}>
+            <span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", marginBottom: "0.2rem" }}>Description</span>
+            <p style={{ color: "#1d1d1f", lineHeight: 1.6, margin: 0, fontSize: "0.92rem" }}>{selectedRfs.description || "No description provided."}</p>
           </div>
+
+          <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#86868b", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 0.75rem" }}>Project</p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", marginBottom: "1.5rem" }}>
+            <div>
+              <span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", marginBottom: "0.2rem" }}>Size</span>
+              <span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{toTitleCase(selectedRfs.project_size)}</span>
+            </div>
+            <div>
+              <span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", marginBottom: "0.2rem" }}>Expertise Level</span>
+              <span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{toTitleCase(selectedRfs.expertise_level)}</span>
+            </div>
+          </div>
+
+          <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#86868b", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 0.75rem" }}>Budget &amp; Location</p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", marginBottom: "1.5rem" }}>
+            <div>
+              <span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", marginBottom: "0.2rem" }}>Budget</span>
+              <span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>{formatBudgetRange(selectedRfs.constraint?.min_budget, selectedRfs.constraint?.max_budget)}</span>
+            </div>
+            <div>
+              <span style={{ display: "block", fontSize: "0.72rem", color: "#86868b", marginBottom: "0.2rem" }}>Location</span>
+              <span style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.9rem" }}>
+                {selectedRfs.constraint?.region || selectedRfs.constraint?.district
+                  ? [selectedRfs.constraint?.region, selectedRfs.constraint?.district].filter(Boolean).join(", ")
+                  : "Not specified"}
+              </span>
+            </div>
+          </div>
+
+          {(selectedRfs.constraint?.start_date || selectedRfs.constraint?.deadline) && (
+            <>
+              <p style={{ fontSize: "0.72rem", fontWeight: 600, color: "#86868b", textTransform: "uppercase", letterSpacing: "0.05em", margin: "0 0 0.75rem" }}>Timeline</p>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", background: "#fafbfc", padding: "0.9rem 1.1rem", borderRadius: "10px", marginBottom: "1.5rem", flexWrap: "wrap" }}>
+                <Calendar style={{ width: "16px", height: "16px", color: "#3c5eab", flexShrink: 0 }} />
+                <span style={{ fontSize: "0.88rem", color: "#1d1d1f", fontWeight: 500 }}>
+                  {formatDate(selectedRfs.constraint?.start_date) || "No start date"}
+                </span>
+                <ChevronRight style={{ width: "14px", height: "14px", color: "#c7c7cc" }} />
+                <span style={{ fontSize: "0.88rem", color: "#1d1d1f", fontWeight: 500 }}>
+                  {formatDate(selectedRfs.constraint?.deadline) || "No deadline"}
+                </span>
+                {formatDurationWeeks(selectedRfs.constraint?.start_date, selectedRfs.constraint?.deadline) && (
+                  <span style={{ marginLeft: "auto", fontSize: "0.78rem", color: "#86868b" }}>
+                    {formatDurationWeeks(selectedRfs.constraint?.start_date, selectedRfs.constraint?.deadline)}
+                  </span>
+                )}
+              </div>
+            </>
+          )}
 
           {isMyRfs(selectedRfs) && shortlist && (
             <div style={{ borderTop: "1px solid #f2f2f2", paddingTop: "1.5rem" }}>
