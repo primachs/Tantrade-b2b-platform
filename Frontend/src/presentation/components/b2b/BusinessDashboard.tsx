@@ -51,10 +51,6 @@ export const BusinessDashboard = ({
         .governance-container {
           display: flex;
           min-height: calc(100vh - 80px);
-          background-color: #f8fafc;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
         
         .sidebar {
@@ -146,14 +142,18 @@ export const BusinessDashboard = ({
           flex: 1;
           display: flex;
           flex-direction: column;
-          background: #f8fafc;
+          background: #ffffff;
+          border-radius: 16px;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04);
+          margin: 1rem 1rem 1rem 1rem;
+          overflow: hidden;
           position: relative;
         }
 
         .content-header {
-          padding: 1.5rem 2rem;
+          padding: 1.25rem 1.5rem;
           background: #ffffff;
-          border-bottom: 1px solid #e2e8f0;
+          border-bottom: 1px solid #f2f2f2;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -173,6 +173,7 @@ export const BusinessDashboard = ({
           padding: 2rem;
           flex: 1;
           overflow-y: auto;
+          background: #fafbfc;
         }
 
         .card {
