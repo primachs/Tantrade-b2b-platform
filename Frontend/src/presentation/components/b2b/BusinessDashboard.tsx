@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Radar, Briefcase, FilePlus, MessageSquare, Menu, Settings } from "lucide-react";
+import { Radar, Briefcase, FilePlus, MessageSquare, Menu, Settings, Building2 } from "lucide-react";
 import { Business, TaxonomyResponse, Rfs } from "./types";
 import { MyBusinessPane } from "./MyBusinessPane";
 import { CreateRfsPane } from "./CreateRfsPane";
@@ -61,35 +61,51 @@ export const BusinessDashboard = ({
           width: 260px;
           background: #ffffff;
           border-right: 1px solid #e2e8f0;
-          padding: 1.5rem 0;
+          border-radius: 16px;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04);
+          margin: 1rem 0 1rem 1rem;
+          padding: 1.25rem;
           display: flex;
           flex-direction: column;
         }
 
         .sidebar-header {
-          padding: 0 1.5rem 1.5rem;
-          margin-bottom: 1rem;
-          border-bottom: 1px solid #f1f5f9;
+          display: flex;
+          align-items: center;
+          gap: 0.7rem;
+          padding: 0.5rem 0.5rem 1.25rem;
+          margin-bottom: 1.25rem;
+          border-bottom: 1px solid #f2f2f2;
+        }
+
+        .sidebar-header__icon {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: #eef1f8;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
         }
 
         .sidebar-header h3 {
-          font-size: 0.875rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          color: #64748b;
-          font-weight: 600;
+          font-size: 0.88rem;
+          color: #1d1d1f;
+          font-weight: 700;
           margin: 0;
         }
 
         .nav-group {
-          margin-bottom: 1.5rem;
+          margin-bottom: 1.25rem;
         }
 
         .nav-group-title {
-          padding: 0 1.5rem 0.5rem;
-          font-size: 0.75rem;
+          padding: 0 0.7rem 0.5rem;
+          font-size: 0.68rem;
           text-transform: uppercase;
-          color: #94a3b8;
+          letter-spacing: 0.05em;
+          color: #86868b;
           font-weight: 600;
         }
 
@@ -97,32 +113,33 @@ export const BusinessDashboard = ({
           display: flex;
           align-items: center;
           width: 100%;
-          padding: 0.75rem 1.5rem;
-          color: #475569;
+          padding: 0.6rem 0.7rem;
+          margin-bottom: 0.15rem;
+          border-radius: 10px;
+          color: #3c3c3c;
           background: transparent;
           border: none;
           text-align: left;
-          font-size: 0.875rem;
+          font-size: 0.85rem;
           font-weight: 500;
           cursor: pointer;
-          transition: all 0.2s;
+          transition: background 0.15s;
         }
 
         .nav-item:hover {
-          background: #f8fafc;
-          color: #0f172a;
+          background: #fafbfc;
         }
 
         .nav-item.active {
-          background: #eff6ff;
-          color: #2563eb;
-          border-right: 3px solid #2563eb;
+          background: rgba(60,94,171,0.08);
+          color: #3c5eab;
+          font-weight: 600;
         }
 
         .nav-item svg {
-          margin-right: 0.75rem;
-          width: 1.125rem;
-          height: 1.125rem;
+          margin-right: 0.7rem;
+          width: 1.05rem;
+          height: 1.05rem;
         }
 
         .main-content {
@@ -210,8 +227,10 @@ export const BusinessDashboard = ({
 
       <aside className={`sidebar ${isPaneMenuOpen ? "is-open" : ""}`}>
         <div className="sidebar-header">
-          <h3>B2B Matchmaking</h3>
-          <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>{myBusiness.name}</span>
+          <div className="sidebar-header__icon">
+            <Building2 style={{ color: "#3c5eab", width: "18px", height: "18px" }} />
+          </div>
+          <h3>{myBusiness.name}</h3>
         </div>
 
         <div className="nav-group">
