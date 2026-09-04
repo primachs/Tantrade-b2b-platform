@@ -13,8 +13,7 @@ type CreateRfsPaneProps = {
 };
 
 export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotice, editingRfs }: CreateRfsPaneProps) => {
-  const [loading, setLoading] = useState(false);
-  const [openAfterCreate, setOpenAfterCreate] = useState(true);
+  const [loading, setLoading] = useState<"draft" | "publish" | null>(null);
 
   const serviceTypes = Array.isArray(taxonomy?.service_types) ? taxonomy.service_types : [];
   const categories = Array.isArray(taxonomy?.categories) ? taxonomy.categories : [];
@@ -61,7 +60,6 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
         region: editingRfs.constraint?.region || "",
         district: editingRfs.constraint?.district || ""
       });
-      setOpenAfterCreate(false);
     } else {
       setRfsForm(prev => ({ ...prev, service_type_id: visibleServiceTypes[0]?.id || "" }));
     }
@@ -73,13 +71,13 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
     return Number.isFinite(parsed) ? parsed : null;
   };
 
-  const handleCreateRfs = async () => {
+  const handleSubmit = async (publishNow: boolean) => {
     if (!rfsForm.service_type_id) {
       setNotice("error", "Select a service type before creating the RFS.");
       return;
     }
 
-    setLoading(true);
+    setLoading(publishNow ? "publish" : "draft");
     try {
       const constraints = {
         min_budget: toNumberOrNull(rfsForm.min_budget),
@@ -107,60 +105,74 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
       const result = await apiRequest<{ id: string }>(endpoint, { method, token, body: payload });
       const rfsId = editingRfs ? editingRfs.id : result.id;
 
-      if (openAfterCreate && rfsId) {
+      if (publishNow && rfsId) {
         if (!hasConstraints) {
-          setNotice("error", "Add at least one constraint to open the RFS immediately.");
-        } else {
-          await apiRequest(`/rfs/${rfsId}/open`, { method: "POST", token });
+          setNotice("error", "Add at least one constraint (budget, dates, or location) to publish immediately.");
+          return;
         }
+        await apiRequest(`/rfs/${rfsId}/open`, { method: "POST", token });
       }
 
-      setNotice("success", editingRfs ? "RFS updated successfully." : "RFS created successfully.");
+      setNotice(
+        "success",
+        editingRfs ? "RFS updated successfully." : publishNow ? "RFS published and matching started." : "RFS saved as a draft."
+      );
       onCreated();
     } catch (err) {
-      setNotice("error", "Failed to create RFS.");
+      setNotice("error", "Failed to save RFS.");
     } finally {
-      setLoading(false);
+      setLoading(null);
     }
   };
 
   return (
-    <div className="card" style={{ padding: "2rem", maxWidth: "800px" }}>
-      <h2 style={{ margin: "0 0 1.5rem 0", fontSize: "1.25rem", color: "#0f172a" }}>
-        {editingRfs ? "Edit Request (RFS)" : "Request a Service (RFS)"}
-      </h2>
-      
-      <div style={{ display: "grid", gap: "1.5rem" }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Project Title</label>
-          <input className="form-control" value={rfsForm.title} onChange={e => setRfsForm({...rfsForm, title: e.target.value})} placeholder="e.g. Needs software development" />
-        </div>
-        
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Description</label>
-          <textarea className="form-control" rows={3} value={rfsForm.description} onChange={e => setRfsForm({...rfsForm, description: e.target.value})} placeholder="Provide details about your requirements..." />
+    <div style={{ maxWidth: "640px" }}>
+      <h1 style={{ fontSize: "1.9rem", fontWeight: 700, color: "#1d1d1f", margin: "0 0 0.35rem", letterSpacing: "-0.025em" }}>
+        {editingRfs ? "Edit RFS" : "Create RFS"}
+      </h1>
+      <p style={{ color: "#86868b", fontSize: "0.95rem", margin: "0 0 2rem" }}>
+        Describe what you need and we'll match you with sellers.
+      </p>
+
+      <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", padding: "2rem" }}>
+
+        <p className="rfs-section-label">Project Details</p>
+
+        <div style={{ marginBottom: "1.25rem" }}>
+          <label className="rfs-field-label">Project Title</label>
+          <input
+            className="rfs-input"
+            value={rfsForm.title}
+            onChange={e => setRfsForm({ ...rfsForm, title: e.target.value })}
+            placeholder="e.g. Needs software development"
+          />
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>
-              Service Category
-              {isTechBusiness && (
-                <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', fontWeight: 400, color: '#2563eb' }}>
-                  (showing Technology categories only)
-                </span>
-              )}
-            </label>
-            <select className="form-control" value={rfsForm.service_type_id} onChange={e => setRfsForm({...rfsForm, service_type_id: e.target.value})}>
+        <div style={{ marginBottom: "1.25rem" }}>
+          <label className="rfs-field-label">Description</label>
+          <textarea
+            className="rfs-input"
+            rows={3}
+            style={{ resize: "none" }}
+            value={rfsForm.description}
+            onChange={e => setRfsForm({ ...rfsForm, description: e.target.value })}
+            placeholder="Provide details about your requirements..."
+          />
+        </div>
+
+        <div className="rfs-two-col" style={{ marginBottom: "2rem" }}>
+          <div>
+            <label className="rfs-field-label">Service Category</label>
+            <select className="rfs-input" value={rfsForm.service_type_id} onChange={e => setRfsForm({ ...rfsForm, service_type_id: e.target.value })}>
               <option value="">Select Category...</option>
               {visibleServiceTypes.map(t => (
                 <option key={t.id} value={t.id}>{t.name}</option>
               ))}
             </select>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Project Size</label>
-            <select className="form-control" value={rfsForm.project_size} onChange={e => setRfsForm({...rfsForm, project_size: e.target.value})}>
+          <div>
+            <label className="rfs-field-label">Project Size</label>
+            <select className="rfs-input" value={rfsForm.project_size} onChange={e => setRfsForm({ ...rfsForm, project_size: e.target.value })}>
               <option value="SMALL">Small</option>
               <option value="MEDIUM">Medium</option>
               <option value="LARGE">Large</option>
@@ -168,59 +180,60 @@ export const CreateRfsPane = ({ token, myBusiness, taxonomy, onCreated, setNotic
           </div>
         </div>
 
-        <h3 style={{ fontSize: "1rem", color: "#334155", margin: "1rem 0 0.5rem", borderBottom: "1px solid #e2e8f0", paddingBottom: "0.5rem" }}>Constraints (Used for Matching)</h3>
-        
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Min Budget (TZS)</label>
-            <input className="form-control" type="number" value={rfsForm.min_budget} onChange={e => setRfsForm({...rfsForm, min_budget: e.target.value})} placeholder="e.g. 1000000" />
+        <p className="rfs-section-label">Budget &amp; Location</p>
+
+        <div className="rfs-two-col" style={{ marginBottom: "1.25rem" }}>
+          <div>
+            <label className="rfs-field-label">Min Budget (TZS)</label>
+            <input className="rfs-input" type="number" value={rfsForm.min_budget} onChange={e => setRfsForm({ ...rfsForm, min_budget: e.target.value })} placeholder="e.g. 1000000" />
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Max Budget (TZS)</label>
-            <input className="form-control" type="number" value={rfsForm.max_budget} onChange={e => setRfsForm({...rfsForm, max_budget: e.target.value})} placeholder="e.g. 5000000" />
+          <div>
+            <label className="rfs-field-label">Max Budget (TZS)</label>
+            <input className="rfs-input" type="number" value={rfsForm.max_budget} onChange={e => setRfsForm({ ...rfsForm, max_budget: e.target.value })} placeholder="e.g. 5000000" />
           </div>
         </div>
 
-        <RegionDistrictSelect
-          region={rfsForm.region}
-          district={rfsForm.district}
-          onRegionChange={(region) => setRfsForm({ ...rfsForm, region, district: "" })}
-          onDistrictChange={(district) => setRfsForm({ ...rfsForm, district })}
-          required={false}
-        />
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Start Date</label>
-            <input className="form-control" type="date" value={rfsForm.start_date} onChange={e => setRfsForm({...rfsForm, start_date: e.target.value})} />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Deadline</label>
-            <input className="form-control" type="date" value={rfsForm.deadline} onChange={e => setRfsForm({...rfsForm, deadline: e.target.value})} />
-          </div>
-        </div>
-
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "1rem" }}>
-          <input 
-            type="checkbox" 
-            id="openAfterCreate" 
-            checked={openAfterCreate} 
-            onChange={(e) => setOpenAfterCreate(e.target.checked)} 
-            style={{ width: "16px", height: "16px", accentColor: "#2563eb" }}
+        <div style={{ marginBottom: "2rem" }}>
+          <RegionDistrictSelect
+            region={rfsForm.region}
+            district={rfsForm.district}
+            onRegionChange={(region) => setRfsForm({ ...rfsForm, region, district: "" })}
+            onDistrictChange={(district) => setRfsForm({ ...rfsForm, district })}
+            required={false}
+            className="rfs-two-col"
+            selectClassName="rfs-input"
           />
-          <label htmlFor="openAfterCreate" style={{ fontSize: "0.875rem", color: "#334155", cursor: "pointer" }}>
-            Open to market immediately (Requires constraints)
-          </label>
         </div>
 
-        <button 
-          className="button" 
-          style={{ background: "#2563eb", color: "white", padding: "0.75rem 1.5rem", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "1rem", fontWeight: 500, marginTop: "1rem" }}
-          onClick={handleCreateRfs} 
-          disabled={loading}
-        >
-          {loading ? "Saving..." : (editingRfs ? "Save Changes" : "Publish RFS")}
-        </button>
+        <p className="rfs-section-label">Timeline</p>
+
+        <div className="rfs-two-col" style={{ marginBottom: "2rem" }}>
+          <div>
+            <label className="rfs-field-label">Start Date</label>
+            <input className="rfs-input" type="date" value={rfsForm.start_date} onChange={e => setRfsForm({ ...rfsForm, start_date: e.target.value })} />
+          </div>
+          <div>
+            <label className="rfs-field-label">Deadline</label>
+            <input className="rfs-input" type="date" value={rfsForm.deadline} onChange={e => setRfsForm({ ...rfsForm, deadline: e.target.value })} />
+          </div>
+        </div>
+
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          <button
+            onClick={() => handleSubmit(false)}
+            disabled={loading !== null}
+            style={{ flex: 1, padding: "0.85rem", borderRadius: "12px", border: "1px solid #d2d2d7", background: "#fff", color: "#1d1d1f", fontWeight: 600, fontSize: "0.9rem", cursor: loading !== null ? "default" : "pointer" }}
+          >
+            {loading === "draft" ? "Saving..." : "Save as Draft"}
+          </button>
+          <button
+            onClick={() => handleSubmit(true)}
+            disabled={loading !== null}
+            style={{ flex: 1.4, padding: "0.85rem", borderRadius: "12px", border: "none", background: "#3c5eab", color: "#fff", fontWeight: 600, fontSize: "0.9rem", cursor: loading !== null ? "default" : "pointer" }}
+          >
+            {loading === "publish" ? "Publishing..." : "Publish Now"}
+          </button>
+        </div>
       </div>
     </div>
   );

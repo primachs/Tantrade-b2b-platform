@@ -53,6 +53,7 @@ body {
   pointer-events: none;
   z-index: 0;
 }
+
 .hero,
 .content {
   position: relative;
@@ -1600,6 +1601,48 @@ pre {
   color: var(--brand-black);
   margin: 0 0 16px;
   font-size: 1.1rem;
+}
+
+/* Create RFS form - scoped styles, do NOT reuse .form-control globally
+   since that class is shared (unstyled) across other pages. */
+.rfs-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #e5e5e7;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #1d1d1f;
+  background: #fafbfc;
+  font-family: inherit;
+}
+
+.rfs-input:focus {
+  outline: none;
+  border-color: #3c5eab;
+}
+
+.rfs-section-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #86868b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 1.1rem;
+}
+
+.rfs-field-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin-bottom: 0.5rem;
+}
+
+.rfs-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 /* Zone 2: Service Matrix */
