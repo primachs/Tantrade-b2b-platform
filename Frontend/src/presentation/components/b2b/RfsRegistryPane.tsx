@@ -13,6 +13,10 @@ type RfsRegistryPaneProps = {
   setNotice: (type: "success" | "error", msg: string) => void;
   onEdit: (rfs: Rfs) => void;
   onNavigate?: (pane: string) => void;
+  /** When true, hides the page-level heading/subtitle - used when this
+   * component is rendered inside another pane (e.g. the "My Requests"
+   * tab within Engagements) that already has its own header. */
+  embedded?: boolean;
 };
 
 const formatCurrency = (value: number | null | undefined) => {
@@ -52,7 +56,7 @@ const toTitleCase = (value: string | null | undefined) => {
   return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 };
 
-export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefresh, setNotice, onEdit, onNavigate }: RfsRegistryPaneProps) => {
+export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefresh, setNotice, onEdit, onNavigate, embedded }: RfsRegistryPaneProps) => {
   const [loading, setLoading] = useState(false);
   const [selectedRfs, setSelectedRfs] = useState<Rfs | null>(null);
   const [shortlist, setShortlist] = useState<MatchShortlist | null>(null);
@@ -150,8 +154,12 @@ export const RfsRegistryPane = ({ token, rfsList, myBusiness, taxonomy, onRefres
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       <div>
-        <h1 style={{ fontSize: "1.9rem", fontWeight: 700, color: "#1d1d1f", margin: "0 0 0.35rem", letterSpacing: "-0.025em" }}>RFS Registry</h1>
-        <p style={{ color: "#86868b", fontSize: "0.95rem", margin: "0 0 1.5rem" }}>Browse requests you've created and ones you're matched to.</p>
+        {!embedded && (
+          <>
+            <h1 style={{ fontSize: "1.9rem", fontWeight: 700, color: "#1d1d1f", margin: "0 0 0.35rem", letterSpacing: "-0.025em" }}>RFS Registry</h1>
+            <p style={{ color: "#86868b", fontSize: "0.95rem", margin: "0 0 1.5rem" }}>Browse requests you've created and ones you're matched to.</p>
+          </>
+        )}
 
         {rfsList.length === 0 ? (
           <div style={{ textAlign: "center", padding: "3.5rem 1.5rem", color: "#86868b", background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)" }}>

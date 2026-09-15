@@ -1,24 +1,28 @@
 import { useState, useEffect } from "react";
 import { apiRequest } from "../../../api/client";
-import { EngagementSession, Business, TaxonomyResponse } from "./types";
+import { EngagementSession, Business, TaxonomyResponse, Rfs } from "./types";
 import { MessageSquare, CheckCircle, XCircle } from "lucide-react";
 import { ChatModal } from "./ChatModal";
+import { RfsRegistryPane } from "./RfsRegistryPane";
 
 type EngagementsPaneProps = {
   token: string;
   myBusiness: Business;
   setNotice: (type: "success" | "error", msg: string) => void;
   taxonomy: TaxonomyResponse | null;
+  rfsList: Rfs[];
+  onEdit: (rfs: Rfs) => void;
+  onRefresh: () => void;
 };
 
 import { BusinessProfileModal } from "./BusinessProfileModal";
 import { RfsInspectModal } from "./RfsInspectModal";
 
-export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy }: EngagementsPaneProps) => {
+export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy, rfsList, onEdit, onRefresh }: EngagementsPaneProps) => {
   const [loading, setLoading] = useState(false);
   const [buyerEngagements, setBuyerEngagements] = useState<EngagementSession[]>([]);
   const [sellerEngagements, setSellerEngagements] = useState<EngagementSession[]>([]);
-  const [activeTab, setActiveTab] = useState<"buyer" | "seller">("buyer");
+  const [activeTab, setActiveTab] = useState<"my-rfs" | "buyer" | "seller">("my-rfs");
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [reportData, setReportData] = useState({
@@ -250,6 +254,22 @@ export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy }: Enga
 
       <div style={{ display: "flex", gap: "0.4rem", marginBottom: "1.75rem", background: "#f0f0f2", borderRadius: "12px", padding: "0.3rem", width: "fit-content" }}>
         <button
+          onClick={() => setActiveTab("my-rfs")}
+          style={{
+            padding: "0.5rem 1.1rem",
+            borderRadius: "9px",
+            border: "none",
+            background: activeTab === "my-rfs" ? "#fff" : "transparent",
+            color: activeTab === "my-rfs" ? "#1d1d1f" : "#6e6e73",
+            fontWeight: activeTab === "my-rfs" ? 600 : 500,
+            fontSize: "0.88rem",
+            cursor: "pointer",
+            boxShadow: activeTab === "my-rfs" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+          }}
+        >
+          My Requests {rfsList.filter(r => r.buyer_id === myBusiness.id).length > 0 && <span style={{ color: "#3c5eab" }}>{rfsList.filter(r => r.buyer_id === myBusiness.id).length}</span>}
+        </button>
+        <button
           onClick={() => setActiveTab("buyer")}
           style={{
             padding: "0.5rem 1.1rem",
@@ -283,7 +303,20 @@ export const EngagementsPane = ({ token, myBusiness, setNotice, taxonomy }: Enga
         </button>
       </div>
 
-      {activeTab === "buyer" ? renderList(buyerEngagements, true) : renderList(sellerEngagements, false)}
+      {activeTab === "my-rfs" && (
+        <RfsRegistryPane
+          token={token}
+          rfsList={rfsList.filter(r => r.buyer_id === myBusiness.id)}
+          myBusiness={myBusiness}
+          taxonomy={taxonomy}
+          onRefresh={onRefresh}
+          setNotice={setNotice}
+          onEdit={onEdit}
+          embedded
+        />
+      )}
+      {activeTab === "buyer" && renderList(buyerEngagements, true)}
+      {activeTab === "seller" && renderList(sellerEngagements, false)}
 
       {reportModalOpen && (
         <div style={{

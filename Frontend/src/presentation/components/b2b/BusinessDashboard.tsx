@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Radar, Briefcase, FilePlus, MessageSquare, Menu, Settings, Building2 } from "lucide-react";
+import { Radar, FilePlus, MessageSquare, Menu, Settings, Building2, Users } from "lucide-react";
 import { Business, TaxonomyResponse, Rfs } from "./types";
 import { MyBusinessPane } from "./MyBusinessPane";
 import { CreateRfsPane } from "./CreateRfsPane";
-import { RfsRegistryPane } from "./RfsRegistryPane";
+import { MatchesPane } from "./MatchesPane";
 import { EngagementsPane } from "./EngagementsPane";
 
 type BusinessDashboardProps = {
@@ -25,12 +25,12 @@ export const BusinessDashboard = ({
   onRefresh,
   setNotice
 }: BusinessDashboardProps) => {
-  const [activePane, setActivePane] = useState("registry");
+  const [activePane, setActivePane] = useState("matches");
   const [isPaneMenuOpen, setIsPaneMenuOpen] = useState(false);
   const [editingRfs, setEditingRfs] = useState<Rfs | null>(null);
 
   const paneItems = [
-    { id: "registry", label: "RFS Registry", icon: Briefcase },
+    { id: "matches", label: "Matches", icon: Users },
     { id: "create-rfs", label: "Create RFS", icon: FilePlus },
     { id: "engagements", label: "Engagements", icon: MessageSquare },
     { id: "my-business", label: "My Profile", icon: Settings },
@@ -38,7 +38,7 @@ export const BusinessDashboard = ({
 
   const getPaneTitle = () => {
     switch (activePane) {
-      case "registry": return "RFS Registry";
+      case "matches": return "Matches";
       case "create-rfs": return editingRfs ? "Edit RFS" : "Create RFS";
       case "engagements": return "Engagements";
       case "my-business": return "My Business Profile";
@@ -236,8 +236,8 @@ export const BusinessDashboard = ({
 
         <div className="nav-group">
           <div className="nav-group-title">Marketplace</div>
-          <button className={`nav-item ${activePane === "registry" ? "active" : ""}`} onClick={() => { setActivePane("registry"); setIsPaneMenuOpen(false); }}>
-            <Briefcase /> Registry
+          <button className={`nav-item ${activePane === "matches" ? "active" : ""}`} onClick={() => { setActivePane("matches"); setIsPaneMenuOpen(false); }}>
+            <Users /> Matches
           </button>
           <button className={`nav-item ${activePane === "create-rfs" ? "active" : ""}`} onClick={() => { setEditingRfs(null); setActivePane("create-rfs"); setIsPaneMenuOpen(false); }}>
             <FilePlus /> Create RFS
@@ -267,14 +267,22 @@ export const BusinessDashboard = ({
         </header>
 
         <div className="content-body">
-          {activePane === "registry" && (
-            <RfsRegistryPane token={token} rfsList={rfsList} myBusiness={myBusiness} taxonomy={taxonomy} onRefresh={onRefresh} setNotice={setNotice} onEdit={(rfs) => { setEditingRfs(rfs); setActivePane("create-rfs"); }} onNavigate={setActivePane} />
+          {activePane === "matches" && (
+            <MatchesPane token={token} rfsList={rfsList} myBusiness={myBusiness} setNotice={setNotice} onNavigate={setActivePane} />
           )}
           {activePane === "create-rfs" && (
-            <CreateRfsPane token={token} myBusiness={myBusiness} taxonomy={taxonomy} onCreated={() => { onRefresh(); setEditingRfs(null); setActivePane("registry"); }} setNotice={setNotice} editingRfs={editingRfs} />
+            <CreateRfsPane token={token} myBusiness={myBusiness} taxonomy={taxonomy} onCreated={() => { onRefresh(); setEditingRfs(null); setActivePane("engagements"); }} setNotice={setNotice} editingRfs={editingRfs} />
           )}
           {activePane === "engagements" && (
-            <EngagementsPane token={token} myBusiness={myBusiness} setNotice={setNotice} taxonomy={taxonomy} />
+            <EngagementsPane
+              token={token}
+              myBusiness={myBusiness}
+              setNotice={setNotice}
+              taxonomy={taxonomy}
+              rfsList={rfsList}
+              onRefresh={onRefresh}
+              onEdit={(rfs) => { setEditingRfs(rfs); setActivePane("create-rfs"); }}
+            />
           )}
           {activePane === "my-business" && (
             <MyBusinessPane token={token} myBusiness={myBusiness} taxonomy={taxonomy} onUpdate={onRefresh} setNotice={setNotice} />
