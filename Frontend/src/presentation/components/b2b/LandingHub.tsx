@@ -1,4 +1,4 @@
-import { Layers, Radar } from "lucide-react";
+import { Layers } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiRequest, ApiError } from "../../../api/client";
@@ -204,65 +204,97 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
 
 
   return (
-    <section style={{ padding: "0", background: "#f8fafc", minHeight: "calc(100vh - 80px)", borderRadius: "12px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
-      <div style={{
-        background: "linear-gradient(135deg, #1e3a8a 0%, #10b981 100%)",
-        color: "white",
-        padding: "6rem 2rem 8rem",
-        textAlign: "center",
-      }}>
-        <Radar style={{ width: "64px", height: "64px", margin: "0 auto 1.5rem", opacity: 0.9 }} />
-        <h1 style={{ fontSize: "3rem", fontWeight: "700", margin: "0 0 1.5rem 0", letterSpacing: "-0.02em" }}>B2B Matchmaking Hub</h1>
-        <p style={{ fontSize: "1.25rem", opacity: 0.9, maxWidth: "600px", margin: "0 auto", lineHeight: "1.6" }}>
-          Connect with verified buyers and sellers, discover new opportunities, and grow your business network through our secure matchmaking platform.
+    <section style={{ position: "relative", minHeight: "calc(100vh - 80px)", overflow: "hidden", padding: "2.5rem 2rem", background: "#f2f3f7" }}>
+      <div style={{ position: "absolute", top: "-80px", left: "-60px", width: "320px", height: "320px", borderRadius: "50%", background: "radial-gradient(circle, rgba(60,94,171,0.35), transparent 70%)", filter: "blur(10px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: "-100px", right: "-80px", width: "380px", height: "380px", borderRadius: "50%", background: "radial-gradient(circle, rgba(0,131,94,0.3), transparent 70%)", filter: "blur(10px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "120px", right: "10%", width: "200px", height: "200px", borderRadius: "50%", background: "radial-gradient(circle, rgba(242,194,75,0.25), transparent 70%)", filter: "blur(8px)", pointerEvents: "none" }} />
+
+      <div style={{ position: "relative", maxWidth: "800px", margin: "0 auto" }}>
+        <h1 style={{ fontSize: "1.9rem", fontWeight: 700, color: "#1d1d1f", margin: "0 0 0.35rem", letterSpacing: "-0.025em" }}>
+          Welcome back, {user.name.split(" ")[0]}
+        </h1>
+        <p style={{ color: "#55565c", fontSize: "0.95rem", margin: "0 0 2rem" }}>
+          Here's what you can do on the B2B Matchmaking Hub.
         </p>
-      </div>
 
-      <div style={{
-        maxWidth: "1100px",
-        margin: "-4rem auto 4rem",
-        padding: "0 2rem",
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-        gap: "2rem",
-        position: "relative",
-        zIndex: 10,
-        width: "100%"
-      }}>
-        {hasBusiness ? (
-          <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", cursor: "pointer", border: "1px solid #e2e8f0" }} onClick={onGoToDashboard}>
-            <div style={{ background: "rgba(37, 99, 235, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>
-              <Layers style={{ color: "#2563eb", width: "32px", height: "32px" }} />
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.25rem" }}>
+          {hasBusiness ? (
+            <div
+              onClick={onGoToDashboard}
+              style={{
+                background: "rgba(255,255,255,0.55)",
+                backdropFilter: "blur(20px) saturate(150%)",
+                WebkitBackdropFilter: "blur(20px) saturate(150%)",
+                border: "1px solid rgba(255,255,255,0.6)",
+                borderRadius: "20px",
+                padding: "1.75rem",
+                boxShadow: "0 8px 32px rgba(31,38,135,0.12), inset 0 1px 0 rgba(255,255,255,0.7)",
+                cursor: "pointer",
+              }}
+            >
+              <div style={{ width: "40px", height: "40px", borderRadius: "12px", background: "rgba(60,94,171,0.18)", backdropFilter: "blur(4px)", border: "1px solid rgba(255,255,255,0.4)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                <Layers style={{ color: "#3c5eab", width: "19px", height: "19px" }} />
+              </div>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.5rem", color: "#1d1d1f" }}>Access My Dashboard</h3>
+              <p style={{ color: "#4a4b50", fontSize: "0.85rem", margin: "0 0 1.25rem", lineHeight: 1.5 }}>Manage your business profile, respond to RFSs, and view matchmaking analytics.</p>
+              <div style={{ color: "#2c4a8f", fontWeight: 600, fontSize: "0.88rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>Go to Dashboard &rarr;</div>
             </div>
-            <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Access My Dashboard</h3>
-            <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Manage your business profile, respond to RFSs, and view matchmaking analytics.</p>
-            <div style={{ color: "#2563eb", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>Go to Dashboard &rarr;</div>
-          </div>
-        ) : (
-          <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", cursor: "pointer", border: "1px solid #e2e8f0" }} onClick={() => { setLandingMode("register"); setRegistrationStep(1); }}>
-            <div style={{ background: "rgba(37, 99, 235, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>
-              <Layers style={{ color: "#2563eb", width: "32px", height: "32px" }} />
+          ) : (
+            <div
+              onClick={() => { setLandingMode("register"); setRegistrationStep(1); }}
+              style={{
+                background: "rgba(255,255,255,0.55)",
+                backdropFilter: "blur(20px) saturate(150%)",
+                WebkitBackdropFilter: "blur(20px) saturate(150%)",
+                border: "1px solid rgba(255,255,255,0.6)",
+                borderRadius: "20px",
+                padding: "1.75rem",
+                boxShadow: "0 8px 32px rgba(31,38,135,0.12), inset 0 1px 0 rgba(255,255,255,0.7)",
+                cursor: "pointer",
+              }}
+            >
+              <div style={{ width: "40px", height: "40px", borderRadius: "12px", background: "rgba(60,94,171,0.18)", backdropFilter: "blur(4px)", border: "1px solid rgba(255,255,255,0.4)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                <Layers style={{ color: "#3c5eab", width: "19px", height: "19px" }} />
+              </div>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.5rem", color: "#1d1d1f" }}>Register Business Profile</h3>
+              <p style={{ color: "#4a4b50", fontSize: "0.85rem", margin: "0 0 1.25rem", lineHeight: 1.5 }}>Create your verified profile to participate in the marketplace and unlock matchmaking features.</p>
+              <div style={{ color: "#2c4a8f", fontWeight: 600, fontSize: "0.88rem", display: "flex", alignItems: "center", gap: "0.4rem" }}>Start Registration &rarr;</div>
             </div>
-            <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Register Business Profile</h3>
-            <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Create your verified profile to participate in the marketplace and unlock matchmaking features.</p>
-            <div style={{ color: "#2563eb", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.5rem" }}>Start Registration &rarr;</div>
-          </div>
-        )}
+          )}
 
-
-
-        <div style={{ background: "#ffffff", padding: "2.5rem", borderRadius: "16px", boxShadow: "0 10px 30px rgba(0,0,0,0.08)", border: "1px solid #e2e8f0" }}>
-          <div style={{ background: "rgba(245, 158, 11, 0.1)", width: "64px", height: "64px", borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1.5rem" }}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
-          </div>
-          <h3 style={{ fontSize: "1.5rem", margin: "0 0 1rem 0", color: "#0f172a" }}>Matchmaking Guide</h3>
-          <p style={{ color: "#64748b", margin: "0 0 2rem 0", lineHeight: "1.6" }}>Learn how our platform works, how to optimize your profile, and best practices for securing deals.</p>
-          <button
-            onClick={() => navigate("/matchmaking-guide")}
-            style={{ padding: "0.625rem", width: "100%", background: "transparent", border: "1px solid #f59e0b", color: "#f59e0b", borderRadius: "6px", fontWeight: 500, cursor: "pointer" }}
+          <div
+            style={{
+              background: "rgba(255,255,255,0.55)",
+              backdropFilter: "blur(20px) saturate(150%)",
+              WebkitBackdropFilter: "blur(20px) saturate(150%)",
+              border: "1px solid rgba(255,255,255,0.6)",
+              borderRadius: "20px",
+              padding: "1.75rem",
+              boxShadow: "0 8px 32px rgba(31,38,135,0.12), inset 0 1px 0 rgba(255,255,255,0.7)",
+            }}
           >
-            Read Guide
-          </button>
+            <div style={{ width: "40px", height: "40px", borderRadius: "12px", background: "rgba(194,118,12,0.18)", backdropFilter: "blur(4px)", border: "1px solid rgba(255,255,255,0.4)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#c2760c" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+            </div>
+            <h3 style={{ fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.5rem", color: "#1d1d1f" }}>Matchmaking Guide</h3>
+            <p style={{ color: "#4a4b50", fontSize: "0.85rem", margin: "0 0 1.25rem", lineHeight: 1.5 }}>Learn how our platform works and best practices for securing deals.</p>
+            <button
+              onClick={() => navigate("/matchmaking-guide")}
+              style={{
+                padding: "0.55rem 1.1rem",
+                borderRadius: "20px",
+                border: "1px solid rgba(255,255,255,0.7)",
+                background: "rgba(255,255,255,0.4)",
+                backdropFilter: "blur(8px)",
+                color: "#1d1d1f",
+                fontWeight: 600,
+                fontSize: "0.85rem",
+                cursor: "pointer",
+              }}
+            >
+              Read Guide
+            </button>
+          </div>
         </div>
       </div>
     </section>
