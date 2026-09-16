@@ -1,130 +1,304 @@
 <?php
 
-namespace App\MatchingContext\Matching\Application;
+namespace App\MatchingContext\Matching\Tests\Feature;
 
-use App\MatchingContext\Matching\Domain\Factories\MatchingFactory;
-use App\MatchingContext\Matching\Domain\Repositories\MatchingRepository;
-use App\MatchingContext\Matching\Domain\Services\MatchingEngine;
-use App\MatchingContext\Rfs\Domain\Entities\Rfs;
-use App\MatchingContext\Rfs\Domain\Repositories\RfsRepository;
-use App\MatchingContext\SharedKernel\Domain\ValueObjects\Uuid;
-use App\MatchingContext\SharedKernel\Infrastructure\DomainEvents\DomainEventRecorder;
-use App\MatchingContext\Taxonomy\Domain\Repositories\TaxonomyRepository;
+use App\AuthenticationContext\Auth\Infrastructure\Models\AuthUser;
+use App\MatchingContext\Business\Infrastructure\Models\Business;
+use App\MatchingContext\Business\Infrastructure\Models\BusinessCapability;
+use App\MatchingContext\Business\Infrastructure\Models\BusinessCapabilityAttribute;
+use App\MatchingContext\Business\Infrastructure\Models\BusinessTrustMetrics;
+use App\MatchingContext\Business\Infrastructure\Models\BusinessVerification;
+use App\MatchingContext\Rfs\Infrastructure\Models\Rfs;
+use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceAttribute;
+use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceCategory;
+use App\MatchingContext\Taxonomy\Infrastructure\Models\ServiceType;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
-class MatchingService
+class RfsMatchingApiTest extends TestCase
 {
-    public function __construct(
-        private readonly MatchingEngine $engine,
-        private readonly MatchingFactory $factory,
-        private readonly MatchingRepository $matchingRepository,
-        private readonly RfsRepository $rfsRepository,
-        private readonly TaxonomyRepository $taxonomyRepository,
-        private readonly DomainEventRecorder $events
-    ) {}
+    use RefreshDatabase;
 
-    public function generateShortlist(string $rfsId): array
+    public function test_rfs_matching_flow(): void
     {
-        $rfs = $this->getRfs($rfsId);
-        if (! in_array($rfs->status(), ['OPEN', 'MATCHED'], true)) {
-        throw new \RuntimeException('Only OPEN or already-matched RFS can be (re-)matched.');
-        }
+        [$serviceType, $attribute] = $this->seedTaxonomy();
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', clone $user);
+        $seller = $this->createBusiness('Seller Co');
 
-        $serviceType = $this->taxonomyRepository->findServiceTypeById($rfs->serviceTypeId());
-        if (! $serviceType) {
-            throw new \RuntimeException('Service type not found for RFS.');
-        }
+        Sanctum::actingAs($user);
 
-        $category = $this->taxonomyRepository->findCategoryById($serviceType->categoryId());
-        if (! $category) {
-            throw new \RuntimeException('Service category not found for RFS.');
-        }
-
-        $topLevelId = $category->parentId() ?? $category->id();
-        $subcategories = $this->taxonomyRepository->listCategoriesByParent($topLevelId);
-        $subcategoryIds = array_map(static fn ($subcategory) => $subcategory->id()->value(), $subcategories);
-        $subcategoryIds[] = $category->id()->value();
-        $subcategoryIds = array_values(array_unique($subcategoryIds));
-
-        $allowedServiceTypes = $this->taxonomyRepository->listServiceTypesByCategoryIds($subcategoryIds);
-        $allowedServiceTypeIds = array_map(static fn ($type) => $type->id()->value(), $allowedServiceTypes);
-        $allowedServiceTypeIds[] = $serviceType->id()->value();
-        $allowedServiceTypeIds = array_values(array_unique($allowedServiceTypeIds));
-
-        $taxonomyScores = $this->buildTaxonomyScoreMap(
-            $serviceType->id()->value(),
-            $category->id()->value(),
-            $allowedServiceTypeIds
-        );
-
-        $candidates = $this->matchingRepository->findCandidatesByServiceTypes($allowedServiceTypeIds);
-
-        $scored = [];
-        foreach ($candidates as $candidate) {
-            $taxonomyScore = $taxonomyScores[$candidate->serviceTypeId()->value()] ?? 0.0;
-            $attributeMatchRatio = $this->attributeMatchRatio($rfs, $candidate);
-            $result = $this->engine->scoreCandidate($rfs, $candidate, [
-                'taxonomy_score' => $taxonomyScore,
-                'attribute_match_ratio' => $attributeMatchRatio,
-            ]);
-
-            $sellerId = $candidate->sellerId()->value();
-            $existing = $scored[$sellerId] ?? null;
-            if (! $existing || $result['score'] > $existing['score']) {
-                $scored[$sellerId] = $result + ['seller_id' => $sellerId];
-            }
-        }
-
-        usort($scored, static fn (array $a, array $b) => $b['score'] <=> $a['score']);
-        $shortlistCandidates = array_slice($scored, 0, 7);
-
-        $shortlist = $this->factory->createShortlist($rfs->id(), $shortlistCandidates);
-        $this->matchingRepository->storeShortlist($shortlist);
-
-        $this->rfsRepository->updateStatus($rfs->id(), 'MATCHED');
-
-        $this->events->record('MatchGenerated', $rfs->id()->value(), [
-            'shortlist_id' => $shortlist->id()->value(),
-            'candidate_count' => count($shortlistCandidates),
+        $capability = BusinessCapability::create([
+            'business_id' => $seller->id,
+            'service_type_id' => $serviceType->id,
         ]);
 
-        return $shortlist->toArray();
+        BusinessCapabilityAttribute::create([
+            'capability_id' => $capability->id,
+            'attribute_id' => $attribute->id,
+            'value' => 'Trucks',
+        ]);
+
+        $response = $this->postJson('/api/rfs', [
+            'buyer_id' => $buyer->id,
+            'title' => 'Need maintenance',
+            'description' => 'Fleet support',
+            'service_type_id' => $serviceType->id,
+            'project_size' => 'SMALL',
+            'expertise_level' => 'BASIC',
+            'constraints' => [
+                'min_budget' => 1000,
+                'max_budget' => 5000,
+                'start_date' => Carbon::now()->toDateString(),
+                'deadline' => Carbon::now()->addDays(10)->toDateString(),
+                'region' => 'Dar',
+                'district' => 'Ilala',
+            ],
+            'preferences' => [
+                'cost_weight' => 2,
+                'quality_weight' => 3,
+                'speed_weight' => 1,
+                'experience_weight' => 1,
+                'location_weight' => 1,
+            ],
+            'attributes' => [
+                [
+                    'attribute_id' => $attribute->id,
+                    'value' => 'Trucks',
+                ],
+            ],
+        ])->assertStatus(201);
+
+        $rfsId = $response->json('id');
+
+        $this->getJson("/api/rfs/{$rfsId}")->assertStatus(200);
+
+        $this->patchJson("/api/rfs/{$rfsId}", [
+            'title' => 'Updated title',
+            'constraints' => [
+                'min_budget' => 1500,
+                'max_budget' => 6000,
+                'region' => 'Dar',
+                'district' => 'Ilala',
+            ],
+            'preferences' => [
+                'cost_weight' => 1,
+                'quality_weight' => 1,
+                'speed_weight' => 1,
+                'experience_weight' => 1,
+                'location_weight' => 1,
+            ],
+            'attributes' => [
+                [
+                    'attribute_id' => $attribute->id,
+                    'value' => 'Trucks',
+                ],
+            ],
+        ])->assertStatus(200);
+
+        $this->postJson("/api/rfs/{$rfsId}/open")->assertStatus(200);
+        $this->postJson("/api/rfs/{$rfsId}/match")->assertStatus(200);
+        $this->getJson("/api/rfs/{$rfsId}/shortlist")->assertStatus(200);
+
+        $rfs = Rfs::findOrFail($rfsId);
+        $this->assertSame('MATCHED', $rfs->status);
     }
 
-    public function latestShortlist(string $rfsId): ?array
+    public function test_matching_requires_open_rfs(): void
     {
-        $shortlist = $this->matchingRepository->findLatestShortlist(Uuid::fromString($rfsId));
+        [$serviceType, $attribute] = $this->seedTaxonomy();
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', $user);
+        Sanctum::actingAs($user);
 
-        return $shortlist?->toArray();
+        $rfs = Rfs::create([
+            'buyer_id' => $buyer->id,
+            'title' => 'Need maintenance',
+            'description' => 'Fleet support',
+            'service_type_id' => $serviceType->id,
+            'project_size' => 'SMALL',
+            'expertise_level' => 'BASIC',
+            'status' => 'DRAFT',
+            'created_at' => Carbon::now(),
+        ]);
+
+        $response = $this->postJson("/api/rfs/{$rfs->id}/match");
+        $this->assertContains($response->status(), [400, 422, 500]);
     }
 
-    private function getRfs(string $rfsId): Rfs
+    public function test_matching_handles_missing_attributes(): void
     {
-        $rfs = $this->rfsRepository->findById(Uuid::fromString($rfsId));
-        if (! $rfs) {
-            throw new \RuntimeException('RFS not found.');
-        }
+        $category = ServiceCategory::create([
+            'name' => 'General Services',
+            'parent_id' => null,
+            'level' => 1,
+            'is_active' => true,
+        ]);
 
-        return $rfs;
+        $serviceType = ServiceType::create([
+            'name' => 'General Consulting',
+            'category_id' => $category->id,
+            'is_active' => true,
+        ]);
+
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', $user);
+        $seller = $this->createBusiness('Seller Co');
+        Sanctum::actingAs($user);
+
+        BusinessCapability::create([
+            'business_id' => $seller->id,
+            'service_type_id' => $serviceType->id,
+        ]);
+
+        $rfs = Rfs::create([
+            'buyer_id' => $buyer->id,
+            'title' => 'Need consulting',
+            'description' => 'General support',
+            'service_type_id' => $serviceType->id,
+            'project_size' => 'SMALL',
+            'expertise_level' => 'BASIC',
+            'status' => 'OPEN',
+            'created_at' => Carbon::now(),
+        ]);
+
+        $this->postJson("/api/rfs/{$rfs->id}/match")->assertStatus(200);
     }
 
-    private function buildTaxonomyScoreMap(string $serviceTypeId, string $categoryId, array $allowedServiceTypes): array
+    public function test_shortlist_includes_sellers_registered_directly_under_the_top_level_category(): void
     {
-        $scores = array_fill_keys($allowedServiceTypes, 0.4);
+        // Regression test for a real bug: a service type attached directly to
+        // a top-level category (e.g. "IT Consultation" under "Technology &
+        // IT") must still be eligible for category-based partial matching
+        // against an RFS for a service type nested one level deeper (e.g.
+        // "Web App Development" under "Software Development", a child of
+        // "Technology & IT"). Previously the top-level category itself was
+        // never added to the eligible category set, silently excluding any
+        // service type attached directly to it.
+        $topLevel = ServiceCategory::create([
+            'name' => 'Technology & IT',
+            'parent_id' => null,
+            'level' => 1,
+            'is_active' => true,
+        ]);
+        $subcategory = ServiceCategory::create([
+            'name' => 'Software Development',
+            'parent_id' => $topLevel->id,
+            'level' => 2,
+            'is_active' => true,
+        ]);
+        $targetType = ServiceType::create([
+            'name' => 'Web App Development',
+            'category_id' => $subcategory->id,
+            'is_active' => true,
+        ]);
+        $siblingType = ServiceType::create([
+            'name' => 'IT Consultation',
+            'category_id' => $topLevel->id, // attached directly to the top-level category
+            'is_active' => true,
+        ]);
 
-        $sameSubcategoryTypes = $this->taxonomyRepository->listServiceTypesByCategoryIds([$categoryId]);
-        foreach ($sameSubcategoryTypes as $type) {
-            $scores[$type->id()->value()] = 0.7;
-        }
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', $user);
+        $exactSeller = $this->createBusiness('Exact Match Seller');
+        $siblingSeller = $this->createBusiness('Sibling Match Seller');
+        Sanctum::actingAs($user);
 
-        $scores[$serviceTypeId] = 1.0;
+        BusinessCapability::create(['business_id' => $exactSeller->id, 'service_type_id' => $targetType->id]);
+        BusinessCapability::create(['business_id' => $siblingSeller->id, 'service_type_id' => $siblingType->id]);
 
-        return $scores;
+        $rfs = Rfs::create([
+            'buyer_id' => $buyer->id,
+            'title' => 'Need a web app',
+            'description' => 'Testing category matching',
+            'service_type_id' => $targetType->id,
+            'project_size' => 'SMALL',
+            'expertise_level' => 'BASIC',
+            'status' => 'OPEN',
+            'created_at' => Carbon::now(),
+        ]);
+
+        $this->postJson("/api/rfs/{$rfs->id}/match")->assertStatus(200);
+        $shortlist = $this->getJson("/api/rfs/{$rfs->id}/shortlist")->assertStatus(200)->json();
+
+        $sellerIds = collect($shortlist['candidates'])->pluck('seller_id');
+        $this->assertTrue($sellerIds->contains($exactSeller->id), 'Exact service type match should be in the shortlist.');
+        $this->assertTrue($sellerIds->contains($siblingSeller->id), 'A seller registered directly under the top-level category should still be a partial match candidate.');
+
+        $exactScore = collect($shortlist['candidates'])->firstWhere('seller_id', $exactSeller->id)['score'];
+        $siblingScore = collect($shortlist['candidates'])->firstWhere('seller_id', $siblingSeller->id)['score'];
+        $this->assertGreaterThan($siblingScore, $exactScore, 'An exact service type match should still outrank a same-top-level-category partial match.');
     }
 
-    private function attributeMatchRatio(Rfs $rfs, $candidate): float
+    private function seedTaxonomy(): array
     {
-        // RFS attributes have been refactored into constraints and preferences.
-        // For now, return a baseline ratio. Future iterations can match specific constraints.
-        return 1.0;
+        $category = ServiceCategory::create([
+            'name' => 'Logistics',
+            'parent_id' => null,
+            'level' => 1,
+            'is_active' => true,
+        ]);
+
+        $subcategory = ServiceCategory::create([
+            'name' => 'Fleet Services',
+            'parent_id' => $category->id,
+            'level' => 2,
+            'is_active' => true,
+        ]);
+
+        $serviceType = ServiceType::create([
+            'name' => 'Vehicle Maintenance',
+            'category_id' => $subcategory->id,
+            'is_active' => true,
+        ]);
+
+        $attribute = ServiceAttribute::create([
+            'service_type_id' => $serviceType->id,
+            'name' => 'Vehicle Type',
+        ]);
+
+        return [$serviceType, $attribute];
+    }
+
+    private function createBusiness(string $name, $user = null): Business
+    {
+        $business = Business::create([
+            'id' => (string) Str::uuid(),
+            'name' => $name,
+            'contact_person' => 'Owner',
+            'phone' => '+255700000000',
+            'email' => strtolower(str_replace(' ', '.', $name)).'@example.com',
+            'user_id' => $user ? $user->id : null,
+        ]);
+
+        BusinessVerification::create([
+            'business_id' => $business->id,
+            'tin_number' => 'TIN-'.$business->id,
+            'brela_number' => 'BRELA-'.$business->id,
+            'business_size' => 'SMALL',
+            'is_owner' => true,
+            'owner_gender' => 'OTHER',
+            'employee_count' => 5,
+            'revenue_range' => 'BELOW_50M',
+            'region' => 'Dar',
+            'district' => 'Ilala',
+            'address' => 'Street',
+            'verification_status' => 'VERIFIED',
+        ]);
+
+        BusinessTrustMetrics::create([
+            'business_id' => $business->id,
+            'reliability_score' => 0.5,
+            'success_rate' => 0.0,
+            'response_rate' => 0.0,
+            'dispute_rate' => 0.0,
+            'avg_response_time' => null,
+            'session_completion_rate' => null,
+        ]);
+
+        return $business;
     }
 }
