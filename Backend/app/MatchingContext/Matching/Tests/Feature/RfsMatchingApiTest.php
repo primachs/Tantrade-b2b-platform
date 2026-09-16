@@ -168,6 +168,71 @@ class RfsMatchingApiTest extends TestCase
         $this->postJson("/api/rfs/{$rfs->id}/match")->assertStatus(200);
     }
 
+    public function test_shortlist_includes_sellers_registered_directly_under_the_top_level_category(): void
+    {
+        // Regression test for a real bug: a service type attached directly to
+        // a top-level category (e.g. "IT Consultation" under "Technology &
+        // IT") must still be eligible for category-based partial matching
+        // against an RFS for a service type nested one level deeper (e.g.
+        // "Web App Development" under "Software Development", a child of
+        // "Technology & IT"). Previously the top-level category itself was
+        // never added to the eligible category set, silently excluding any
+        // service type attached directly to it.
+        $topLevel = ServiceCategory::create([
+            'name' => 'Technology & IT',
+            'parent_id' => null,
+            'level' => 1,
+            'is_active' => true,
+        ]);
+        $subcategory = ServiceCategory::create([
+            'name' => 'Software Development',
+            'parent_id' => $topLevel->id,
+            'level' => 2,
+            'is_active' => true,
+        ]);
+        $targetType = ServiceType::create([
+            'name' => 'Web App Development',
+            'category_id' => $subcategory->id,
+            'is_active' => true,
+        ]);
+        $siblingType = ServiceType::create([
+            'name' => 'IT Consultation',
+            'category_id' => $topLevel->id, // attached directly to the top-level category
+            'is_active' => true,
+        ]);
+
+        $user = AuthUser::create(['id' => (string) Str::uuid(), 'name' => 'Test', 'email' => 'test@'.Str::uuid().'.com', 'password' => bcrypt('password'), 'status' => 'ACTIVE']);
+        $buyer = $this->createBusiness('Buyer Co', $user);
+        $exactSeller = $this->createBusiness('Exact Match Seller');
+        $siblingSeller = $this->createBusiness('Sibling Match Seller');
+        Sanctum::actingAs($user);
+
+        BusinessCapability::create(['business_id' => $exactSeller->id, 'service_type_id' => $targetType->id]);
+        BusinessCapability::create(['business_id' => $siblingSeller->id, 'service_type_id' => $siblingType->id]);
+
+        $rfs = Rfs::create([
+            'buyer_id' => $buyer->id,
+            'title' => 'Need a web app',
+            'description' => 'Testing category matching',
+            'service_type_id' => $targetType->id,
+            'project_size' => 'SMALL',
+            'expertise_level' => 'BASIC',
+            'status' => 'OPEN',
+            'created_at' => Carbon::now(),
+        ]);
+
+        $this->postJson("/api/rfs/{$rfs->id}/match")->assertStatus(200);
+        $shortlist = $this->getJson("/api/rfs/{$rfs->id}/shortlist")->assertStatus(200)->json();
+
+        $sellerIds = collect($shortlist['candidates'])->pluck('seller_id');
+        $this->assertTrue($sellerIds->contains($exactSeller->id), 'Exact service type match should be in the shortlist.');
+        $this->assertTrue($sellerIds->contains($siblingSeller->id), 'A seller registered directly under the top-level category should still be a partial match candidate.');
+
+        $exactScore = collect($shortlist['candidates'])->firstWhere('seller_id', $exactSeller->id)['score'];
+        $siblingScore = collect($shortlist['candidates'])->firstWhere('seller_id', $siblingSeller->id)['score'];
+        $this->assertGreaterThan($siblingScore, $exactScore, 'An exact service type match should still outrank a same-top-level-category partial match.');
+    }
+
     private function seedTaxonomy(): array
     {
         $category = ServiceCategory::create([
