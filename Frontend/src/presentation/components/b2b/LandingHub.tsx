@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiRequest, ApiError } from "../../../api/client";
 import { RegionDistrictSelect } from "../RegionDistrictSelect";
+import { deriveBusinessSizeFromRevenue } from "../../../shared/deriveBusinessSize";
 import {
   validateBrela,
   validateMobile,
@@ -33,7 +34,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
     email: user.email,
     tin_number: "",
     brela_number: "",
-    business_size: "MEDIUM",
+    business_size: deriveBusinessSizeFromRevenue("BETWEEN_50M_500M"),
     is_owner: true,
     owner_gender: "FEMALE",
     employee_count: "",

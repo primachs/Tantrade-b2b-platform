@@ -3,6 +3,7 @@ import { apiRequest, ApiError } from "../../../api/client";
 import { RegionDistrictSelect } from "../RegionDistrictSelect";
 import { Business, TaxonomyResponse } from "./types";
 import { Edit2, Shield, Settings, X } from "lucide-react";
+import { deriveBusinessSizeFromRevenue } from "../../../shared/deriveBusinessSize";
 
 type MyBusinessPaneProps = {
   token: string;
@@ -26,7 +27,7 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
   const [verificationForm, setVerificationForm] = useState({
     tin_number: myBusiness.verification?.tin_number || "",
     brela_number: myBusiness.verification?.brela_number || "",
-    business_size: myBusiness.verification?.business_size || "MEDIUM",
+    business_size: deriveBusinessSizeFromRevenue(myBusiness.verification?.revenue_range || "BETWEEN_50M_500M"),
     is_owner: myBusiness.verification?.is_owner ?? true,
     owner_gender: myBusiness.verification?.owner_gender || "FEMALE",
     employee_count: String(myBusiness.verification?.employee_count || ""),
@@ -313,22 +314,25 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
               This determines which service categories appear when you create a Request for Supply.
             </small>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.5rem" }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Business Size</label>
-              <select className="form-control" value={verificationForm.business_size} onChange={e => setVerificationForm({...verificationForm, business_size: e.target.value})}>
-                <option value="SMALL">Small</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="LARGE">Large</option>
-              </select>
-            </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Revenue Range</label>
-              <select className="form-control" value={verificationForm.revenue_range} onChange={e => setVerificationForm({...verificationForm, revenue_range: e.target.value})}>
+              <select
+                className="form-control"
+                value={verificationForm.revenue_range}
+                onChange={e => setVerificationForm({
+                  ...verificationForm,
+                  revenue_range: e.target.value,
+                  business_size: deriveBusinessSizeFromRevenue(e.target.value),
+                })}
+              >
                 <option value="BELOW_50M">Below 50M</option>
                 <option value="BETWEEN_50M_500M">50M - 500M</option>
                 <option value="ABOVE_500M">Above 500M</option>
               </select>
+              <small style={{ color: '#64748b' }}>
+                Business size ({verificationForm.business_size.charAt(0) + verificationForm.business_size.slice(1).toLowerCase()}) is set automatically from this.
+              </small>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Employee Count</label>
