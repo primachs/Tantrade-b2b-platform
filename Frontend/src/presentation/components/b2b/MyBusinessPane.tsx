@@ -225,31 +225,31 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
           onClick={() => setActiveTab("profile")}
           style={{ 
             background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "profile" ? "#2563eb" : "#64748b",
-            borderBottom: activeTab === "profile" ? "2px solid #2563eb" : "none",
+            color: activeTab === "profile" ? "#3c5eab" : "#64748b",
+            borderBottom: activeTab === "profile" ? "2px solid #3c5eab" : "none",
             paddingBottom: "0.5rem"
           }}>
-          <Edit2 style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Profile
+          <Edit2 strokeWidth={1.8} style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Profile
         </button>
         <button 
           onClick={() => setActiveTab("verification")}
           style={{ 
             background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "verification" ? "#2563eb" : "#64748b",
-            borderBottom: activeTab === "verification" ? "2px solid #2563eb" : "none",
+            color: activeTab === "verification" ? "#3c5eab" : "#64748b",
+            borderBottom: activeTab === "verification" ? "2px solid #3c5eab" : "none",
             paddingBottom: "0.5rem"
           }}>
-          <Shield style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Verification
+          <Shield strokeWidth={1.8} style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Verification
         </button>
         <button 
           onClick={() => setActiveTab("offerings")}
           style={{ 
             background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "offerings" ? "#2563eb" : "#64748b",
-            borderBottom: activeTab === "offerings" ? "2px solid #2563eb" : "none",
+            color: activeTab === "offerings" ? "#3c5eab" : "#64748b",
+            borderBottom: activeTab === "offerings" ? "2px solid #3c5eab" : "none",
             paddingBottom: "0.5rem"
           }}>
-          <Settings style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Offerings (Products & Services)
+          <Settings strokeWidth={1.8} style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Offerings (Products & Services)
         </button>
       </div>
 
