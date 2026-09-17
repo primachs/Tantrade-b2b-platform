@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { apiRequest, ApiError } from "../../../api/client";
 import { RegionDistrictSelect } from "../RegionDistrictSelect";
-import { Business, ServiceType, TaxonomyResponse } from "./types";
-import { Edit2, Shield, Settings } from "lucide-react";
+import { Business, TaxonomyResponse } from "./types";
+import { Edit2, Shield, Settings, X } from "lucide-react";
 
 type MyBusinessPaneProps = {
   token: string;
@@ -40,20 +40,22 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const [capabilitiesDraft, setCapabilitiesDraft] = useState(myBusiness.capabilities || []);
-  const [capabilityForm, setCapabilityForm] = useState({
-    service_type_id: "",
-    attributes: [] as { attribute_id: string; value: string }[]
-  });
+  const emptyCapabilityForm = { service_type_id: "", attributes: [] as { attribute_id: string; value: string }[] };
+  const [capabilityForm, setCapabilityForm] = useState(emptyCapabilityForm);
   const [attributeDraft, setAttributeDraft] = useState({ attribute_id: "", value: "" });
+  // null = adding a new offering; a number = editing capabilitiesDraft at that index in place.
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const serviceTypes = Array.isArray(taxonomy?.service_types) ? taxonomy.service_types : [];
   const serviceAttributes = Array.isArray(taxonomy?.attributes) ? taxonomy.attributes : [];
+  const categories = Array.isArray(taxonomy?.categories) ? taxonomy.categories : [];
 
   useEffect(() => {
-    if (!capabilityForm.service_type_id && serviceTypes.length > 0) {
+    if (!capabilityForm.service_type_id && serviceTypes.length > 0 && editingIndex === null) {
       setCapabilityForm((prev) => ({ ...prev, service_type_id: serviceTypes[0].id }));
     }
-  }, [serviceTypes, capabilityForm.service_type_id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceTypes]);
 
   const toIntOrNull = (value: string) => {
     if (!value.trim()) return null;
@@ -114,24 +116,74 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
     }
   };
 
+  // Returns e.g. "Technology & IT" or "Technology & IT → Software Development"
+  const getCategoryPath = (serviceTypeId: string): string | null => {
+    const type = serviceTypes.find(t => t.id === serviceTypeId);
+    if (!type) return null;
+    const category = categories.find(c => c.id === type.category_id);
+    if (!category) return null;
+    const parent = categories.find(c => c.id === category.parent_id);
+    return parent ? `${parent.name} → ${category.name}` : category.name;
+  };
+
   const handleAddAttribute = () => {
     if (!attributeDraft.attribute_id || !attributeDraft.value.trim()) return;
-    setCapabilityForm(prev => ({
-      ...prev,
-      attributes: [...prev.attributes, attributeDraft]
-    }));
+    setCapabilityForm(prev => {
+      // Replace the value if this attribute was already added, rather than duplicating it.
+      const withoutExisting = prev.attributes.filter(a => a.attribute_id !== attributeDraft.attribute_id);
+      return { ...prev, attributes: [...withoutExisting, attributeDraft] };
+    });
     setAttributeDraft({ attribute_id: "", value: "" });
   };
 
-  const handleAddCapability = () => {
+  const handleRemoveAttributeDraft = (attributeId: string) => {
+    setCapabilityForm(prev => ({
+      ...prev,
+      attributes: prev.attributes.filter(a => a.attribute_id !== attributeId),
+    }));
+  };
+
+  const handleStartEdit = (index: number) => {
+    setCapabilityForm({ ...capabilitiesDraft[index], attributes: [...capabilitiesDraft[index].attributes] });
+    setAttributeDraft({ attribute_id: "", value: "" });
+    setEditingIndex(index);
+  };
+
+  const handleCancelEdit = () => {
+    setCapabilityForm({ ...emptyCapabilityForm, service_type_id: serviceTypes[0]?.id || "" });
+    setAttributeDraft({ attribute_id: "", value: "" });
+    setEditingIndex(null);
+  };
+
+  const handleSubmitCapability = () => {
     if (!capabilityForm.service_type_id) return;
-    setCapabilitiesDraft(prev => [...prev, capabilityForm]);
-    setCapabilityForm({ service_type_id: serviceTypes[0]?.id || "", attributes: [] });
+
+    const duplicateIndex = capabilitiesDraft.findIndex(
+      (c, i) => c.service_type_id === capabilityForm.service_type_id && i !== editingIndex
+    );
+    if (duplicateIndex !== -1) {
+      setNotice("error", "That service is already in your offerings. Edit the existing entry instead.");
+      return;
+    }
+
+    if (editingIndex !== null) {
+      setCapabilitiesDraft(prev => prev.map((c, i) => (i === editingIndex ? capabilityForm : c)));
+    } else {
+      setCapabilitiesDraft(prev => [...prev, capabilityForm]);
+    }
+    handleCancelEdit();
+  };
+
+  const handleRemoveCapability = (index: number) => {
+    setCapabilitiesDraft(prev => prev.filter((_, i) => i !== index));
+    if (editingIndex === index) {
+      handleCancelEdit();
+    }
   };
 
   const handleSaveCapabilities = async () => {
     if (capabilitiesDraft.length === 0) {
-      setNotice("error", "Add at least one capability before saving.");
+      setNotice("error", "Add at least one offering before saving.");
       return;
     }
     setLoading(true);
@@ -141,14 +193,29 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
         token,
         body: { capabilities: capabilitiesDraft },
       });
-      setNotice("success", "Capabilities updated successfully.");
+      setNotice("success", "Offerings updated successfully.");
       onUpdate();
     } catch (err) {
-      setNotice("error", "Failed to update capabilities.");
+      setNotice("error", "Failed to update offerings.");
     } finally {
       setLoading(false);
     }
   };
+
+  const inputStyle = {
+    width: "100%",
+    boxSizing: "border-box" as const,
+    padding: "0.7rem 0.9rem",
+    border: "1px solid #e5e5e7",
+    borderRadius: "10px",
+    fontSize: "0.9rem",
+    color: "#1d1d1f",
+    background: "#fafbfc",
+    fontFamily: "inherit",
+  };
+
+  const fieldLabelStyle = { display: "block" as const, fontSize: "0.82rem", fontWeight: 600, color: "#1d1d1f", marginBottom: "0.5rem" };
+  const sectionLabelStyle = { fontSize: "0.72rem", fontWeight: 600, color: "#86868b", textTransform: "uppercase" as const, letterSpacing: "0.05em", margin: "0 0 1.1rem" };
 
   return (
     <div className="card" style={{ padding: "2rem" }}>
@@ -285,116 +352,154 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
       )}
 
       {activeTab === "offerings" && (
-        <div style={{ display: "grid", gap: "1.5rem" }}>
-          <h2 style={{ margin: 0, fontSize: "1.25rem", color: "#0f172a" }}>Offerings (Products & Services)</h2>
-          
-          <div style={{ padding: "1.5rem", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0" }}>
-            <h3 style={{ fontSize: "1rem", margin: "0 0 1rem 0" }}>Add New Offering</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", marginBottom: "1rem" }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Offering (Product or Service)</label>
-                <select className="form-control" value={capabilityForm.service_type_id} onChange={e => setCapabilityForm({...capabilityForm, service_type_id: e.target.value})}>
-                  <option value="">Select Offering...</option>
-                  {Array.isArray(taxonomy?.categories) && taxonomy.categories.map(cat => {
-                    const typesInCategory = serviceTypes.filter(t => t.category_id === cat.id);
-                    if (typesInCategory.length === 0) return null;
-                    
-                    const parentCat = taxonomy.categories?.find(c => c.id === cat.parent_id);
-                    const groupLabel = parentCat ? `${parentCat.name} > ${cat.name}` : cat.name;
+        <div style={{ maxWidth: "680px" }}>
+          <h1 style={{ fontSize: "1.4rem", fontWeight: 700, color: "#1d1d1f", margin: "0 0 0.35rem", letterSpacing: "-0.02em" }}>Offerings</h1>
+          <p style={{ color: "#86868b", fontSize: "0.9rem", margin: "0 0 1.75rem" }}>
+            What you offer determines which requests you're matched with.
+          </p>
 
-                    return (
-                      <optgroup key={cat.id} label={groupLabel}>
-                        {typesInCategory.map(t => (
-                          <option key={t.id} value={t.id}>{t.name}</option>
-                        ))}
-                      </optgroup>
-                    );
-                  })}
-                  
-                  {/* Fallback for types without categories or unknown mapping */}
-                  {serviceTypes.filter(t => !taxonomy?.categories?.find(c => c.id === t.category_id)).map(t => (
-                    <option key={t.id} value={t.id}>{t.name}</option>
-                  ))}
-                </select>
-              </div>
+          <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", padding: "1.75rem", marginBottom: "1.5rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.1rem" }}>
+              <p style={sectionLabelStyle}>{editingIndex !== null ? "Editing offering" : "Add an offering"}</p>
+              {editingIndex !== null && (
+                <button onClick={handleCancelEdit} style={{ background: "none", border: "none", color: "#86868b", fontSize: "0.78rem", cursor: "pointer", fontWeight: 500 }}>
+                  Cancel
+                </button>
+              )}
             </div>
-            
-            <h4 style={{ fontSize: "0.875rem", color: "#64748b", margin: "1rem 0 0.5rem" }}>Attributes (Optional)</h4>
-            <div style={{ display: "flex", gap: "1rem", alignItems: "flex-end" }}>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Attribute</label>
-                <select className="form-control" value={attributeDraft.attribute_id} onChange={e => setAttributeDraft({...attributeDraft, attribute_id: e.target.value})}>
-                  <option value="">Select Attribute...</option>
-                  {serviceAttributes.map(a => (
-                    <option key={a.id} value={a.id}>{a.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 500, color: '#334155' }}>Value</label>
-                <input className="form-control" value={attributeDraft.value} onChange={e => setAttributeDraft({...attributeDraft, value: e.target.value})} placeholder="e.g. 5 Years" />
-              </div>
-              <button onClick={handleAddAttribute} style={{ padding: "0.5rem 1rem", background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: "6px", cursor: "pointer", height: "42px" }}>
-                Add Attribute
+
+            <div style={{ marginBottom: "1.25rem" }}>
+              <label style={fieldLabelStyle}>Service</label>
+              <select style={inputStyle} value={capabilityForm.service_type_id} onChange={e => setCapabilityForm({...capabilityForm, service_type_id: e.target.value})}>
+                <option value="">Select a service...</option>
+                {categories.map(cat => {
+                  const typesInCategory = serviceTypes.filter(t => t.category_id === cat.id);
+                  if (typesInCategory.length === 0) return null;
+                  const parentCat = categories.find(c => c.id === cat.parent_id);
+                  const groupLabel = parentCat ? `${parentCat.name} > ${cat.name}` : cat.name;
+                  return (
+                    <optgroup key={cat.id} label={groupLabel}>
+                      {typesInCategory.map(t => (
+                        <option key={t.id} value={t.id}>{t.name}</option>
+                      ))}
+                    </optgroup>
+                  );
+                })}
+                {serviceTypes.filter(t => !categories.find(c => c.id === t.category_id)).map(t => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
+              </select>
+              {capabilityForm.service_type_id && getCategoryPath(capabilityForm.service_type_id) && (
+                <span style={{ display: "block", marginTop: "0.4rem", fontSize: "0.78rem", color: "#3c5eab" }}>
+                  {getCategoryPath(capabilityForm.service_type_id)}
+                </span>
+              )}
+            </div>
+
+            <label style={fieldLabelStyle}>Add details (optional)</label>
+            <div style={{ display: "flex", gap: "0.6rem", marginBottom: "0.75rem" }}>
+              <select style={{ ...inputStyle, flex: 1 }} value={attributeDraft.attribute_id} onChange={e => setAttributeDraft({...attributeDraft, attribute_id: e.target.value})}>
+                <option value="">Select attribute...</option>
+                {serviceAttributes.map(a => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </select>
+              <input style={{ ...inputStyle, flex: 1 }} value={attributeDraft.value} onChange={e => setAttributeDraft({...attributeDraft, value: e.target.value})} placeholder="e.g. 5 years" />
+              <button
+                onClick={handleAddAttribute}
+                disabled={!attributeDraft.attribute_id || !attributeDraft.value.trim()}
+                style={{ padding: "0 1.1rem", borderRadius: "10px", border: "1px solid #d2d2d7", background: "#fff", color: "#1d1d1f", fontWeight: 600, fontSize: "0.82rem", cursor: (!attributeDraft.attribute_id || !attributeDraft.value.trim()) ? "default" : "pointer", opacity: (!attributeDraft.attribute_id || !attributeDraft.value.trim()) ? 0.5 : 1 }}
+              >
+                Add
               </button>
             </div>
+
             {capabilityForm.attributes.length > 0 && (
-              <ul style={{ marginTop: "1rem", paddingLeft: "1.5rem" }}>
-                {capabilityForm.attributes.map((a, i) => (
-                  <li key={i} style={{ fontSize: "0.875rem", color: "#475569", marginBottom: "0.25rem" }}>
+              <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "1.5rem" }}>
+                {capabilityForm.attributes.map((a) => (
+                  <span key={a.attribute_id} style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "#eef1f8", color: "#3c5eab", padding: "0.3rem 0.5rem 0.3rem 0.75rem", borderRadius: "999px", fontSize: "0.78rem", fontWeight: 500 }}>
                     {serviceAttributes.find(sa => sa.id === a.attribute_id)?.name}: {a.value}
-                  </li>
+                    <button onClick={() => handleRemoveAttributeDraft(a.attribute_id)} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", padding: 0, color: "#3c5eab" }}>
+                      <X style={{ width: "12px", height: "12px" }} />
+                    </button>
+                  </span>
                 ))}
-              </ul>
+              </div>
             )}
-            
-            <button onClick={handleAddCapability} style={{ marginTop: "1.5rem", padding: "0.5rem 1rem", background: "#f1f5f9", border: "1px solid #cbd5e1", borderRadius: "6px", cursor: "pointer" }}>
-              Add Offering to List
+
+            <button
+              onClick={handleSubmitCapability}
+              disabled={!capabilityForm.service_type_id}
+              style={{ width: "100%", padding: "0.75rem", borderRadius: "12px", border: "none", background: !capabilityForm.service_type_id ? "#cbd5e1" : "#3c5eab", color: "#fff", fontWeight: 600, fontSize: "0.9rem", cursor: !capabilityForm.service_type_id ? "default" : "pointer" }}
+            >
+              {editingIndex !== null ? "Save Changes" : "Add to My Offerings"}
             </button>
           </div>
 
-          <div>
-            <h3 style={{ fontSize: "1rem", margin: "1.5rem 0 1rem 0" }}>Current Offerings</h3>
-            {capabilitiesDraft.length === 0 ? (
-              <p style={{ color: "#64748b", fontSize: "0.875rem" }}>No offerings added yet.</p>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                {capabilitiesDraft.map((cap, i) => (
-                  <div key={i} style={{ padding: "1rem", border: "1px solid #e2e8f0", borderRadius: "6px", background: "#fff", display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                    <div>
-                      <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "0.875rem" }}>
+          <p style={sectionLabelStyle}>Your Offerings ({capabilitiesDraft.length})</p>
+
+          {capabilitiesDraft.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "2.5rem 1.5rem", color: "#86868b", background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", marginBottom: "1.5rem" }}>
+              <p style={{ margin: 0, fontSize: "0.9rem" }}>No offerings added yet.</p>
+            </div>
+          ) : (
+            <div style={{ background: "#fff", borderRadius: "16px", boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.04)", overflow: "hidden", marginBottom: "1.5rem" }}>
+              {capabilitiesDraft.map((cap, i) => {
+                const categoryPath = getCategoryPath(cap.service_type_id);
+                const isEditing = editingIndex === i;
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      padding: "1.1rem 1.5rem",
+                      gap: "1rem",
+                      borderBottom: i === capabilitiesDraft.length - 1 ? "none" : "1px solid #f2f2f2",
+                      background: isEditing ? "#f4f6fb" : "transparent",
+                    }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, color: "#1d1d1f", fontSize: "0.95rem", marginBottom: "0.15rem" }}>
                         {serviceTypes.find(t => t.id === cap.service_type_id)?.name || cap.service_type_id}
-                      </h4>
+                        {isEditing && <span style={{ marginLeft: "0.5rem", fontSize: "0.72rem", color: "#3c5eab", fontWeight: 600 }}>Editing…</span>}
+                      </div>
+                      {categoryPath && <div style={{ color: "#86868b", fontSize: "0.78rem", marginBottom: cap.attributes.length > 0 ? "0.5rem" : 0 }}>{categoryPath}</div>}
                       {cap.attributes.length > 0 && (
-                        <ul style={{ margin: 0, paddingLeft: "1.5rem", fontSize: "0.75rem", color: "#64748b" }}>
+                        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
                           {cap.attributes.map((a, j) => (
-                            <li key={j}>{serviceAttributes.find(sa => sa.id === a.attribute_id)?.name}: {a.value}</li>
+                            <span key={j} style={{ background: "#f0f0f2", color: "#6e6e73", padding: "0.2rem 0.6rem", borderRadius: "999px", fontSize: "0.72rem" }}>
+                              {serviceAttributes.find(sa => sa.id === a.attribute_id)?.name}: {a.value}
+                            </span>
                           ))}
-                        </ul>
+                        </div>
                       )}
                     </div>
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
-                      <button 
-                        onClick={() => {
-                          setCapabilityForm(cap);
-                          setCapabilitiesDraft(prev => prev.filter((_, index) => index !== i));
-                        }}
-                        style={{ padding: "0.25rem 0.75rem", background: "#eff6ff", color: "#2563eb", border: "none", borderRadius: "4px", fontSize: "0.75rem", cursor: "pointer", fontWeight: 500 }}>
+                    <div style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}>
+                      <button
+                        onClick={() => handleStartEdit(i)}
+                        style={{ padding: "0.45rem 0.9rem", borderRadius: "20px", border: "1px solid #d2d2d7", background: "#fff", color: "#1d1d1f", fontWeight: 500, fontSize: "0.78rem", cursor: "pointer" }}
+                      >
                         Edit
                       </button>
-                      <button 
-                        onClick={() => setCapabilitiesDraft(prev => prev.filter((_, index) => index !== i))}
-                        style={{ padding: "0.25rem 0.75rem", background: "#fef2f2", color: "#ef4444", border: "none", borderRadius: "4px", fontSize: "0.75rem", cursor: "pointer", fontWeight: 500 }}>
+                      <button
+                        onClick={() => handleRemoveCapability(i)}
+                        style={{ padding: "0.45rem 0.9rem", borderRadius: "20px", border: "1px solid #fecaca", background: "#fff", color: "#dc2626", fontWeight: 500, fontSize: "0.78rem", cursor: "pointer" }}
+                      >
                         Remove
                       </button>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
+                );
+              })}
+            </div>
+          )}
 
-          <button className="button" style={{ background: "#2563eb", color: "white", padding: "0.5rem 1rem", border: "none", borderRadius: "6px", cursor: "pointer", alignSelf: "flex-start", marginTop: "1rem" }} onClick={handleSaveCapabilities} disabled={loading}>
+          <button
+            onClick={handleSaveCapabilities}
+            disabled={loading}
+            style={{ width: "100%", padding: "0.85rem", borderRadius: "12px", border: "none", background: "#00835e", color: "#fff", fontWeight: 600, fontSize: "0.9rem", cursor: loading ? "default" : "pointer" }}
+          >
             {loading ? "Saving..." : "Save Offerings"}
           </button>
         </div>
