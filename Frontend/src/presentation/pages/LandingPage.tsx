@@ -62,14 +62,11 @@ export const LandingPage = (_props: LandingPageProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
           >
-            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(60,94,171,0.15)", color: "#2c4a8f", padding: "0.4rem 0.9rem", borderRadius: "999px", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "1.25rem" }}>
-              Tanzania Trade Development Authority
-            </span>
             <h1 style={{ fontSize: "2.2rem", fontWeight: 800, color: "#14161a", margin: "0 0 0.6rem", letterSpacing: "-0.02em", lineHeight: 1.15 }}>
               TanTrade National B2B Platform
             </h1>
             <p style={{ color: "#4a4b50", fontSize: "1rem", margin: "0 0 1.75rem", lineHeight: 1.6 }}>
-              The official platform connecting verified Tanzanian buyers and sellers — matched by industry, secured by verification, closed with confidence.
+              The official platform connecting verified Tanzanian buyers and sellers matched by industry, secured by verification, closed with confidence.
             </p>
             <button
               type="button"
