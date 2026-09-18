@@ -1,4 +1,4 @@
-import { ShieldCheck, Zap, MessageSquare, Building2, Search, Users } from "lucide-react";
+import { ShieldCheck, Zap, MessageSquare, Building2, Search, Users, Facebook, Instagram, Youtube } from "lucide-react";
 import { motion } from "motion/react";
 
 type LandingPageProps = {
@@ -183,35 +183,66 @@ export const LandingPage = (_props: LandingPageProps) => {
       </motion.section>
 
       <motion.section
-        style={{ position: "relative", background: "rgba(255,255,255,0.5)", backdropFilter: "blur(16px) saturate(150%)", WebkitBackdropFilter: "blur(16px) saturate(150%)", borderTop: "1px solid rgba(255,255,255,0.6)", borderRadius: "24px 24px 0 0", maxWidth: "1000px", margin: "0 auto", padding: "2rem" }}
+        style={{ position: "relative", padding: 0 }}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1.25rem" }}>
-          <div>
-            <h3 style={{ margin: "0 0 0.6rem", fontSize: "0.95rem", fontWeight: 700, color: "#14161a" }}>Technical Support</h3>
-            <a href="tel:+255123456789" style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#2c4a8f", fontSize: "0.85rem", marginBottom: "0.3rem", textDecoration: "none" }}>
-              +255 (0) 123 456 789
-            </a>
-            <a href="mailto:support@tantrade.go.tz" style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#2c4a8f", fontSize: "0.85rem", textDecoration: "none" }}>
-              support@tantrade.go.tz
-            </a>
+        <div style={{ background: "linear-gradient(135deg, #1d3566, #14432f)", borderRadius: "24px 24px 0 0", padding: "3rem 3rem 1.5rem" }}>
+          <div style={{ maxWidth: "1000px", margin: "0 auto 2rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "2.5rem" }}>
+            <div>
+              <h3 style={{ color: "#fff", fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.9rem", paddingBottom: "0.9rem", borderBottom: "1px solid rgba(255,255,255,0.18)" }}>Contact</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                <a href="tel:+255123456789" style={{ color: "#a8c1f0", fontSize: "0.9rem", textDecoration: "none" }}>
+                  +255 (0) 123 456 789
+                </a>
+                <a href="mailto:support@tantrade.go.tz" style={{ color: "#a8c1f0", fontSize: "0.9rem", textDecoration: "none" }}>
+                  support@tantrade.go.tz
+                </a>
+              </div>
+            </div>
+            <div>
+              <h3 style={{ color: "#fff", fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.9rem", paddingBottom: "0.9rem", borderBottom: "1px solid rgba(255,255,255,0.18)" }}>Resources</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                <a href="#archives" style={{ color: "#a8c1f0", fontSize: "0.9rem", textDecoration: "none" }}>Document Archives</a>
+                <a href="#e-services" style={{ color: "#a8c1f0", fontSize: "0.9rem", textDecoration: "none" }}>E-Services</a>
+              </div>
+            </div>
+            <div>
+              <h3 style={{ color: "#fff", fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.9rem", paddingBottom: "0.9rem", borderBottom: "1px solid rgba(255,255,255,0.18)" }}>Legal</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                <a href="#legal" style={{ color: "#a8c1f0", fontSize: "0.9rem", textDecoration: "none" }}>Legal Declarations</a>
+                <a href="#copyright" style={{ color: "#a8c1f0", fontSize: "0.9rem", textDecoration: "none" }}>Copyright Notice</a>
+              </div>
+            </div>
           </div>
-          <div>
-            <h3 style={{ margin: "0 0 0.6rem", fontSize: "0.95rem", fontWeight: 700, color: "#14161a" }}>Utility Links</h3>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.3rem" }}>
-              <li><a href="#archives" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>Document Archives</a></li>
-              <li><a href="#e-services" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>E-Services</a></li>
-              <li><a href="#legal" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>Legal Declarations</a></li>
-              <li><a href="#copyright" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>Copyright Notice</a></li>
-            </ul>
+
+          <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", justifyContent: "flex-end", alignItems: "center", gap: "1rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.12)", flexWrap: "wrap" }}>
+            <span style={{ color: "#cdd6e8", fontSize: "0.88rem" }}>Follow TanTrade</span>
+            <a href="#" style={{ color: "#cdd6e8", display: "flex" }} aria-label="Facebook">
+              <Facebook style={{ width: "18px", height: "18px" }} />
+            </a>
+            <a href="#" style={{ color: "#cdd6e8", display: "flex" }} aria-label="Instagram">
+              <Instagram style={{ width: "18px", height: "18px" }} />
+            </a>
+            <a href="#" style={{ color: "#cdd6e8", display: "flex" }} aria-label="X">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7l-5.5-7.2L4.5 22H1.4l8.1-9.3L1 2h7.2l5 6.6zm-1.2 18h1.7L7.4 4H5.6z" /></svg>
+            </a>
+            <a href="#" style={{ color: "#cdd6e8", display: "flex" }} aria-label="YouTube">
+              <Youtube style={{ width: "18px", height: "18px" }} />
+            </a>
           </div>
         </div>
-        <p style={{ textAlign: "center", fontSize: "0.8rem", color: "#55565c", margin: 0 }}>
-          &copy; 2026 Tanzania Trade Development Authority. All rights reserved.
-        </p>
+
+        <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "1.5rem 3rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1.05rem" }}>
+            <span style={{ color: "#3c5eab" }}>Tan</span><span style={{ color: "#00835e" }}>Trade</span>
+          </div>
+          <p style={{ fontSize: "0.8rem", color: "#55565c", margin: 0 }}>
+            Copyright &copy; 2026 Tanzania Trade Development Authority
+          </p>
+        </div>
       </motion.section>
 
       <style>{`
