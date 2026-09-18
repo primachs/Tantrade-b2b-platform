@@ -1,146 +1,226 @@
-import { ShieldCheck, Building2, Zap, Phone, Mail, FileText, Users, MessageSquare, Search } from "lucide-react";
+import { ShieldCheck, Zap, MessageSquare, Building2, Search, Users } from "lucide-react";
 import { motion } from "motion/react";
 
 type LandingPageProps = {
   onGetStarted: () => void;
 };
 
+const glassCard: React.CSSProperties = {
+  background: "rgba(255,255,255,0.55)",
+  backdropFilter: "blur(20px) saturate(150%)",
+  WebkitBackdropFilter: "blur(20px) saturate(150%)",
+  border: "1px solid rgba(255,255,255,0.6)",
+  borderRadius: "24px",
+  boxShadow: "0 8px 32px rgba(31,38,135,0.12), inset 0 1px 0 rgba(255,255,255,0.7)",
+};
+
 export const LandingPage = (_props: LandingPageProps) => {
   const services = [
     {
-      icon: <Building2 className="w-8 h-8" />,
+      icon: <Building2 className="w-7 h-7" />,
       title: "Register your business",
       desc: "Get verified and listed as a trusted buyer or seller in your industry.",
+      tint: "rgba(60,94,171,0.18)",
+      color: "#3c5eab",
     },
     {
-      icon: <Search className="w-8 h-8" />,
+      icon: <Search className="w-7 h-7" />,
       title: "Post a request for supply",
       desc: "Describe what you need and get matched with qualified sellers automatically.",
+      tint: "rgba(0,131,94,0.18)",
+      color: "#00835e",
     },
     {
-      icon: <MessageSquare className="w-8 h-8" />,
+      icon: <MessageSquare className="w-7 h-7" />,
       title: "Engage and close deals",
       desc: "Message trade partners directly and confirm outcomes on the platform.",
+      tint: "rgba(60,94,171,0.18)",
+      color: "#3c5eab",
     },
     {
-      icon: <Users className="w-8 h-8" />,
+      icon: <Users className="w-7 h-7" />,
       title: "Market governance",
       desc: "Register brokers and manage market offices under official oversight.",
+      tint: "rgba(0,131,94,0.18)",
+      color: "#00835e",
     },
   ];
 
   return (
-    <main className="page landing-home">
-      <motion.section 
-        className="landing-hero"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <div className="hero-wrapper">
-          <h1 className="hero-headline">Find verified buyers and sellers, faster.</h1>
-          <p className="hero-subheader">
-            TanTrade matches your business with the right trade partners across Tanzania, backed by verification, smart matching, and secure deal-making.
-          </p>
-          <div className="hero-cta">
-            <button type="button" className="button button--primary" onClick={_props.onGetStarted}>
-              Get started free
+    <main style={{ position: "relative", overflow: "hidden", background: "#eef0f5", minHeight: "100vh" }}>
+      {/* Soft colored orbs for the glass panels to refract against */}
+      <div style={{ position: "absolute", top: "-100px", left: "-80px", width: "400px", height: "400px", borderRadius: "50%", background: "radial-gradient(circle, rgba(60,94,171,0.32), transparent 70%)", filter: "blur(15px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "220px", right: "-100px", width: "420px", height: "420px", borderRadius: "50%", background: "radial-gradient(circle, rgba(0,131,94,0.28), transparent 70%)", filter: "blur(15px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "620px", left: "8%", width: "300px", height: "300px", borderRadius: "50%", background: "radial-gradient(circle, rgba(242,194,75,0.24), transparent 70%)", filter: "blur(12px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", top: "1000px", right: "10%", width: "320px", height: "320px", borderRadius: "50%", background: "radial-gradient(circle, rgba(60,94,171,0.22), transparent 70%)", filter: "blur(12px)", pointerEvents: "none" }} />
+
+      <div style={{ position: "relative", padding: "3rem 2rem" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto", display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: "2rem", alignItems: "center" }} className="hero-grid-responsive">
+          <motion.div
+            style={{ ...glassCard, padding: "2.5rem" }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          >
+            <span style={{ display: "inline-flex", alignItems: "center", background: "rgba(60,94,171,0.15)", color: "#2c4a8f", padding: "0.4rem 0.9rem", borderRadius: "999px", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: "1.25rem" }}>
+              Tanzania Trade Development Authority
+            </span>
+            <h1 style={{ fontSize: "2.2rem", fontWeight: 800, color: "#14161a", margin: "0 0 0.6rem", letterSpacing: "-0.02em", lineHeight: 1.15 }}>
+              TanTrade National B2B Platform
+            </h1>
+            <p style={{ color: "#4a4b50", fontSize: "1rem", margin: "0 0 1.75rem", lineHeight: 1.6 }}>
+              The official platform connecting verified Tanzanian buyers and sellers — matched by industry, secured by verification, closed with confidence.
+            </p>
+            <button
+              type="button"
+              onClick={_props.onGetStarted}
+              style={{ padding: "0.8rem 1.7rem", borderRadius: "999px", border: "none", background: "#3c5eab", color: "#fff", fontWeight: 600, fontSize: "0.95rem", cursor: "pointer", marginBottom: "1.75rem" }}
+            >
+              Get started
             </button>
-          </div>
-          <div className="hero-pills">
-            <span className="pill"><ShieldCheck className="icon" /> Verified business profiles</span>
-            <span className="pill"><Zap className="icon" /> Smart RFS matching</span>
-            <span className="pill"><MessageSquare className="icon" /> Secure deal chat</span>
-          </div>
+            <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.7)", padding: "0.45rem 0.9rem", borderRadius: "999px", fontSize: "0.8rem", fontWeight: 600, color: "#14161a" }}>
+                <ShieldCheck style={{ width: "15px", height: "15px", color: "#3c5eab" }} /> Verified business profiles
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.7)", padding: "0.45rem 0.9rem", borderRadius: "999px", fontSize: "0.8rem", fontWeight: 600, color: "#14161a" }}>
+                <Zap style={{ width: "15px", height: "15px", color: "#00835e" }} /> Smart RFS matching
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "0.4rem", background: "rgba(255,255,255,0.6)", border: "1px solid rgba(255,255,255,0.7)", padding: "0.45rem 0.9rem", borderRadius: "999px", fontSize: "0.8rem", fontWeight: 600, color: "#14161a" }}>
+                <MessageSquare style={{ width: "15px", height: "15px", color: "#3c5eab" }} /> Secure deal chat
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            style={{ ...glassCard, padding: "1.5rem" }}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease: "easeOut", delay: 0.15 }}
+          >
+            <svg viewBox="0 0 400 320" style={{ width: "100%", height: "auto" }}>
+              <rect x="55" y="110" width="90" height="110" rx="10" fill="rgba(255,255,255,0.7)" stroke="#3c5eab" strokeWidth="2" />
+              <rect x="70" y="130" width="16" height="16" rx="3" fill="#3c5eab" opacity="0.6" />
+              <rect x="94" y="130" width="16" height="16" rx="3" fill="#3c5eab" opacity="0.6" />
+              <rect x="70" y="154" width="16" height="16" rx="3" fill="#3c5eab" opacity="0.35" />
+              <rect x="94" y="154" width="16" height="16" rx="3" fill="#3c5eab" opacity="0.35" />
+              <rect x="80" y="188" width="36" height="32" rx="4" fill="#3c5eab" opacity="0.8" />
+              <rect x="255" y="90" width="90" height="130" rx="10" fill="rgba(255,255,255,0.7)" stroke="#00835e" strokeWidth="2" />
+              <rect x="270" y="110" width="16" height="16" rx="3" fill="#00835e" opacity="0.6" />
+              <rect x="294" y="110" width="16" height="16" rx="3" fill="#00835e" opacity="0.6" />
+              <rect x="270" y="134" width="16" height="16" rx="3" fill="#00835e" opacity="0.35" />
+              <rect x="294" y="134" width="16" height="16" rx="3" fill="#00835e" opacity="0.35" />
+              <rect x="280" y="188" width="36" height="32" rx="4" fill="#00835e" opacity="0.8" />
+              <circle cx="200" cy="150" r="34" fill="rgba(255,255,255,0.85)" stroke="#f2c24b" strokeWidth="2.5" />
+              <path d="M188 150 l8 8 l16 -16" stroke="#f2c24b" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M148 148 Q175 130 178 148" stroke="#3c5eab" strokeWidth="2" fill="none" strokeDasharray="4 4" />
+              <path d="M252 148 Q225 130 222 148" stroke="#00835e" strokeWidth="2" fill="none" strokeDasharray="4 4" />
+            </svg>
+          </motion.div>
         </div>
-      </motion.section>
+
+        <motion.div
+          style={{ maxWidth: "760px", margin: "1.75rem auto 0", display: "flex", gap: "1rem", flexWrap: "wrap" }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <div style={{ ...glassCard, flex: 1, minWidth: "160px", padding: "1.1rem 1.5rem", textAlign: "center" }}>
+            <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#2c4a8f", margin: 0 }}>Verified</p>
+            <p style={{ fontSize: "0.78rem", color: "#55565c", margin: "0.2rem 0 0" }}>business profiles</p>
+          </div>
+          <div style={{ ...glassCard, flex: 1, minWidth: "160px", padding: "1.1rem 1.5rem", textAlign: "center" }}>
+            <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#00694a", margin: 0 }}>Smart</p>
+            <p style={{ fontSize: "0.78rem", color: "#55565c", margin: "0.2rem 0 0" }}>RFS matching engine</p>
+          </div>
+          <div style={{ ...glassCard, flex: 1, minWidth: "160px", padding: "1.1rem 1.5rem", textAlign: "center" }}>
+            <p style={{ fontSize: "1.2rem", fontWeight: 800, color: "#2c4a8f", margin: 0 }}>Secure</p>
+            <p style={{ fontSize: "0.78rem", color: "#55565c", margin: "0.2rem 0 0" }}>in-app deal chat</p>
+          </div>
+        </motion.div>
+      </div>
 
       <motion.section
-        className="stats-row"
+        style={{ position: "relative", maxWidth: "1000px", margin: "0 auto", padding: "2rem 2rem 3rem" }}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
       >
-        <div className="stat-item">
-          <p className="landing-stat-value landing-stat-value--blue">Verified</p>
-          <p className="landing-stat-label">business profiles</p>
-        </div>
-        <div className="stat-item">
-          <p className="landing-stat-value landing-stat-value--green">Smart</p>
-          <p className="landing-stat-label">RFS matching engine</p>
-        </div>
-        <div className="stat-item">
-          <p className="landing-stat-value landing-stat-value--blue">Secure</p>
-          <p className="landing-stat-label">in-app deal chat</p>
-        </div>
-      </motion.section>
-
-      <motion.section 
-        className="service-matrix" 
-        id="service-matrix"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-      >
-        <h2>What you can do on this B2B platform</h2>
-        <div className="service-grid">
+        <h2 style={{ textAlign: "center", fontSize: "1.6rem", fontWeight: 700, color: "#14161a", margin: "0 0 1.75rem" }}>
+          What you can do on this B2B platform
+        </h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1.25rem" }}>
           {services.map((service) => (
-            <div key={service.title} className="service-card">
-              <div className="service-icon">{service.icon}</div>
-              <h3>{service.title}</h3>
-              <p>{service.desc}</p>
+            <div key={service.title} style={{ ...glassCard, padding: "1.5rem" }}>
+              <div style={{ width: "44px", height: "44px", borderRadius: "12px", background: service.tint, backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem", color: service.color }}>
+                {service.icon}
+              </div>
+              <h3 style={{ margin: "0 0 0.4rem", fontSize: "1rem", fontWeight: 700, color: "#14161a" }}>{service.title}</h3>
+              <p style={{ margin: 0, fontSize: "0.85rem", color: "#55565c", lineHeight: 1.5 }}>{service.desc}</p>
             </div>
           ))}
         </div>
       </motion.section>
 
       <motion.section
-        className="closing-cta"
+        style={{ position: "relative", textAlign: "center", padding: "0 2rem 3rem" }}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <p className="closing-cta__title">Ready to grow your trade network?</p>
-        <button type="button" className="button button--primary" onClick={_props.onGetStarted}>
-          Create your free account
-        </button>
+        <div style={{ ...glassCard, maxWidth: "520px", margin: "0 auto", padding: "2.25rem" }}>
+          <p style={{ fontWeight: 700, color: "#14161a", margin: "0 0 1.25rem", fontSize: "1.05rem" }}>Ready to grow your trade network?</p>
+          <button
+            type="button"
+            onClick={_props.onGetStarted}
+            style={{ padding: "0.75rem 1.6rem", borderRadius: "999px", border: "none", background: "#3c5eab", color: "#fff", fontWeight: 600, fontSize: "0.9rem", cursor: "pointer" }}
+          >
+            Create your free account
+          </button>
+        </div>
       </motion.section>
 
-      <motion.section 
-        className="support-footer" 
-        id="support-footer"
+      <motion.section
+        style={{ position: "relative", background: "rgba(255,255,255,0.5)", backdropFilter: "blur(16px) saturate(150%)", WebkitBackdropFilter: "blur(16px) saturate(150%)", borderTop: "1px solid rgba(255,255,255,0.6)", borderRadius: "24px 24px 0 0", maxWidth: "1000px", margin: "0 auto", padding: "2rem" }}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <div className="support-grid">
-          <div className="support-block">
-            <h3>Technical Support</h3>
-            <a href="tel:+255123456789" className="support-link">
-              <Phone className="icon" /> +255 (0) 123 456 789
+        <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "1.25rem" }}>
+          <div>
+            <h3 style={{ margin: "0 0 0.6rem", fontSize: "0.95rem", fontWeight: 700, color: "#14161a" }}>Technical Support</h3>
+            <a href="tel:+255123456789" style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#2c4a8f", fontSize: "0.85rem", marginBottom: "0.3rem", textDecoration: "none" }}>
+              +255 (0) 123 456 789
             </a>
-            <a href="mailto:support@tantrade.go.tz" className="support-link">
-              <Mail className="icon" /> support@tantrade.go.tz
+            <a href="mailto:support@tantrade.go.tz" style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#2c4a8f", fontSize: "0.85rem", textDecoration: "none" }}>
+              support@tantrade.go.tz
             </a>
           </div>
-          <div className="support-block">
-            <h3>Utility Links</h3>
-            <ul className="utility-links">
-              <li><a href="#archives">Document Archives</a></li>
-              <li><a href="#e-services">E-Services</a></li>
-              <li><a href="#legal">Legal Declarations</a></li>
-              <li><a href="#copyright">Copyright Notice</a></li>
+          <div>
+            <h3 style={{ margin: "0 0 0.6rem", fontSize: "0.95rem", fontWeight: 700, color: "#14161a" }}>Utility Links</h3>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.3rem" }}>
+              <li><a href="#archives" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>Document Archives</a></li>
+              <li><a href="#e-services" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>E-Services</a></li>
+              <li><a href="#legal" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>Legal Declarations</a></li>
+              <li><a href="#copyright" style={{ color: "#55565c", fontSize: "0.85rem", textDecoration: "none" }}>Copyright Notice</a></li>
             </ul>
           </div>
         </div>
-        <div className="footer-meta">
-          <p>&copy; 2026 Tanzania Trade Development Authority. All rights reserved.</p>
-        </div>
+        <p style={{ textAlign: "center", fontSize: "0.8rem", color: "#55565c", margin: 0 }}>
+          &copy; 2026 Tanzania Trade Development Authority. All rights reserved.
+        </p>
       </motion.section>
+
+      <style>{`
+        @media (max-width: 800px) {
+          .hero-grid-responsive {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </main>
   );
 };
