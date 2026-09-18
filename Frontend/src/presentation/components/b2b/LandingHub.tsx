@@ -205,7 +205,7 @@ export const LandingHub = ({ token, user, setNotice, onRegistered, hasBusiness, 
 
 
   return (
-    <section style={{ position: "relative", minHeight: "calc(100vh - 80px)", overflow: "hidden", padding: "2.5rem 2rem", background: "#f2f3f7" }}>
+    <section style={{ position: "relative", minHeight: "calc(100vh - 80px)", overflow: "hidden", padding: "2.5rem 2rem", background: "#f2f3f7", borderRadius: "28px" }}>
       <div style={{ position: "absolute", top: "-80px", left: "-60px", width: "320px", height: "320px", borderRadius: "50%", background: "radial-gradient(circle, rgba(60,94,171,0.35), transparent 70%)", filter: "blur(10px)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", bottom: "-100px", right: "-80px", width: "380px", height: "380px", borderRadius: "50%", background: "radial-gradient(circle, rgba(0,131,94,0.3), transparent 70%)", filter: "blur(10px)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", top: "120px", right: "10%", width: "200px", height: "200px", borderRadius: "50%", background: "radial-gradient(circle, rgba(242,194,75,0.25), transparent 70%)", filter: "blur(8px)", pointerEvents: "none" }} />
