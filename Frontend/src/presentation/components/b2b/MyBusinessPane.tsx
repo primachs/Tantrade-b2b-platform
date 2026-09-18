@@ -220,36 +220,45 @@ export const MyBusinessPane = ({ token, myBusiness, taxonomy, onUpdate, setNotic
 
   return (
     <div className="card" style={{ padding: "2rem" }}>
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "2rem", borderBottom: "1px solid #e2e8f0", paddingBottom: "1rem" }}>
-        <button 
+      <div style={{ display: "flex", gap: "0.4rem", marginBottom: "2rem", background: "#f0f0f2", borderRadius: "12px", padding: "0.3rem", width: "fit-content" }}>
+        <button
           onClick={() => setActiveTab("profile")}
-          style={{ 
-            background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "profile" ? "#3c5eab" : "#64748b",
-            borderBottom: activeTab === "profile" ? "2px solid #3c5eab" : "none",
-            paddingBottom: "0.5rem"
+          style={{
+            display: "flex", alignItems: "center", gap: "0.4rem",
+            padding: "0.55rem 1.1rem", borderRadius: "9px", border: "none", cursor: "pointer",
+            fontSize: "0.88rem", fontFamily: "inherit",
+            background: activeTab === "profile" ? "#fff" : "transparent",
+            color: activeTab === "profile" ? "#1d1d1f" : "#6e6e73",
+            fontWeight: activeTab === "profile" ? 600 : 500,
+            boxShadow: activeTab === "profile" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
           }}>
-          <Edit2 strokeWidth={1.8} style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Profile
+          <Edit2 strokeWidth={1.8} style={{ width: "15px", height: "15px", color: activeTab === "profile" ? "#3c5eab" : "#6e6e73" }} /> Profile
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab("verification")}
-          style={{ 
-            background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "verification" ? "#3c5eab" : "#64748b",
-            borderBottom: activeTab === "verification" ? "2px solid #3c5eab" : "none",
-            paddingBottom: "0.5rem"
+          style={{
+            display: "flex", alignItems: "center", gap: "0.4rem",
+            padding: "0.55rem 1.1rem", borderRadius: "9px", border: "none", cursor: "pointer",
+            fontSize: "0.88rem", fontFamily: "inherit",
+            background: activeTab === "verification" ? "#fff" : "transparent",
+            color: activeTab === "verification" ? "#1d1d1f" : "#6e6e73",
+            fontWeight: activeTab === "verification" ? 600 : 500,
+            boxShadow: activeTab === "verification" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
           }}>
-          <Shield strokeWidth={1.8} style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Verification
+          <Shield strokeWidth={1.8} style={{ width: "15px", height: "15px", color: activeTab === "verification" ? "#3c5eab" : "#6e6e73" }} /> Verification
         </button>
-        <button 
+        <button
           onClick={() => setActiveTab("offerings")}
-          style={{ 
-            background: "transparent", border: "none", cursor: "pointer", fontSize: "1rem", fontWeight: 500,
-            color: activeTab === "offerings" ? "#3c5eab" : "#64748b",
-            borderBottom: activeTab === "offerings" ? "2px solid #3c5eab" : "none",
-            paddingBottom: "0.5rem"
+          style={{
+            display: "flex", alignItems: "center", gap: "0.4rem",
+            padding: "0.55rem 1.1rem", borderRadius: "9px", border: "none", cursor: "pointer",
+            fontSize: "0.88rem", fontFamily: "inherit",
+            background: activeTab === "offerings" ? "#fff" : "transparent",
+            color: activeTab === "offerings" ? "#1d1d1f" : "#6e6e73",
+            fontWeight: activeTab === "offerings" ? 600 : 500,
+            boxShadow: activeTab === "offerings" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
           }}>
-          <Settings strokeWidth={1.8} style={{ width: "16px", height: "16px", display: "inline", marginRight: "0.5rem" }} /> Offerings (Products & Services)
+          <Settings strokeWidth={1.8} style={{ width: "15px", height: "15px", color: activeTab === "offerings" ? "#3c5eab" : "#6e6e73" }} /> Offerings
         </button>
       </div>
 
