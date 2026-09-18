@@ -189,7 +189,7 @@ export const LandingPage = (_props: LandingPageProps) => {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <div style={{ background: "linear-gradient(135deg, #1d3566, #14432f)", borderRadius: "24px 24px 0 0", padding: "3rem 3rem 1.5rem" }}>
+        <div style={{ background: "linear-gradient(135deg, #1d3566, #14432f)", padding: "3rem 3rem 1.5rem" }}>
           <div style={{ maxWidth: "1000px", margin: "0 auto 2rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "2.5rem" }}>
             <div>
               <h3 style={{ color: "#fff", fontSize: "1.05rem", fontWeight: 700, margin: "0 0 0.9rem", paddingBottom: "0.9rem", borderBottom: "1px solid rgba(255,255,255,0.18)" }}>Contact</h3>
@@ -235,11 +235,8 @@ export const LandingPage = (_props: LandingPageProps) => {
           </div>
         </div>
 
-        <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "1.5rem 3rem", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontFamily: "Georgia, serif", fontWeight: 700, fontSize: "1.05rem" }}>
-            <span style={{ color: "#3c5eab" }}>Tan</span><span style={{ color: "#00835e" }}>Trade</span>
-          </div>
-          <p style={{ fontSize: "0.8rem", color: "#55565c", margin: 0 }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "1.5rem 3rem", textAlign: "center" }}>
+          <p style={{ fontSize: "0.85rem", color: "#55565c", margin: 0 }}>
             Copyright &copy; 2026 Tanzania Trade Development Authority
           </p>
         </div>
