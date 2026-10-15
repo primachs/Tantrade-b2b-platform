@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Radar, FilePlus, MessageSquare, Menu, Settings, Building2, Users } from "lucide-react";
 import { Business, TaxonomyResponse, Rfs } from "./types";
 import { MyBusinessPane } from "./MyBusinessPane";
+import { BuyerRequestsPane } from "./BuyerRequestsPane";
 import { CreateRfsPane } from "./CreateRfsPane";
 import { MatchesPane } from "./MatchesPane";
 import { EngagementsPane } from "./EngagementsPane";
@@ -31,6 +32,7 @@ export const BusinessDashboard = ({
 
   const paneItems = [
     { id: "matches", label: "Matches", icon: Users },
+    { id: "buyer-requests", label: "Buyer Requests", icon: FilePlus },
     { id: "create-rfs", label: "Create RFS", icon: FilePlus },
     { id: "engagements", label: "Engagements", icon: MessageSquare },
     { id: "my-business", label: "My Profile", icon: Settings },
@@ -39,6 +41,7 @@ export const BusinessDashboard = ({
   const getPaneTitle = () => {
     switch (activePane) {
       case "matches": return "Matches";
+      case "buyer-requests": return "Buyer Requests";
       case "create-rfs": return editingRfs ? "Edit RFS" : "Create RFS";
       case "engagements": return "Engagements";
       case "my-business": return "My Business Profile";
@@ -239,6 +242,9 @@ export const BusinessDashboard = ({
           <button className={`nav-item ${activePane === "matches" ? "active" : ""}`} onClick={() => { setActivePane("matches"); setIsPaneMenuOpen(false); }}>
             <Users /> Matches
           </button>
+          <button className={`nav-item ${activePane === "buyer-requests" ? "active" : ""}`} onClick={() => { setActivePane("buyer-requests"); setIsPaneMenuOpen(false); }}>
+            <FilePlus /> Buyer Requests
+          </button>
           <button className={`nav-item ${activePane === "create-rfs" ? "active" : ""}`} onClick={() => { setEditingRfs(null); setActivePane("create-rfs"); setIsPaneMenuOpen(false); }}>
             <FilePlus /> Create RFS
           </button>
@@ -267,6 +273,9 @@ export const BusinessDashboard = ({
         </header>
 
         <div className="content-body">
+          {activePane === "buyer-requests" && (
+            <BuyerRequestsPane rfsList={rfsList} taxonomy={taxonomy} myBusiness={myBusiness} onOpenMatches={() => setActivePane("matches")} />
+          )}
           {activePane === "matches" && (
             <MatchesPane token={token} rfsList={rfsList} myBusiness={myBusiness} setNotice={setNotice} onNavigate={setActivePane} />
           )}
